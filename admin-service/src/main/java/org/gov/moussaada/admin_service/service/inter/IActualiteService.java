@@ -1,0 +1,17 @@
+package org.gov.moussaada.admin_service.service.inter;
+
+import org.gov.moussaada.admin_service.dto.ActualiteReponseDTO;
+import org.gov.moussaada.admin_service.dto.ActualiteRequestDTO;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+
+public interface IActualiteService {
+    ResponseEntity<?> save(ActualiteRequestDTO actualiteRQ);
+    ResponseEntity<?>  findById(Integer id);
+    ResponseEntity<?> findByTitre(String titre);
+    ResponseEntity<?> update(ActualiteRequestDTO actualiteRQ , Integer id);
+    ResponseEntity<?> Delete(Integer id);
+    List<ActualiteReponseDTO> findAll();
+    ResponseEntity<?> DeleteAll();
+}
