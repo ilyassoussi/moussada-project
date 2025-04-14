@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="server-config" />
+        <module name="gateway-server" />
+      </profile>
+      <profile name="Annotation profile for paysan-service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="paysan-service" />
+        <module name="terrain-service" />
+        <module name="shared-lib" />
+        <module name="subventions-service" />
+        <module name="utilisateur-service" />
+        <module name="appel-service" />
+        <module name="admin-service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="admin-service" options="-parameters" />
+      <module name="appel-service" options="-parameters" />
+      <module name="gateway-server" options="-parameters" />
+      <module name="paysan-service" options="-parameters" />
+      <module name="server-config" options="-parameters" />
+      <module name="shared-lib" options="-parameters" />
+      <module name="subventions-service" options="-parameters" />
+      <module name="terrain-service" options="-parameters" />
+      <module name="utilisateur-service" options="-parameters" />
+    </option>
+  </component>
+</project>
