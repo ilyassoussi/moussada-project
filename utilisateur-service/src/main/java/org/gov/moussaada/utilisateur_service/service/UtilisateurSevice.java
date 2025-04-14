@@ -45,8 +45,8 @@ import java.util.Optional;
 @Slf4j
 public class UtilisateurSevice implements IUtilisateurService,UserDetailsService {
 
-    private static final String TOKEN = "Token";
     private UtilisateurDAO utilisateurdao;
+    private static final String TOKEN = "Token";
 
     @Autowired
     private ModelMapper modelmapper;
@@ -238,11 +238,19 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     public Utilisateur updateCompteById(int id , Boolean isactive) {
         Utilisateur utilisateur = utilisateurdao.findById(id).get();
         try{
-            Role role = new Role();
-            role.setType_role(Type_Role.Paysan);
-            utilisateur.set_active(isactive);
             utilisateur.setId(id);
-            utilisateur.setRole(role);
+            utilisateur.set_active(isactive);
+            if(isactive == true){
+                Role role = new Role();
+                role.setType_role(Type_Role.Paysan);
+
+                utilisateur.setRole(role);
+                log.info("utilisqateur : {}",utilisateur);
+            }else {
+                Role role = new Role();
+                role.setType_role(Type_Role.Unkown);
+                utilisateur.setRole(role);
+            }
             utilisateurdao.save(utilisateur);
             return utilisateur;
         } catch (Exception e){

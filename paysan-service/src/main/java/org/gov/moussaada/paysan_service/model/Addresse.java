@@ -20,7 +20,7 @@ public class Addresse implements Serializable {
     @Column(name = "id_addresse")
     private int id;
 
-    private Long id_utilisateur;
+    private int id_utilisateur;
 
     private Integer id_ville;
 

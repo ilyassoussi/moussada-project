@@ -30,8 +30,6 @@ public class UtilisateurServiceApplication {
 //
 //	@PostConstruct //had la methode katexecuta automatique lors dyal demarrage dyal application
 //	public void createAdmin() {
-//		if (!utilisateurdao.findByEmail("moussaada.admin@moussada-admin.com").isPresent()) {
-//			Utilisateur utilisateur = Utilisateur.builder()
 //					.mdp(this.passwordEncoder.encode("Moussaada%@Boadmin2026@@'"))
 //					.date_de_naissance(utile.CurentDate())
 //					.mail("moussaada.admin@moussada-admin.com")

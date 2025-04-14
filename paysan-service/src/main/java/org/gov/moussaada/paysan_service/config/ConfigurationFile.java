@@ -23,13 +23,14 @@ public class ConfigurationFile {
         return TopicBuilder.name(topicName).build();
     }
 
-    
+
     @Bean
     public RequestInterceptor requestInterceptor() {
         return new RequestInterceptor() {
             @Override
             public void apply(RequestTemplate requestTemplate) {
                 String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+                log.info("ici : {}",token);
                 requestTemplate.header("Authorization", "Bearer " + token);
             }
         };

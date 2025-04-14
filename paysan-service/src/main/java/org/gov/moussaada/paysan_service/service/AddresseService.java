@@ -1,6 +1,7 @@
 package org.gov.moussaada.paysan_service.service;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.paysan_service.dao.AddresseDAO;
 import org.gov.moussaada.paysan_service.dto.AddresseRequestDTO;
 import org.gov.moussaada.paysan_service.dto.AddresseResponseDTO;
@@ -11,7 +12,6 @@ import org.gov.moussaada.paysan_service.response.ErrorResponse;
 import org.gov.moussaada.paysan_service.response.SuccessResponse;
 import org.gov.moussaada.paysan_service.service.inter.IAddresseService;
 import org.gov.moussaada.paysan_service.utils.utile;
-import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +22,10 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AddresseService implements IAddresseService {
 
@@ -44,18 +46,25 @@ public class AddresseService implements IAddresseService {
         ) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Error"));
         }
-        Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Addresse> addresseExist = addresseDAO.findByUser((long) utilisateur.getId());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long idUtilisateur = null;
+        if (principal instanceof Map<?, ?>) {
+            Map<String, Object> userDetails = (Map<String, Object>) principal;
+            idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
+        } else {
+            log.warn("Principal n'est pas une Map : {}", principal.getClass());
+        }
+        Optional<Addresse> addresseExist = addresseDAO.findByUser(Math.toIntExact(idUtilisateur));
 
         if (addresseExist.isPresent()) {
             Addresse adress = modelMapper.map(adreesRq, Addresse.class);
             adress.setId(addresseExist.get().getId());
-            adress.setId_utilisateur((long) utilisateur.getId());
+            adress.setId_utilisateur((Math.toIntExact(idUtilisateur)));
             Addresse saved = addresseDAO.save(adress);
             return ResponseEntity.ok().body(new SuccessResponse<>("adresse updated with success", 200, modelMapper.map(saved, AddresseResponseDTO.class)));
         } else {
             Addresse adress = modelMapper.map(adreesRq, Addresse.class);
-            adress.setId_utilisateur((long) utilisateur.getId());
+            adress.setId_utilisateur(Math.toIntExact(idUtilisateur));
             Addresse save = addresseDAO.save(adress);
             if (save != null) {
                 AddresseResponseDTO savedResponse = modelMapper.map(save, AddresseResponseDTO.class);
@@ -68,8 +77,15 @@ public class AddresseService implements IAddresseService {
 
     @Override
     public ResponseEntity<?> getAdress() {
-        Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Addresse> addresseExist = addresseDAO.findByUser((long) utilisateur.getId());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long idUtilisateur = null;
+        if (principal instanceof Map<?, ?>) {
+            Map<String, Object> userDetails = (Map<String, Object>) principal;
+            idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
+        } else {
+            log.warn("Principal n'est pas une Map : {}", principal.getClass());
+        }
+        Optional<Addresse> addresseExist = addresseDAO.findByUser(Math.toIntExact(idUtilisateur));
         if(addresseExist.isPresent()){
             AddresseResponseDTO addresseResponseDTO = modelMapper.map(addresseExist.get() , AddresseResponseDTO.class);
             return ResponseEntity.ok().body(new SuccessResponse<>("l'addresse est exsit",200,addresseResponseDTO));

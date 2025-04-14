@@ -24,7 +24,7 @@ public class Reclamation implements Serializable {
 
     private int id_ville;
 
-    private Long id_user;
+    private int id_user;
 
     private String email;
 
