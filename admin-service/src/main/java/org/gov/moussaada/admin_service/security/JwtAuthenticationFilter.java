@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .setSigningKey(SECRET_KEY).build()
                         .parseClaimsJws(token)
                         .getBody();
+                log.info("ici {}",claims);
 
                 // Extraire les rôles depuis le token JWT
                 Map<String, Object> roleMap = (Map<String, Object>) claims.get("role");
@@ -44,7 +45,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if ("Admin".equals((String)roleMap.get("type_role"))) {
                     authorities.add(new SimpleGrantedAuthority("ROLE_Admin"));
                 }
-
                 // zdte les autorités l la requete dyal authentification dyali bash takhodha en censideration
                 Authentication authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), token, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
