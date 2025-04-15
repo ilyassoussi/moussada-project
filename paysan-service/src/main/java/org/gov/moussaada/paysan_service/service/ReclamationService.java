@@ -14,6 +14,7 @@ import org.gov.moussaada.paysan_service.response.ErrorResponse;
 import org.gov.moussaada.paysan_service.response.SuccessResponse;
 import org.gov.moussaada.paysan_service.service.inter.IReclamationService;
 import org.gov.moussaada.paysan_service.utils.utile;
+import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,11 +38,12 @@ public class ReclamationService implements IReclamationService {
 
     @Autowired
     private ReclamationDAO reclamationDAO;
+
     @Autowired
     private ModelMapper modelMapper;
 
-//    @Autowired
-//    AdminFeign adminFeign;
+    @Autowired
+    private KafakaBrokerPaysan kafakaBrokerPaysan;
 
     @Override
     public ResponseEntity<?> CreateReclamation(ReclamationRequestDTO reclamationRequestDTO) {
@@ -75,13 +77,12 @@ public class ReclamationService implements IReclamationService {
 
     @Override
     public ResponseEntity<?> ReclamaTiondejatraite(int id) {
-//        try{
-//            TraitmentReclamation reponse = adminFeign.getReponse(id);
-//            return ResponseEntity.ok().body(new SuccessResponse<>("voila la reponse",200,reponse));
-//        } catch (Exception e){
-//            return ResponseEntity.badRequest().body("Error: "+e);
-//        }
-        return null;
+        try{
+            ReclamationTraite reponse = kafakaBrokerPaysan.getLastMessage();
+            return ResponseEntity.ok().body(new SuccessResponse<>("voila la reponse",200,reponse));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Error: "+e);
+        }
     }
 
     @Override

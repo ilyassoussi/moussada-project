@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,13 +65,12 @@ public class TraitementService implements ITraitementService {
 
     @Override
     public ResponseEntity<?> GetAll() {
-//        List<Reclamation> reclamation =  paysanFeign.getAll();
-//        if (reclamation != null){
-//            return ResponseEntity.ok().body(new SuccessResponse<>("exist",200,reclamation.stream().collect(Collectors.toList())));
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("aucune reclamation No traite"));
-//        }
-        return  null;
+        List<Reclamation> reclamation =  paysanFeign.getAll();
+        if (!reclamation.isEmpty()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("exist",200,reclamation.stream().collect(Collectors.toList())));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("aucune reclamation No traite"));
+        }
     }
 
     @Override

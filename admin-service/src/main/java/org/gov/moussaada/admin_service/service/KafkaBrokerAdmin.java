@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaBrokerAdmin {
 
-    private NewTopic newTopic;
+    private final NewTopic newTopic;
 
     private final KafkaTemplate<String, ReclamationTraite> kafkaTemplate;
 
@@ -22,9 +22,7 @@ public class KafkaBrokerAdmin {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-
     public void envoyerTraiteReclamtionAuPaysan(ReclamationTraite traitmentReclamation) {
-        log.info("ici : {}",traitmentReclamation);
         Message<ReclamationTraite> message = MessageBuilder.withPayload(traitmentReclamation)
                                             .setHeader(KafkaHeaders.TOPIC,  newTopic.name())
                                             .build();
