@@ -1,8 +1,7 @@
 package org.gov.moussaada.admin_service.controller;
 
-import org.gov.moussaada.admin_service.config.KafkaBroker;
+import org.gov.moussaada.admin_service.service.KafkaBrokerAdmin;
 import org.gov.moussaada.admin_service.dto.TraitementRequestDTO;
-import org.gov.moussaada.admin_service.model.TraitmentReclamation;
 import org.gov.moussaada.admin_service.service.TraitementService;
 import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class TraitementContrloler {
     private TraitementService traitementService;
 
-    private KafkaBroker kafkaBroker;
+    private KafkaBrokerAdmin kafkaBroker;
 
-    public TraitementContrloler(TraitementService traitementService , KafkaBroker kafkaBroker) {
+    public TraitementContrloler(TraitementService traitementService , KafkaBrokerAdmin kafkaBroker) {
         this.traitementService = traitementService;
         this.kafkaBroker = kafkaBroker;
     }
