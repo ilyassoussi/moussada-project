@@ -37,8 +37,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .setSigningKey(SECRET_KEY).build()
                         .parseClaimsJws(token)
                         .getBody();
-                log.info("ici {}",claims);
-
                 // Extraire les rôles depuis le token JWT
                 Map<String, Object> roleMap = (Map<String, Object>) claims.get("role");
                 List<GrantedAuthority> authorities = new ArrayList<>();

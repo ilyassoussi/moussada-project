@@ -12,6 +12,5 @@ import lombok.Setter;
 @Setter
 
 public class TraitementRequestDTO {
-    private int id_reclamation;
     private String reponse;
 }

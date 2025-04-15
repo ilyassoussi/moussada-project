@@ -7,12 +7,14 @@ import lombok.Setter;
 import org.gov.moussaada.admin_service.dao.TraitementDAO;
 import org.gov.moussaada.admin_service.dto.TraitementRequestDTO;
 //import org.gov.moussaada.admin_service.feign.PaysanFeign;
+import org.gov.moussaada.admin_service.feign.PaysanFeign;
 import org.gov.moussaada.admin_service.model.TraitmentReclamation;
 import org.gov.moussaada.admin_service.response.ErrorResponse;
 import org.gov.moussaada.admin_service.response.SuccessResponse;
 import org.gov.moussaada.admin_service.service.inter.ITraitementService;
 //import org.gov.moussaada.admin_service.utils.utile;
 //import org.gov.moussaada.paysan_service.model.Reclamation;
+import org.gov.moussaada.admin_service.utils.utile;
 import org.gov.moussaada.paysan_service.model.Reclamation;
 import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.modelmapper.ModelMapper;
@@ -33,8 +35,8 @@ import java.util.stream.Collectors;
 
 public class TraitementService implements ITraitementService {
 
-//    @Autowired
-//    private PaysanFeign paysanFeign;
+    @Autowired
+    private PaysanFeign paysanFeign;
     @Autowired
     private TraitementDAO traitementDAO;
     @Autowired
@@ -43,18 +45,19 @@ public class TraitementService implements ITraitementService {
 
     @Override
     public ResponseEntity<?> CreateTraitement(int id , TraitementRequestDTO traitementRequestDTO) {
-//        Reclamation reclamation = paysanFeign.geById(id);
-//        TraitmentReclamation traitmentReclamation = modelMapper.map(traitementRequestDTO,TraitmentReclamation.class);
-//        traitmentReclamation.setId_reclamation(reclamation.getId_reclamation());
-//        traitmentReclamation.setDate_creation_reclamation(utile.CurentDate());
-//        TraitmentReclamation savedTra = traitementDAO.save(traitmentReclamation);
-//        if(savedTra != null) {
-//            paysanFeign.updateReclamationById(id);
-//            return ResponseEntity.ok().body(new SuccessResponse<>("traitement est effectue",201,paysanFeign.updateReclamationById(id)));
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Error"));
-//        }
-        return null;
+        Reclamation reclamation = paysanFeign.geById(id);
+        TraitmentReclamation traitmentReclamation = TraitmentReclamation.builder()
+                .date_creation_reclamation(utile.CurentDate())
+                .id_reclamation(reclamation.getId_reclamation())
+                .reponse(traitementRequestDTO.getReponse())
+                .build();
+        TraitmentReclamation savedTra = traitementDAO.save(traitmentReclamation);
+        if(savedTra != null) {
+            paysanFeign.updateReclamationById(id);
+            return ResponseEntity.ok().body(new SuccessResponse<>("traitement est effectue",201,paysanFeign.updateReclamationById(id)));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Error"));
+        }
     }
 
     @Override
