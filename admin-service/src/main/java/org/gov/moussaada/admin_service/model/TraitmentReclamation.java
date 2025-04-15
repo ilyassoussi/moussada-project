@@ -1,10 +1,7 @@
 package org.gov.moussaada.admin_service.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class TraitmentReclamation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
