@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.admin_service.dao.TraitementDAO;
 import org.gov.moussaada.admin_service.dto.TraitementRequestDTO;
 //import org.gov.moussaada.admin_service.feign.PaysanFeign;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
+@Slf4j
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
