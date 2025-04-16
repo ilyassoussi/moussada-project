@@ -43,7 +43,7 @@ public class ReclamationService implements IReclamationService {
     private ModelMapper modelMapper;
 
     @Autowired
-    private KafakaBrokerPaysan kafakaBrokerPaysan;
+    private KafakaPaysanService kafakaBrokerPaysan;
 
     @Override
     public ResponseEntity<?> CreateReclamation(ReclamationRequestDTO reclamationRequestDTO) {
