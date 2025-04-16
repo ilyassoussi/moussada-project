@@ -10,5 +10,5 @@ public interface ITraitementService {
 
     ResponseEntity<?> GetById(int id);
 
-    ReclamationTraite GetByIdByReclamation(int id);
+    ResponseEntity<?> GetByIdByReclamation(int id);
 }

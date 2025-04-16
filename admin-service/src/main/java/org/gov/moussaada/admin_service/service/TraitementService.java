@@ -20,6 +20,7 @@ import org.gov.moussaada.paysan_service.model.Reclamation;
 import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,8 @@ public class TraitementService implements ITraitementService {
     private TraitementDAO traitementDAO;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private KafkaAdminService kafkaAdminService;
 
 
     @Override
@@ -56,7 +59,7 @@ public class TraitementService implements ITraitementService {
                 .build();
         TraitmentReclamation savedTra = traitementDAO.save(traitmentReclamation);
         if(savedTra != null) {
-            paysanFeign.updateReclamationById(id);
+            kafkaAdminService.UpdateStatusReclmation(id);
             return ResponseEntity.ok().body(new SuccessResponse<>("traitement est effectue",201,paysanFeign.updateReclamationById(id)));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Error"));
@@ -84,16 +87,19 @@ public class TraitementService implements ITraitementService {
     }
 
     @Override
-    public ReclamationTraite GetByIdByReclamation(int id) {
+    public ResponseEntity<?> GetByIdByReclamation(int id) {
         try{
             TraitmentReclamation traitmentReclamation = traitementDAO.gettraitementByReclamation(id);
+            if(traitmentReclamation == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("reponse n'existe as pour cette reclamation"));
+            }
             ReclamationTraite reclamationTraite = ReclamationTraite.builder()
                     .id_reclamation(traitmentReclamation.getId_reclamation())
                     .reponse(traitmentReclamation.getReponse())
                     .build();
-            return reclamationTraite;
+            return ResponseEntity.ok().body(new SuccessResponse<>("reponse",200,traitmentReclamation));
         } catch (Exception e){
-            return null;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("error , "+ e));
         }
     }
 }
