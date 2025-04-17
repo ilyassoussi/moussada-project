@@ -55,6 +55,9 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
+    private SmsService smsService;
+
+    @Autowired
     @Lazy
     private AuthenticationManager authenticationManager;
 
@@ -67,21 +70,30 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     public ResponseEntity<?> createAffilie(UtilisateurRequestDTO utilisateurRequestDTO) {
         Utilisateur utilisateur = this.modelmapper.map(utilisateurRequestDTO,Utilisateur.class);
         if(utilisateurdao.findByEmail(utilisateur.getMail()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("vous avez deja un compte , s'il vous plait connecetz-vous..."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Vous avez deja un compte , s'il vous plait connecetz-vous..."));
         }
         if(utilisateurdao.findByIdentite(utilisateur.getIdentite()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("vous avez deja un compte , s'il vous plait connecetz-vous..."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Vous avez deja un compte , s'il vous plait connecetz-vous..."));
         }
         if(!utile.isValidEmail(utilisateurRequestDTO.getMail())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("le mail n'est as compatible avec les normes de securites"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Le mail n'est as compatible avec les normes de securites"));
         }
         if(!utile.isValidPassword(utilisateurRequestDTO.getMdp())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("le mot de passe n'est as compatible avec les normes de securites"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Le mot de passe n'est as compatible avec les normes de securites"));
+        }
+        if(!utile.isValidPhone(utilisateurRequestDTO.getPhone())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Le numéro de téléphone doit être au format marocain (+2126... ou +2127...)"));
         }
         utilisateur.setMdp(this.passwordEncoder.encode(utilisateurRequestDTO.getMdp()));
         Role role = new Role();
         role.setType_role(Type_Role.Unkown);
         utilisateur.setRole(role);
+        int code_validation = utile.GenerateCodeValidation();
+        utilisateur.setValidation(code_validation);
+        // Envoi du SMS
+        String phoneNumber = utilisateurRequestDTO.getPhone(); // s'assurer qu’il est bien au format international
+        String message = "Votre code de validation est : " + code_validation + "/n Ce code est valide pendant 5 min";
+        smsService.sendSms(phoneNumber, message);
         Utilisateur saved = this.utilisateurdao.save(utilisateur);
         if(saved!=null){
             UtilisateurReponseDTO utilrp = this.modelmapper.map(saved,UtilisateurReponseDTO.class);
@@ -256,6 +268,23 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
         } catch (Exception e){
             return null;
         }
+    }
+
+    @Override
+    public ResponseEntity<?> ValidateAccount(int id , int numeroValidation) {
+            try{
+                Optional<Utilisateur> utilisateur = utilisateurdao.findById(id);
+                if(utilisateur.get().getValidation() == numeroValidation) {
+                    utilisateur.get().set_valide(true);
+                    utilisateur.get().setValidation(0);
+                    utilisateurdao.save(utilisateur.get());
+                    return ResponseEntity.ok().body(new SuccessResponse<>("Merci pour votre inscription. Nous allons maintenant effectuer une recherche pour vérifier l'existence de votre dossier dans notre base de données afin d'activer votre compte. Merci !",200,utilisateur));
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("le code que vous avez entrer est invalide !");
+                }
+            } catch (Exception e){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error"+e);
+            }
     }
 
 
