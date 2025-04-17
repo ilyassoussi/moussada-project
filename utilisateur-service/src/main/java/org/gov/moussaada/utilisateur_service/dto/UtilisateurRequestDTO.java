@@ -14,6 +14,7 @@ public class UtilisateurRequestDTO {
     private String nometprenom;
     private String mail;
     private String mdp;
+    private String phone;
     private String confirmation_mdp;
     private Date date_de_naissance;
 }

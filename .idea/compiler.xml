@@ -10,7 +10,7 @@
         <module name="server-config" />
         <module name="gateway-server" />
       </profile>
-      <profile name="Annotation profile for paysan-service" enabled="true">
+      <profile name="Annotation profile for utilisateur-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

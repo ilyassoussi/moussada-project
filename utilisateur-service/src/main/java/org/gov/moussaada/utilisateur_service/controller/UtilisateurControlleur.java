@@ -2,7 +2,6 @@ package org.gov.moussaada.utilisateur_service.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.gov.moussaada.utilisateur_service.dao.JwtDAO;
 import org.gov.moussaada.utilisateur_service.dto.AuthentifDTO;
 import org.gov.moussaada.utilisateur_service.dto.UpdatePasswordRequestDTO;
 import org.gov.moussaada.utilisateur_service.dto.UtilisateurRequestDTO;
@@ -11,10 +10,8 @@ import org.gov.moussaada.utilisateur_service.service.UtilisateurSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/utilisateur")
@@ -23,8 +20,6 @@ public class UtilisateurControlleur {
     @Autowired
     private UtilisateurSevice utilisateurservice;
 
-    @Autowired
-    private JwtDAO jwtDAO;
 
     @PostMapping("/auth/create")
     private ResponseEntity<?> CreateAffilie(@RequestBody UtilisateurRequestDTO requestbody){
@@ -41,11 +36,11 @@ public class UtilisateurControlleur {
         return this.utilisateurservice.logout();
     }
 
-    @PutMapping("/update")
-    private ResponseEntity<?> update(@RequestParam UtilisateurRequestDTO requestbody){
-
-        return null;
-    }
+//    @PutMapping("/update")
+//    private ResponseEntity<?> update(@RequestParam UtilisateurRequestDTO requestbody){
+//
+//        return null;
+//    }
 
     @GetMapping("/getInfoUser/{token}")
     private ResponseEntity<?> getInfoUser(@PathVariable String token){
@@ -81,5 +76,10 @@ public class UtilisateurControlleur {
     @PutMapping("/compte/{id}")
     public Utilisateur compteById(@PathVariable int id,@RequestBody Boolean isactive){
         return utilisateurservice.updateCompteById(id,isactive);
+    }
+
+    @PostMapping("/auth/validate/account/{id}")
+    private ResponseEntity<?> ValidateAccount(@PathVariable int id , @RequestBody int numeroValidation){
+        return this.utilisateurservice.ValidateAccount(id,numeroValidation);
     }
 }
