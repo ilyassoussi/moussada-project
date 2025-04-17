@@ -92,7 +92,7 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
         utilisateur.setValidation(code_validation);
         // Envoi du SMS
         String phoneNumber = utilisateurRequestDTO.getPhone(); // s'assurer qu’il est bien au format international
-        String message = "Votre code de validation est : " + code_validation + "/n Ce code est valide pendant 5 min";
+        String message = "Votre code de validation est : " + code_validation + " , Ce code est valide pendant 5 min";
         smsService.sendSms(phoneNumber, message);
         Utilisateur saved = this.utilisateurdao.save(utilisateur);
         if(saved!=null){
