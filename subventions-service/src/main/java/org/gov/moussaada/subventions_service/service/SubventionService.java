@@ -30,7 +30,7 @@ public class SubventionService implements ISubvention {
     }
 
     @Override
-    public ResponseEntity<?> Update(SubventionRequest subventionRequest) {
+    public ResponseEntity<?> Update(int id  , SubventionRequest subventionRequest) {
         return null;
     }
 

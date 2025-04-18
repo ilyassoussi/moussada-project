@@ -27,14 +27,10 @@ public class SubventionReponse {
 
     private Date dateFin;
 
-    @Column(columnDefinition = "TEXT")
     private String conditionsEligibilite;
 
-    @ElementCollection
     private List<String> piecesRequises;
 
     private String regionConcernee;
 
-    @ElementCollection
-    private List<String> typeProjetEligibles;
 }

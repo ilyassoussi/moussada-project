@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public interface ISubvention {
     ResponseEntity<?> Create(SubventionRequest subventionRequest);
-    ResponseEntity<?> Update(SubventionRequest subventionRequest);
+    ResponseEntity<?> Update(int id , SubventionRequest subventionRequest);
     ResponseEntity<?> GetAll();
     ResponseEntity<?> GetById(int id);
     ResponseEntity<?> RemoveSubvention(int id);
