@@ -32,6 +32,4 @@ public class SubventionRequest {
     private List<String> piecesRequises;
 
     private List<String> regionConcernee;
-
-    private List<String> typeProjetEligibles;
 }

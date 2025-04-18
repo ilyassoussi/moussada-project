@@ -43,7 +43,4 @@ public class Subvention implements Serializable {
 
     @ElementCollection
     private List<Region> regionConcernee;
-
-    @ElementCollection
-    private List<String> typeProjetEligibles;
 }
