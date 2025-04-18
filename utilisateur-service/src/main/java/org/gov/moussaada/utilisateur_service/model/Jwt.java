@@ -19,6 +19,7 @@ public class Jwt implements Serializable {
     @Column(name = "id_token")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(length = 1000)
     private String value;
     private boolean isExpired;
     private boolean isDesactive;

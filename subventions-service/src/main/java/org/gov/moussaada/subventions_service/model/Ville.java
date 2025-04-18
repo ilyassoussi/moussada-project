@@ -1,4 +1,4 @@
-package org.gov.moussaada.paysan_service.model;
+package org.gov.moussaada.subventions_service.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,4 +22,3 @@ public class Ville implements Serializable {
 
     private String ville;
 }
-
