@@ -10,7 +10,7 @@
         <module name="server-config" />
         <module name="gateway-server" />
       </profile>
-      <profile name="Annotation profile for utilisateur-service" enabled="true">
+      <profile name="Annotation profile for subventions-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -19,8 +19,8 @@
         </processorPath>
         <module name="paysan-service" />
         <module name="terrain-service" />
-        <module name="shared-lib" />
         <module name="subventions-service" />
+        <module name="shared-lib" />
         <module name="utilisateur-service" />
         <module name="appel-service" />
         <module name="admin-service" />
