@@ -27,10 +27,12 @@ public class SubventionReponse {
 
     private Date dateFin;
 
+    private Date dateCreation;
+
     private String conditionsEligibilite;
 
     private List<String> piecesRequises;
 
-    private String regionConcernee;
+    private List<Long> id_region;
 
 }

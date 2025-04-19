@@ -30,9 +30,9 @@ public class GatewayServerApplication {
 				.route("paysan-service", r -> r
 						.path("/paysan/**")
 						.uri("lb://paysan-service"))
-				.route("subvention-service", r -> r
+				.route("subventions-service", r -> r
 						.path("/subvention/**")
-						.uri("lb://subvention-service"))
+						.uri("lb://subventions-service"))
 				.route("terrain-service", r -> r
 						.path("/terrain/**")
 						.uri("lb://terrain-service"))

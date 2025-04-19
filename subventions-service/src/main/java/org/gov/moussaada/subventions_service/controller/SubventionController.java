@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.subventions_service.dto.SubventionRequest;
 import org.gov.moussaada.subventions_service.service.SubventionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @Data
 @RequestMapping("/subvention")
 public class SubventionController {
+
+    @Autowired
     private SubventionService subventionService;
 
     @PostMapping("/create")
@@ -24,22 +27,22 @@ public class SubventionController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> Update(@PathVariable int id ,@RequestBody SubventionRequest subventionRequest){
+    public ResponseEntity<?> Update(@PathVariable Long id ,@RequestBody SubventionRequest subventionRequest){
         return subventionService.Update(id , subventionRequest);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> remove(@PathVariable int id){
+    public ResponseEntity<?> remove(@PathVariable Long id){
         return subventionService.RemoveSubvention(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/getall")
     public ResponseEntity<?> get(){
         return subventionService.GetAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable int id){
+    public ResponseEntity<?> getById(@PathVariable Long id){
         return subventionService.GetById(id);
     }
 }

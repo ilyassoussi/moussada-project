@@ -1,5 +1,6 @@
 package org.gov.moussaada.subventions_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import lombok.*;
@@ -22,14 +23,13 @@ public class SubventionRequest {
 
     private double pourcentageSubvention;
 
-    private Date dateDebut;
+    private String dateDebut;
 
-    private Date dateFin;
+    private String dateFin;
 
-    @Column(columnDefinition = "TEXT")
     private String conditionsEligibilite;
 
     private List<String> piecesRequises;
 
-    private List<String> regionConcernee;
+    private List<Long> id_region;
 }
