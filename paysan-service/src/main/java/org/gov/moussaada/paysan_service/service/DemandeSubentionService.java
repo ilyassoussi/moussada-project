@@ -7,12 +7,16 @@ import org.gov.moussaada.paysan_service.dao.DemandeSubventionDAO;
 import org.gov.moussaada.paysan_service.model.DemandeSubvention;
 import org.gov.moussaada.paysan_service.model.Status_demande;
 import org.gov.moussaada.paysan_service.service.inter.IDemandeSubventionService;
+import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
 import org.gov.moussaada.utilisateur_service.response.SuccessResponse;
 import org.gov.moussaada.utilisateur_service.utils.utile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +30,17 @@ public class DemandeSubentionService implements IDemandeSubventionService {
 
     @Override
     public ResponseEntity<?> create(Long idSubvention, String numeroTitre, String description, String devisFilename) {
+
+        if (idSubvention == null) {
+            return ResponseEntity.badRequest().body("Le champ 'id subvention' est requis.");
+        }
+        if (numeroTitre == null || numeroTitre.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Le champ 'numero de titre' est requis.");
+        }
+        if (description == null || description.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Le champ 'description' est requis.");
+        }
+
         DemandeSubvention demandeSubvention = DemandeSubvention.builder()
                 .id_subvention(idSubvention)
                 .numero_titre(numeroTitre)
@@ -42,11 +57,34 @@ public class DemandeSubentionService implements IDemandeSubventionService {
 
     @Override
     public ResponseEntity<?> getAll() {
-        return null;
+        List<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findAll();
+        if(demandeSubvention.isEmpty()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("no demande existe ",200,demandeSubvention));
+        }else{
+            return ResponseEntity.ok().body(new SuccessResponse<>("all demande ",200,demandeSubvention));
+        }
     }
 
     @Override
-    public ResponseEntity<?> update(Long idSubvention, String numeroTitre, String description, String pdfFilename) {
-        return null;
+    public ResponseEntity<?> update(Long id, Long idSubvention, String numeroTitre, String description, String devisFilename) {
+        Optional<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findById(id);
+        if(idSubvention != null) {
+            demandeSubvention.get().setId_subvention(idSubvention);
+        }
+        if (!numeroTitre.trim().isEmpty()) {
+            demandeSubvention.get().setNumero_titre(numeroTitre);
+        }
+        if (!description.trim().isEmpty()) {
+            demandeSubvention.get().setDescription(description);
+        }
+        if (devisFilename != null) {
+            demandeSubvention.get().setDevis_fournisseur(devisFilename);
+        }
+        try{
+            DemandeSubvention saved = demandeSubventionDAO.save(demandeSubvention.get());
+            return ResponseEntity.ok().body(new SuccessResponse<>("updated",200,saved));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(new ErrorResponse("Error lors de mise a jours "+ e));
+        }
     }
 }
