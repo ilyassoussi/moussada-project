@@ -20,10 +20,9 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         this.webClientBuilder = webClientBuilder;
     }
 
-        public boolean matchesPath(String path) {
+        public boolean matchesPath(String path , String pattern) {
         PathPatternParser parser = new PathPatternParser();
         // Définit un modèle de chemin avec un paramètre dynamique (ex : /admin/actualite/{id})
-        String pattern = "/admin/actualite/{id}";  // Le modèle avec un paramètre dynamique
         boolean matches = parser.parse(pattern).matches(PathContainer.parsePath(path));
 
         return matches;
@@ -36,11 +35,11 @@ public class JwtAuthenticationFilter implements GlobalFilter {
 
         System.out.println("Requested path: " + path);
 
-        if (path.startsWith("/utilisateur/auth") || path.startsWith("/pdf") || path.startsWith("/admin/actualite/getall") || path.startsWith("/actuator/health")) {
+        if (path.startsWith("/utilisateur/auth") || path.startsWith("/pdf") || path.startsWith("/admin/actualite/getall") || path.startsWith("/actuator/health") || path.startsWith("/subvention/getall")) {
             System.out.println("Skipping token verification for path: " + path);
             return chain.filter(exchange);
         }
-        if (matchesPath(path)) {
+        if (matchesPath(path,"/admin/actualite/{id}") || matchesPath(path,"/subvention/{id}")) {
             return chain.filter(exchange);
         }
 

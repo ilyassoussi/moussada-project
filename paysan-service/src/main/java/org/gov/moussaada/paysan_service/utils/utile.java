@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class utile {
 
     private static final Path rootLocation = Paths.get("/var/tmp/PDF");
-    private final Path rootLocationimg = Paths.get("src/main/resources/image");
+    private static final Path rootLocationimg = Paths.get("/var/tmp/images");
 
     public static java.util.Date CurentDate() {
         // Obtenir la date et l'heure courante
@@ -36,6 +36,8 @@ public class utile {
         // Convertir LocalDateTime en Date
         return java.util.Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
+
+    /*************************************************POUR PDF *************************************************************************/
 
     public static String savePDF(MultipartFile file) throws IOException {
         if (!Files.exists(rootLocation)) {
@@ -73,26 +75,6 @@ public class utile {
         return destinationFile.getFileName().toString();
     }
 
-    private static String generateUniqueFileName(String originalFileName) {
-        String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
-        String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
-        int count = 1;
-
-        Path destinationFile = rootLocation.resolve(Paths.get(originalFileName)).normalize().toAbsolutePath();
-
-        // Boucle jusqu'à trouver un nom de fichier qui n'existe pas déjà
-        while (Files.exists(destinationFile)) {
-            String newFileName = baseName + "(" + count + ")" + extension;
-            destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
-            count++;
-        }
-
-        return destinationFile.getFileName().toString();
-    }
-
-    public static void imageBloc(){
-
-    }
 
     public static boolean isPDF(MultipartFile file) {
         String fileName = file.getOriginalFilename();
@@ -113,6 +95,91 @@ public class utile {
         }
         return pdfFilename;
     }
+
+    /*********************************************************************************************************************************************************************/
+
+    private static String generateUniqueFileName(String originalFileName) {
+        String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
+        String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+        int count = 1;
+
+        Path destinationFile = rootLocation.resolve(Paths.get(originalFileName)).normalize().toAbsolutePath();
+
+        // Boucle jusqu'à trouver un nom de fichier qui n'existe pas déjà
+        while (Files.exists(destinationFile)) {
+            String newFileName = baseName + "(" + count + ")" + extension;
+            destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
+            count++;
+        }
+
+        return destinationFile.getFileName().toString();
+    }
+
+
+    /***************************************************POUR image*********************************************************************/
+
+    public static boolean isImage(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) return false;
+        String lowerName = fileName.toLowerCase();
+        return lowerName.endsWith(".png") ||
+                lowerName.endsWith(".jpg") ||
+                lowerName.endsWith(".jpeg") ||
+                lowerName.endsWith(".webp");
+    }
+
+    public static String CheckImageAccepded(MultipartFile image){
+        String imageFilename = null;
+        if (image != null && !image.isEmpty()) {
+            if (!isImage(image)) {
+                return String.valueOf(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("File is not a IMAGE.")));
+            }
+            try {
+                imageFilename = saveImage(image);
+            } catch (IOException e) {
+                return String.valueOf(ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(new ErrorResponse("le fichier est deja existe: " + e.getMessage())));
+            }
+        }
+        return imageFilename;
+    }
+
+    private static String saveImage(MultipartFile image) throws IOException {
+        if (!Files.exists(rootLocationimg)) {
+            Files.createDirectories(rootLocationimg);
+        }
+
+        if (!isImage(image)) {
+            throw new IOException("Ce n'est pas un PDF.");
+        }
+
+        if (image.isEmpty()) {
+            throw new IOException("Impossible de stocker un fichier vide.");
+        }
+
+        String fileName = image.getOriginalFilename();
+        Path destinationFile = rootLocationimg.resolve(Paths.get(fileName)).normalize().toAbsolutePath();
+
+        // Vérifier si le fichier existe déjà
+        if (Files.exists(destinationFile)) {
+            // Si le fichier existe, ajouter un suffixe incrémental
+            String newFileName = generateUniqueFileName(fileName);
+            destinationFile = rootLocationimg.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
+        }
+
+        if (!destinationFile.getParent().equals(rootLocationimg.toAbsolutePath())) {
+            throw new IOException("Impossible de stocker le fichier en dehors du répertoire courant.");
+        }
+
+        try {
+            Files.copy(image.getInputStream(), destinationFile);
+        } catch (IOException e) {
+            throw new IOException("Impossible de stocker le fichier.", e);
+        }
+
+        return destinationFile.getFileName().toString();
+    }
+
+    /********************************************************************************************************************************************/
 
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";

@@ -14,14 +14,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-
+@Builder
 public class Subvention implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Type_subv categorie;
+//    @Enumerated(EnumType.STRING)
+    private String categorie;
 
     private String description;
 
@@ -42,5 +42,5 @@ public class Subvention implements Serializable {
     private List<String> piecesRequises;
 
     @ElementCollection
-    private List<Region> regionConcernee;
+    private List<Long> id_region;
 }
