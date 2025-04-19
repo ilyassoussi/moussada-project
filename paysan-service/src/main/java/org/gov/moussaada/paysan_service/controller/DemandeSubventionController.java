@@ -24,8 +24,8 @@ public class DemandeSubventionController {
                                            @RequestParam("numero_titre") String numero_titre,
                                            @RequestParam("description") String description,
                                            @RequestParam(value = "devis_fournisseur" , required = false) MultipartFile devis_fournisseur){
-        String pdfFilename = utile.CheckImageAccepded(devis_fournisseur);
-        return this.demandeSubentionService.create(id_subvention,numero_titre,description,pdfFilename);
+        String devisFilename = utile.CheckImageAccepded(devis_fournisseur);
+        return this.demandeSubentionService.create(id_subvention,numero_titre,description,devisFilename);
     }
 
     @PostMapping("/update/{id}")

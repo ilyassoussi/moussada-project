@@ -1,5 +1,6 @@
 package org.gov.moussaada.paysan_service.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 public class utile {
 
     private static final Path rootLocation = Paths.get("/var/tmp/PDF");
@@ -58,7 +60,7 @@ public class utile {
         // Vérifier si le fichier existe déjà
         if (Files.exists(destinationFile)) {
             // Si le fichier existe, ajouter un suffixe incrémental
-            String newFileName = generateUniqueFileName(fileName);
+            String newFileName = generateUniqueFileName(fileName,rootLocation);
             destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
         }
 
@@ -98,17 +100,17 @@ public class utile {
 
     /*********************************************************************************************************************************************************************/
 
-    private static String generateUniqueFileName(String originalFileName) {
+    private static String generateUniqueFileName(String originalFileName , Path locationpath) {
         String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
         String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
         int count = 1;
 
-        Path destinationFile = rootLocation.resolve(Paths.get(originalFileName)).normalize().toAbsolutePath();
+        Path destinationFile = locationpath.resolve(Paths.get(originalFileName)).normalize().toAbsolutePath();
 
         // Boucle jusqu'à trouver un nom de fichier qui n'existe pas déjà
         while (Files.exists(destinationFile)) {
             String newFileName = baseName + "(" + count + ")" + extension;
-            destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
+            destinationFile = locationpath.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
             count++;
         }
 
@@ -158,12 +160,15 @@ public class utile {
 
         String fileName = image.getOriginalFilename();
         Path destinationFile = rootLocationimg.resolve(Paths.get(fileName)).normalize().toAbsolutePath();
-
+        log.info("voila : {}",destinationFile);
         // Vérifier si le fichier existe déjà
         if (Files.exists(destinationFile)) {
             // Si le fichier existe, ajouter un suffixe incrémental
-            String newFileName = generateUniqueFileName(fileName);
+            log.info("ici : {}",destinationFile);
+            String newFileName = generateUniqueFileName(fileName,rootLocationimg);
             destinationFile = rootLocationimg.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
+            log.info("icissss : {}",newFileName);
+            log.info("icissss : {}",destinationFile);
         }
 
         if (!destinationFile.getParent().equals(rootLocationimg.toAbsolutePath())) {
