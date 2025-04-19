@@ -87,4 +87,14 @@ public class DemandeSubentionService implements IDemandeSubventionService {
             return ResponseEntity.badRequest().body(new ErrorResponse("Error lors de mise a jours "+ e));
         }
     }
+
+    @Override
+    public ResponseEntity<?> getById(Long id) {
+        Optional<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findById(id);
+        if(demandeSubvention.isEmpty()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("no demande existe avec id = "+id,200,demandeSubvention));
+        }else{
+            return ResponseEntity.ok().body(new SuccessResponse<>("demande avec id = "+id,200,demandeSubvention.get()));
+        }
+    }
 }

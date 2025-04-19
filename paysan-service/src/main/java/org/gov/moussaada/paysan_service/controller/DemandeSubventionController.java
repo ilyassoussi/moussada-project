@@ -15,8 +15,13 @@ public class DemandeSubventionController {
 
 
     @GetMapping("")
-    public ResponseEntity<?> getAddressById(){
+    public ResponseEntity<?> getAll(){
         return demandeSubentionService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id){
+        return demandeSubentionService.getById(id);
     }
 
     @PostMapping("/create")

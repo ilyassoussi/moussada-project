@@ -12,4 +12,6 @@ public interface IDemandeSubventionService{
     ResponseEntity<?> getAll();
 
     ResponseEntity<?> update(Long id, Long idSubvention, String numeroTitre, String description, String pdfFilename);
+
+    ResponseEntity<?> getById(Long id);
 }
