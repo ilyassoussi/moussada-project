@@ -164,11 +164,8 @@ public class utile {
         // Vérifier si le fichier existe déjà
         if (Files.exists(destinationFile)) {
             // Si le fichier existe, ajouter un suffixe incrémental
-            log.info("ici : {}",destinationFile);
             String newFileName = generateUniqueFileName(fileName,rootLocationimg);
             destinationFile = rootLocationimg.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
-            log.info("icissss : {}",newFileName);
-            log.info("icissss : {}",destinationFile);
         }
 
         if (!destinationFile.getParent().equals(rootLocationimg.toAbsolutePath())) {

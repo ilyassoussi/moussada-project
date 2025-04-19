@@ -28,14 +28,14 @@ public class DemandeSubventionController {
         return this.demandeSubentionService.create(id_subvention,numero_titre,description,devisFilename);
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateDemande(@PathVariable Long id,
-                                           @RequestParam("id_subvention") Long id_subvention,
-                                           @RequestParam("numero_titre") String numero_titre,
-                                           @RequestParam("description") String description,
+                                           @RequestParam(value = "id_subvention" , required = false) Long id_subvention,
+                                           @RequestParam(value = "numero_titre" , required = false) String numero_titre,
+                                           @RequestParam(value = "description" ,required = false) String description,
                                            @RequestParam(value = "devis_fournisseur" , required = false) MultipartFile devis_fournisseur){
-        String pdfFilename = utile.CheckImageAccepded(devis_fournisseur);
-        return this.demandeSubentionService.update(id_subvention,numero_titre,description,pdfFilename);
+        String devisFilename = utile.CheckImageAccepded(devis_fournisseur);
+        return this.demandeSubentionService.update(id,id_subvention,numero_titre,description,devisFilename);
     }
 
 }
