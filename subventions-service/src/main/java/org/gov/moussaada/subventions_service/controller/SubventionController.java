@@ -45,4 +45,10 @@ public class SubventionController {
     public ResponseEntity<?> getById(@PathVariable Long id){
         return subventionService.GetById(id);
     }
+
+//    @PostMapping("/traitement/{id}")
+//    public ResponseEntity<?> traite(@PathVariable Long id){
+//
+//    }
+
 }
