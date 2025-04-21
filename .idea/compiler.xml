@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="titration" />
         <module name="server-config" />
         <module name="gateway-server" />
       </profile>
@@ -37,6 +38,7 @@
       <module name="shared-lib" options="-parameters" />
       <module name="subventions-service" options="-parameters" />
       <module name="terrain-service" options="-parameters" />
+      <module name="titration" options="-parameters" />
       <module name="utilisateur-service" options="-parameters" />
     </option>
   </component>
