@@ -47,6 +47,11 @@ public class UtilisateurControlleur {
         return this.utilisateurservice.getUserByToken(token);
     }
 
+    @GetMapping("/getbyid/{id}")
+    private Utilisateur getInfoId(@PathVariable int id){
+        return this.utilisateurservice.getById(id);
+    }
+
     @PutMapping("/update/password")
     private ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequestDTO updatePasswordRequestDTO){
         return utilisateurservice.updatePassword(updatePasswordRequestDTO);

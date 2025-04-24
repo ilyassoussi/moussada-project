@@ -13,6 +13,7 @@ import java.util.List;
 
 @FeignClient(name ="utilisateur-service", fallbackFactory = UtilisateurFeignFallbackFactory.class)
 @CircuitBreaker(name = "UtilisateurFeign")
+
 public interface UtilisateurFeign {
 
     @GetMapping("/utilisateur/compte") // <-- OK
@@ -20,6 +21,9 @@ public interface UtilisateurFeign {
 
     @GetMapping("/utilisateur/compte/active") // <-- OK
     List<Utilisateur> getByStatus();
+
+    @GetMapping("/utilisateur/getbyid/{id}") // <-- OK
+    Utilisateur getById(@PathVariable("id") int id);
 
     @GetMapping("/utilisateur/compte/inactive") // <-- OK
     List<Utilisateur> getByInActive();

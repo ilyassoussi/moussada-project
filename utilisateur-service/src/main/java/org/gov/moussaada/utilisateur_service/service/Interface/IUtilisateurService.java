@@ -27,4 +27,6 @@ public interface IUtilisateurService {
     public Utilisateur updateCompteById(int id , Boolean isactive);
 
     ResponseEntity<?> ValidateAccount(int id , int numeroValidation);
+
+    Utilisateur getById(int id);
 }

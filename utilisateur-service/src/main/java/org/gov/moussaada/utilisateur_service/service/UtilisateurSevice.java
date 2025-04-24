@@ -287,6 +287,11 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
             }
     }
 
+    @Override
+    public Utilisateur getById(int id) {
+        return utilisateurdao.findById(id).get();
+    }
+
 
     //    @Override
 //    public ResponseEntity<?> createAdmin(UtilisateurRequestDTO utilisateurRequestDTO) {
