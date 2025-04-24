@@ -35,4 +35,5 @@ public class DemandeSubvention implements Serializable {
 
     private Date dateDepot;
 
+    private int id_paysan;
 }

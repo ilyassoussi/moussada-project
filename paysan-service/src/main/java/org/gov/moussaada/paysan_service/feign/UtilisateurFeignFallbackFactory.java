@@ -25,6 +25,11 @@ public class UtilisateurFeignFallbackFactory implements FallbackFactory<Utilisat
             }
 
             @Override
+            public Utilisateur getById(int id) {
+                return null;
+            }
+
+            @Override
             public List<Utilisateur> getByInActive() {
                 System.out.println("Fallback getByInActive: " + cause.getMessage());
                 return List.of();
