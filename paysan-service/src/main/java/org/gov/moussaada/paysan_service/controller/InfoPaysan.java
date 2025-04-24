@@ -1,6 +1,7 @@
 package org.gov.moussaada.paysan_service.controller;
 
 import io.spring.guides.gs_producing_web_service.GetInformationsResponse;
+import org.gov.moussaada.paysan_service.response.SuccessResponse;
 import org.gov.moussaada.paysan_service.service.TerrainSOAPService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +18,8 @@ public class InfoPaysan {
     }
 
     @GetMapping("")
-    public ResponseEntity<GetInformationsResponse> getTerre() {
+    public ResponseEntity<?> getTerre() {
         GetInformationsResponse response = terrainSoapService.getTerreByCIN();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().body(new SuccessResponse<>("information sur le paysan",200,response));
     }
 }
