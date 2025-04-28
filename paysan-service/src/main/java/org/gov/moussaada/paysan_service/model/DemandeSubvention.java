@@ -23,6 +23,8 @@ public class DemandeSubvention implements Serializable {
 
     private Long id_subvention;
 
+    private int id_paysan;
+
     private String numero_titre;
 
     @Enumerated(EnumType.STRING)
@@ -35,5 +37,4 @@ public class DemandeSubvention implements Serializable {
 
     private Date dateDepot;
 
-    private int id_paysan;
 }

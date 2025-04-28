@@ -3,6 +3,7 @@ package org.gov.moussaada.paysan_service.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.paysan_service.dao.DemandeSubventionDAO;
 import org.gov.moussaada.paysan_service.model.DemandeSubvention;
 import org.gov.moussaada.paysan_service.model.Status_demande;
@@ -13,16 +14,18 @@ import org.gov.moussaada.utilisateur_service.utils.utile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
+@Slf4j
 public class DemandeSubentionService implements IDemandeSubventionService {
 
     @Autowired
@@ -30,6 +33,9 @@ public class DemandeSubentionService implements IDemandeSubventionService {
 
     @Override
     public ResponseEntity<?> create(Long idSubvention, String numeroTitre, String description, String devisFilename) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String, Object> userDetails = (Map<String, Object>) principal;
+        Long idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
 
         if (idSubvention == null) {
             return ResponseEntity.badRequest().body("Le champ 'id subvention' est requis.");
@@ -48,6 +54,7 @@ public class DemandeSubentionService implements IDemandeSubventionService {
                 .devis_fournisseur(devisFilename)
                 .statusDemande(Status_demande.EN_ATTENTE)
                 .dateDepot(utile.CurentDate())
+                .id_paysan(Math.toIntExact(idUtilisateur))
                 .build();
 
         DemandeSubvention saveDemande =  demandeSubventionDAO.save(demandeSubvention);
