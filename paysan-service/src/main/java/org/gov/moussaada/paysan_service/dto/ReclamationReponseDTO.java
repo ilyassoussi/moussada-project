@@ -15,8 +15,6 @@ public class ReclamationReponseDTO {
 
     private int id_ville;
 
-    private Long id_use;
-
     private String email;
 
     private String addresse;

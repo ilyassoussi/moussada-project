@@ -8,6 +8,8 @@ public class DemandeSubventionResponse {
 
     private Long id_subvention;
 
+    private int id_paysan;
+
     private String numero_titre;
 
     private Status_demande statusDemande;

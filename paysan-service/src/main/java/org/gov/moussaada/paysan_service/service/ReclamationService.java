@@ -48,18 +48,12 @@ public class ReclamationService implements IReclamationService {
     @Override
     public ResponseEntity<?> CreateReclamation(ReclamationRequestDTO reclamationRequestDTO) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String, Object> userDetails = (Map<String, Object>) principal;
+        Long idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
 
-        Long idUtilisateur = null;
-        if (principal instanceof Map<?, ?>) {
-            Map<String, Object> userDetails = (Map<String, Object>) principal;
-            idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
-            log.info("ID de l'utilisateur : {}", idUtilisateur);
-        } else {
-            log.warn("Principal n'est pas une Map : {}", principal.getClass());
-        }
         Reclamation reclamation = modelMapper.map(reclamationRequestDTO, Reclamation.class);
         reclamation.setDate_creation(utile.CurentDate());
-        reclamation.setId_user(Math.toIntExact(idUtilisateur));
+        reclamation.setId_paysan(Math.toIntExact(idUtilisateur));
         reclamation.setInTreatment(false);
         if (utile.isValidEmail(reclamation.getEmail())) {
             Reclamation SaveReclamation = reclamationDAO.save(reclamation);
@@ -88,14 +82,9 @@ public class ReclamationService implements IReclamationService {
     @Override
     public ResponseEntity<?> GetAll() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long idUtilisateur = null;
-        if (principal instanceof Map<?, ?>) {
-            Map<String, Object> userDetails = (Map<String, Object>) principal;
-            idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
-            log.info("ID de l'utilisateur : {}", idUtilisateur);
-        } else {
-            log.warn("Principal n'est pas une Map : {}", principal.getClass());
-        }
+        Map<String, Object> userDetails = (Map<String, Object>) principal;
+        Long idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
+
         List<Reclamation> reclamation =  reclamationDAO.findByUser(Math.toIntExact(idUtilisateur));
         if (!reclamation.isEmpty()){
             return ResponseEntity.ok().body(new SuccessResponse<>("exist",200,reclamation.stream().collect(Collectors.toList())));
