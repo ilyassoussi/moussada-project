@@ -1,28 +1,20 @@
-package org.gov.moussaada.subventions_service.model;
+package org.gov.moussaada.subventions_service.dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Builder
-@Table(name = "traitement_subvention")
+public class TraitementSubventionResponse {
 
-public class TraitementSubvention {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_traitement;
 
     private int id_demande;
-
-    /*
+    /**
      * EN_ATTENTE
      * VALIDEE
      * REFUSEE
@@ -37,10 +29,9 @@ public class TraitementSubvention {
 
     private int nombre_de_plan;
 
-    private boolean isValidateByTechnique = false;
+    private boolean isValidateByTechnique;
 
     private Date date_traitement;
 
     private Date date_update;
-
 }

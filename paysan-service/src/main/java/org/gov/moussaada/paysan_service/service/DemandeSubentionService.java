@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.paysan_service.dao.DemandeSubventionDAO;
+import org.gov.moussaada.paysan_service.feign.SubventionFeign;
 import org.gov.moussaada.paysan_service.model.DemandeSubvention;
 import org.gov.moussaada.paysan_service.model.Status_demande;
 import org.gov.moussaada.paysan_service.service.inter.IDemandeSubventionService;
+import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
 import org.gov.moussaada.utilisateur_service.response.SuccessResponse;
 import org.gov.moussaada.utilisateur_service.utils.utile;
@@ -30,6 +32,9 @@ public class DemandeSubentionService implements IDemandeSubventionService {
 
     @Autowired
     private DemandeSubventionDAO demandeSubventionDAO;
+
+    @Autowired
+    private SubventionFeign subventionFeign;
 
     @Override
     public ResponseEntity<?> create(Long idSubvention, String numeroTitre, String description, String devisFilename) {
@@ -96,12 +101,13 @@ public class DemandeSubentionService implements IDemandeSubventionService {
     }
 
     @Override
-    public ResponseEntity<?> getById(Long id) {
-        Optional<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findById(id);
-        if(demandeSubvention.isEmpty()){
-            return ResponseEntity.ok().body(new SuccessResponse<>("no demande existe avec id = "+id,200,demandeSubvention));
-        }else{
-            return ResponseEntity.ok().body(new SuccessResponse<>("demande avec id = "+id,200,demandeSubvention.get()));
+    public ResponseEntity<?> getById(int id) {
+//        Optional<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findById(id);
+        TraitementSubvention traitementSubvention = subventionFeign.getByIdDemande(id);
+        if(traitementSubvention == null) {
+            return ResponseEntity.ok().body(new SuccessResponse<>("no message existe ",200,null));
+        } else {
+            return ResponseEntity.ok().body(new SuccessResponse<>("message existe",200,traitementSubvention));
         }
     }
 }
