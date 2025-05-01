@@ -20,7 +20,7 @@ public class DemandeSubventionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable int id){
         return demandeSubentionService.getById(id);
     }
 
