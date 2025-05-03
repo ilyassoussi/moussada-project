@@ -1,11 +1,11 @@
-package org.gov.moussaada.admin_service.service;
+package org.gov.moussaada.subventions_service.service;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
+import org.gov.moussaada.subventions_service.dto.KafkaUpdateStatusDTO;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -16,20 +16,18 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 
-public class KafkaAdminService {
+public class KafkaSubventionService {
 
     private final NewTopic newTopic;
 
-    private final KafkaTemplate<String, ReclamationTraite> kafkaTemplate;
 
     private final KafkaTemplate<String, KafkaMoussaadaDTO> kafkaTemplateUpdateResponse;
 
-    public void UpdateStatusReclmation(int id) {
-        KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("RECLAMATION",id);
+    public void UpdateStatusDemande(KafkaMoussaadaDTO kafkaMoussaadaDTO) {
         Message<KafkaMoussaadaDTO> message = MessageBuilder.withPayload(kafkaMoussaadaDTO)
                 .setHeader(KafkaHeaders.TOPIC,  newTopic.name())
                 .build();
         kafkaTemplateUpdateResponse.send(message);
-        log.info("update reclamation status : {}",kafkaTemplateUpdateResponse.send(message));
-    }
+        log.info("ok : {}",message.getPayload());
+     }
 }

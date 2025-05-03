@@ -22,6 +22,6 @@ public class TraitementSubventionRequest {
 
     private Double montantSubvention; //min(coûtProjet * tauxSubvention, plafondParType)
 
-    private int nombre_de_plan;
+    private Integer nombre_de_plan;
 
 }

@@ -1,4 +1,4 @@
-package org.gov.moussaada.admin_service.service;
+package org.gov.moussaada.terrain_service.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.subventions_service.dao.ValidateSubventionDAO;
+import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
+import org.gov.moussaada.subventions_service.dto.KafkaUpdateStatusDTO;
 import org.gov.moussaada.subventions_service.dto.TraitementSubventionRequest;
 import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.gov.moussaada.subventions_service.service.inter.ITraitementSubvention;
@@ -29,6 +31,9 @@ public class TraitementSubventionService implements ITraitementSubvention {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private KafkaSubventionService kafkaSubventionService;
+
     @Override
     public ResponseEntity<?> CreateTraitement(TraitementSubventionRequest traitementSubventionRequest) {
         TraitementSubvention traitementSubvention = modelMapper.map(traitementSubventionRequest,TraitementSubvention.class);
@@ -36,6 +41,8 @@ public class TraitementSubventionService implements ITraitementSubvention {
         traitementSubvention.setDate_update(utile.CurentDate());
 
         try{
+            KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TRAITEMENT", new KafkaUpdateStatusDTO(traitementSubvention.getId_demande(), traitementSubvention.getStatus()));
+            kafkaSubventionService.UpdateStatusDemande(kafkaMoussaadaDTO);
             TraitementSubvention saved = validateSubvention.save(traitementSubvention);
             return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>("created",201,saved));
         } catch (Exception e) {
@@ -47,16 +54,21 @@ public class TraitementSubventionService implements ITraitementSubvention {
     public ResponseEntity<?> UpdateTraitement(int id , TraitementSubventionRequest traitementSubventionRequest) {
         TraitementSubvention traitementSubvention = validateSubvention.findById(id).get();
         if(traitementSubventionRequest.getMontantSubvention() != null) {
-            traitementSubvention.setMontantSubvention(traitementSubvention.getMontantSubvention());
+            traitementSubvention.setMontantSubvention(traitementSubventionRequest.getMontantSubvention());
         }
-        if(traitementSubventionRequest.getDescription() != null){
-            traitementSubvention.setDescription(traitementSubvention.getDescription());
+
+        if(traitementSubventionRequest.getDescription() != null && !traitementSubventionRequest.getDescription().isEmpty()) {
+            traitementSubvention.setDescription(traitementSubventionRequest.getDescription());
         }
-        if(traitementSubventionRequest.getStatus() != null ){
-            traitementSubvention.setStatus(traitementSubvention.getStatus());
+
+        if(traitementSubventionRequest.getStatus() != null && !traitementSubventionRequest.getStatus().isEmpty()) {
+            traitementSubvention.setStatus(traitementSubventionRequest.getStatus());
+            KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TRAITEMENT", new KafkaUpdateStatusDTO(traitementSubvention.getId_demande(), traitementSubvention.getStatus()));
+            kafkaSubventionService.UpdateStatusDemande(kafkaMoussaadaDTO);
         }
-        if(traitementSubventionRequest.getNombre_de_plan() != 0 ){
-            traitementSubvention.setNombre_de_plan(traitementSubvention.getNombre_de_plan());
+
+        if(traitementSubventionRequest.getNombre_de_plan() != null) {
+            traitementSubvention.setNombre_de_plan(traitementSubventionRequest.getNombre_de_plan());
         }
         traitementSubvention.setDate_update(utile.CurentDate());
         try{
@@ -80,6 +92,16 @@ public class TraitementSubventionService implements ITraitementSubvention {
             return null;
         } else {
             return traitementSubvention;
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> Delete(int id) {
+        try{
+            validateSubvention.deleteById(id);
+            return ResponseEntity.ok().body(new SuccessResponse<>("deleted with success",200,null));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
