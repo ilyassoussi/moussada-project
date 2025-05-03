@@ -9,4 +9,6 @@ public interface ITraitementSubvention {
     ResponseEntity<?> UpdateTraitement(int id , TraitementSubventionRequest traitementSubventionRequest);
     ResponseEntity<?> GetAllTraitement();
     TraitementSubvention GetByIdDemande(int id);
+
+    ResponseEntity<?> Delete(int id);
 }

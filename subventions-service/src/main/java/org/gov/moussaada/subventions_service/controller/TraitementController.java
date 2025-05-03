@@ -37,4 +37,9 @@ public class TraitementController {
     TraitementSubvention getByIdDemande(@PathVariable int id){
         return traitementSubventionService.GetByIdDemande(id);
     }
+
+    @DeleteMapping("/delete/{id}")
+    ResponseEntity<?> deleteTraitement(@PathVariable int id){
+        return traitementSubventionService.Delete(id);
+    }
 }
