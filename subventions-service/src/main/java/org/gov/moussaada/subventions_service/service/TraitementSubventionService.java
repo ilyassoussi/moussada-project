@@ -43,6 +43,12 @@ public class TraitementSubventionService implements ITraitementSubvention {
         try{
             KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TRAITEMENT", new KafkaUpdateStatusDTO(traitementSubvention.getId_demande(), traitementSubvention.getStatus()));
             kafkaSubventionService.UpdateStatusDemande(kafkaMoussaadaDTO);
+            /*
+            * @TODO Avoir un appel avec KAFKA au service de Terrain
+            */
+            if(traitementSubvention.getStatus().equals("EN_ATTENTE_EVALUATION_TERRAIN")){
+                System.out.println("ici le traitement d'envoyer la demande au service Technique (Terrain)");
+            }
             TraitementSubvention saved = validateSubvention.save(traitementSubvention);
             return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>("created",201,saved));
         } catch (Exception e) {
@@ -73,6 +79,12 @@ public class TraitementSubventionService implements ITraitementSubvention {
         traitementSubvention.setDate_update(utile.CurentDate());
         try{
             TraitementSubvention saved = validateSubvention.save(traitementSubvention);
+            /*
+             * @TODO Avoir un appel avec KAFKA au service de Terrain
+             */
+            if(traitementSubvention.getStatus().equals("EN_ATTENTE_EVALUATION_TERRAIN")){
+                System.out.println("ici le traitement d'envoyer la demande au service Technique (Terrain)");
+            }
             return ResponseEntity.ok().body(new SuccessResponse<>("updated",200,saved));
         } catch (Exception e) {
             throw new RuntimeException(e);
