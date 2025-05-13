@@ -5,7 +5,7 @@ import io.spring.guides.gs_producing_web_service.GetInformationsResponse;
 import io.spring.guides.gs_producing_web_service.GetTerreRequest;
 import io.spring.guides.gs_producing_web_service.GetTerreResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.gov.moussaada.admin_service.feign.UtilisateurFeign;
+import org.gov.moussaada.terrain_service.feign.UtilisateurFeign;
 import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
