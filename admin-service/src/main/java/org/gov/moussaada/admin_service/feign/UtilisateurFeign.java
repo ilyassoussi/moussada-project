@@ -4,7 +4,6 @@ package org.gov.moussaada.admin_service.feign;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +17,9 @@ public interface UtilisateurFeign {
 
     @GetMapping("/utilisateur/compte") // <-- OK
     List<Utilisateur> getAll();
+
+    @GetMapping("/utilisateur/getbyid/{id}") // <-- OK
+    Utilisateur getById(@PathVariable("id") int id);
 
     @GetMapping("/utilisateur/compte/active") // <-- OK
     List<Utilisateur> getByStatus();

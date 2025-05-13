@@ -8,7 +8,6 @@ import org.gov.moussaada.paysan_service.dao.ReclamationDAO;
 import org.gov.moussaada.paysan_service.model.DemandeSubvention;
 import org.gov.moussaada.paysan_service.model.Reclamation;
 import org.gov.moussaada.paysan_service.model.Status_demande;
-import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.subventions_service.dto.KafkaUpdateStatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Service;
 @Setter
 @Slf4j
 public class KafakaPaysanService {
-
-    private ReclamationTraite lastMessage;
 
     @Autowired
     private ReclamationDAO reclamationDAO;

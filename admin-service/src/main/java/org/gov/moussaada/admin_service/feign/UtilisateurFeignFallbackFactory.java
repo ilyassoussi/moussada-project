@@ -19,6 +19,11 @@ public class UtilisateurFeignFallbackFactory implements FallbackFactory<Utilisat
             }
 
             @Override
+            public Utilisateur getById(int id) {
+                return null;
+            }
+
+            @Override
             public List<Utilisateur> getByStatus() {
                 System.out.println("Fallback getByStatus: " + cause.getMessage());
                 return List.of();

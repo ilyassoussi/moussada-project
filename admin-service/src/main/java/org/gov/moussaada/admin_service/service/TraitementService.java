@@ -7,20 +7,15 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.admin_service.dao.TraitementDAO;
 import org.gov.moussaada.admin_service.dto.TraitementRequestDTO;
-//import org.gov.moussaada.admin_service.feign.PaysanFeign;
 import org.gov.moussaada.admin_service.feign.PaysanFeign;
 import org.gov.moussaada.admin_service.model.TraitmentReclamation;
 import org.gov.moussaada.admin_service.response.ErrorResponse;
 import org.gov.moussaada.admin_service.response.SuccessResponse;
 import org.gov.moussaada.admin_service.service.inter.ITraitementService;
-//import org.gov.moussaada.admin_service.utils.utile;
-//import org.gov.moussaada.paysan_service.model.Reclamation;
 import org.gov.moussaada.admin_service.utils.utile;
 import org.gov.moussaada.paysan_service.model.Reclamation;
-import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -93,10 +88,6 @@ public class TraitementService implements ITraitementService {
             if(traitmentReclamation == null){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("reponse n'existe as pour cette reclamation"));
             }
-            ReclamationTraite reclamationTraite = ReclamationTraite.builder()
-                    .id_reclamation(traitmentReclamation.getId_reclamation())
-                    .reponse(traitmentReclamation.getReponse())
-                    .build();
             return ResponseEntity.ok().body(new SuccessResponse<>("reponse",200,traitmentReclamation));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("error , "+ e));

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 public class KafkaAdminService {
 
     private final NewTopic newTopic;
-
-    private final KafkaTemplate<String, ReclamationTraite> kafkaTemplate;
 
     private final KafkaTemplate<String, KafkaMoussaadaDTO> kafkaTemplateUpdateResponse;
 

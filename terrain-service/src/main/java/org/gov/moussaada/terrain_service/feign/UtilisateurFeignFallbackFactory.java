@@ -1,8 +1,8 @@
 package org.gov.moussaada.terrain_service.feign;
 
+import org.gov.moussaada.admin_service.feign.UtilisateurFeign;
 import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.cloud.openfeign.FallbackFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,6 +16,11 @@ public class UtilisateurFeignFallbackFactory implements FallbackFactory<Utilisat
             public List<Utilisateur> getAll() {
                 System.out.println("Fallback getAll: " + cause.getMessage());
                 return List.of(); // retour par défaut
+            }
+
+            @Override
+            public Utilisateur getById(int id) {
+                return null;
             }
 
             @Override

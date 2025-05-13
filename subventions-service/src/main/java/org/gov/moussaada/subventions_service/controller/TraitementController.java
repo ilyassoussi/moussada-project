@@ -28,14 +28,24 @@ public class TraitementController {
         return traitementSubventionService.UpdateTraitement(id,traitementSubventionRequest);
     }
 
-    @GetMapping()
+    @GetMapping("")
     ResponseEntity<?> getAll(){
         return traitementSubventionService.GetAllTraitement();
     }
 
-    @GetMapping("/{id}")
-    TraitementSubvention getByIdDemande(@PathVariable int id){
+    @GetMapping("/info-demande/{id}")
+    ResponseEntity<?> getInfoDemande(@PathVariable Long id){
+        return traitementSubventionService.GetInfoDemande(id);
+    }
+
+    @GetMapping("/getdemande/{id}")
+    ResponseEntity<?> getByIdDemande(@PathVariable int id){
         return traitementSubventionService.GetByIdDemande(id);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getById(@PathVariable int id) {
+        return traitementSubventionService.GetById(id);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -2,6 +2,7 @@ package org.gov.moussaada.paysan_service.feign;
 
 import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.http.ResponseEntity;
 
 public class SubventionFeignFallbackFactory implements FallbackFactory<SubventionFeign> {
     @Override
@@ -9,7 +10,7 @@ public class SubventionFeignFallbackFactory implements FallbackFactory<Subventio
         return new SubventionFeign() {
 
             @Override
-            public TraitementSubvention getByIdDemande(int id) {
+            public ResponseEntity<?> getByIdDemande(int id) {
                 return null;
             }
         };

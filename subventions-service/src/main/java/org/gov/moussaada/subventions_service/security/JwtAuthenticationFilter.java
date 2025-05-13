@@ -48,6 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authorities.add(new SimpleGrantedAuthority("ROLE_Admin"));
                 } else if ("Paysan".equals((String)roleMap.get("type_role"))) {
                     authorities.add(new SimpleGrantedAuthority("ROLE_Paysan"));
+                } else if ("Service_terrain".equals((String)roleMap.get("type_role"))) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_Service_terrain"));
                 }
                 // zdte les autorités l la requete dyal authentification dyali bash takhodha en censideration
                 Authentication authentication = new UsernamePasswordAuthenticationToken(claims, token, authorities);
