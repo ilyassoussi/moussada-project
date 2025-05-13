@@ -51,7 +51,6 @@ public class ActualiteController {
                                      @RequestParam("titre") String titre,
                                      @RequestParam("description") String description,
                                      @RequestParam(value = "pdf" , required = false) MultipartFile pdf){
-        System.out.println("Sdasdsd");
         String pdfFilename = utile.CheckPdfAccepded(pdf);
         ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(titre, description, pdfFilename, utile.CurentDate());
         return actualiteService.update(actualiteRQ,id);

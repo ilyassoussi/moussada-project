@@ -8,15 +8,20 @@ import org.gov.moussaada.subventions_service.dao.ValidateSubventionDAO;
 import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.subventions_service.dto.KafkaUpdateStatusDTO;
 import org.gov.moussaada.subventions_service.dto.TraitementSubventionRequest;
+import org.gov.moussaada.subventions_service.feign.SharedFeign;
 import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.gov.moussaada.subventions_service.service.inter.ITraitementSubvention;
 import org.gov.moussaada.subventions_service.utils.utile;
+import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
 import org.gov.moussaada.utilisateur_service.response.SuccessResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +38,9 @@ public class TraitementSubventionService implements ITraitementSubvention {
 
     @Autowired
     private KafkaSubventionService kafkaSubventionService;
+
+    @Autowired
+    private SharedFeign sharedFeign;
 
     @Override
     public ResponseEntity<?> CreateTraitement(TraitementSubventionRequest traitementSubventionRequest) {
@@ -97,13 +105,24 @@ public class TraitementSubventionService implements ITraitementSubvention {
     }
 
     @Override
-    public TraitementSubvention GetByIdDemande(int id) {
+    public ResponseEntity<?> GetByIdDemande(int id) {
+//        Optional<TraitementSubvention> traitementSubvention = validateSubvention.findById(id);
         TraitementSubvention traitementSubvention = validateSubvention.findByIDemanade(id);
         log.info("ici : {}",traitementSubvention);
         if(traitementSubvention == null){
-            return null;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Aucun traitement por cette demande"));
         } else {
-            return traitementSubvention;
+            return ResponseEntity.ok().body(new SuccessResponse<>("voila les traitements par demandes de paysan",200,traitementSubvention));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> GetById(int id) {
+        Optional<TraitementSubvention> traitementSubvention = validateSubvention.findById(id);
+        if(!traitementSubvention.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Aucun traitement trouver"));
+        } else {
+            return ResponseEntity.ok().body(new SuccessResponse<>("voila le traitements ",200,traitementSubvention));
         }
     }
 
@@ -114,6 +133,16 @@ public class TraitementSubventionService implements ITraitementSubvention {
             return ResponseEntity.ok().body(new SuccessResponse<>("deleted with success",200,null));
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> GetInfoDemande(Long id) {
+        ResponseEntity<?> demande_paysan = sharedFeign.getInfoDemande(id);
+        if(demande_paysan.getStatusCode().is2xxSuccessful()){
+            return demande_paysan;
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Erreur lors de get info de demande"));
         }
     }
 }

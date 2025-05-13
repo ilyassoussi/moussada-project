@@ -39,6 +39,9 @@ public class GatewayServerApplication {
 				.route("appel-service", r -> r
 						.path("/appel/**")
 						.uri("lb://appel-service"))
+				.route("shared-micro", r -> r
+						.path("/shared/**")
+						.uri("lb://shared-micro"))
 				.build();
 	}
 

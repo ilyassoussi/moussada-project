@@ -103,11 +103,21 @@ public class DemandeSubentionService implements IDemandeSubventionService {
     @Override
     public ResponseEntity<?> getById(int id) {
 //        Optional<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findById(id);
-        TraitementSubvention traitementSubvention = subventionFeign.getByIdDemande(id);
+        ResponseEntity<?> traitementSubvention = subventionFeign.getByIdDemande(id);
         if(traitementSubvention == null) {
             return ResponseEntity.ok().body(new SuccessResponse<>("no message existe ",200,null));
         } else {
-            return ResponseEntity.ok().body(new SuccessResponse<>("message existe",200,traitementSubvention));
+            return traitementSubvention;
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getdemandeById(Long id) {
+        Optional<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findById(id);
+        if(demandeSubvention.isPresent()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("la demande " , 200 , demandeSubvention));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("aucune demande existe"));
         }
     }
 }

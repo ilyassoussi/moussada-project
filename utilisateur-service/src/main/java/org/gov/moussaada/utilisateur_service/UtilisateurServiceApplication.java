@@ -36,19 +36,19 @@ public class UtilisateurServiceApplication {
 //	@PostConstruct //had la methode katexecuta automatique lors dyal demarrage dyal application
 //	public void createAdmin() {
 //			Utilisateur utilisateur = Utilisateur.builder()
-//					.mdp(this.passwordEncoder.encode("Mous%@%@Subvention2026@'"))
+//					.mdp(this.passwordEncoder.encode("Mous%@%@Terrain2026@'"))
 //					.date_de_naissance(utile.CurentDate())
-//					.mail("moussaada.subvention@moussada-subvention.ma")
+//					.mail("moussaada.terrain@moussada-terrain.ma")
 //					.is_active(true)
 //					.phone("")
 //					.is_valide(true)
 //					.validation(0)
 //					.nometprenom("Admin Moussada")
-//					.identite("PS-123666YX")
+//					.identite("TR-976303RR")
 //					.build();
 //
 //			Role role = new Role();
-//			role.setType_role(Type_Role.Subvention);
+//			role.setType_role(Type_Role.Service_terrain);
 //			utilisateur.setRole(role);
 //
 //			Utilisateur saved = this.utilisateurdao.save(utilisateur);

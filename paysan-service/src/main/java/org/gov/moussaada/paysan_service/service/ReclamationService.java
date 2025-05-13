@@ -14,7 +14,6 @@ import org.gov.moussaada.paysan_service.response.ErrorResponse;
 import org.gov.moussaada.paysan_service.response.SuccessResponse;
 import org.gov.moussaada.paysan_service.service.inter.IReclamationService;
 import org.gov.moussaada.paysan_service.utils.utile;
-import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,11 +68,14 @@ public class ReclamationService implements IReclamationService {
         }
     }
 
+    /*
+    * @TODO
+    *   probleme icicicicidcisa!!!!!!!!!!!!
+    */
     @Override
     public ResponseEntity<?> ReclamaTiondejatraite(int id) {
         try{
-            ReclamationTraite reponse = kafakaBrokerPaysan.getLastMessage();
-            return ResponseEntity.ok().body(new SuccessResponse<>("voila la reponse",200,reponse));
+            return ResponseEntity.ok().body(new SuccessResponse<>("voila la reponse",200,null));
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Error: "+e);
         }
