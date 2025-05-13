@@ -1,6 +1,5 @@
 package org.gov.moussaada.terrain_service.config;
 
-import org.gov.moussaada.admin_service.config.SoapApiKeyInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

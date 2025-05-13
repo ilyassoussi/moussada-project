@@ -2,8 +2,8 @@ package org.gov.moussaada.terrain_service.controller;
 
 import io.spring.guides.gs_producing_web_service.GetInformationsResponse;
 import io.spring.guides.gs_producing_web_service.GetTerreResponse;
-import org.gov.moussaada.admin_service.response.SuccessResponse;
-import org.gov.moussaada.admin_service.service.TerrainSOAPService;
+import org.gov.moussaada.terrain_service.response.SuccessResponse;
+import org.gov.moussaada.terrain_service.service.TerrainSOAPService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
