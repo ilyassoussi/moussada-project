@@ -14,6 +14,10 @@ public class ResponseController {
 
     private ResponseTerrainService responseTerrainService;
 
+    public ResponseController(ResponseTerrainService responseTerrainService) {
+        this.responseTerrainService = responseTerrainService;
+    }
+
     @GetMapping("")
     public ResponseEntity<?> getAll(){
         return responseTerrainService.getAll();

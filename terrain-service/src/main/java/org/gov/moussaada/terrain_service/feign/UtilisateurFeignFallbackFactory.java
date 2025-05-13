@@ -1,6 +1,5 @@
 package org.gov.moussaada.terrain_service.feign;
 
-import org.gov.moussaada.admin_service.feign.UtilisateurFeign;
 import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;

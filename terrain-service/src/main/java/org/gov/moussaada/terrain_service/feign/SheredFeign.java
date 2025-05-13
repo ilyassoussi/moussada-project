@@ -17,7 +17,7 @@ public interface SheredFeign {
     @GetMapping("/shared/from-subvention") // <-- OK
     ResponseEntity<?> getAll();
 
-    @GetMapping("/from-paysan/demande-paysan/{id}")
+    @GetMapping("/shared/from-paysan/demande-paysan/{id}")
     ResponseEntity<?> getDemandeInfo(@PathVariable Long id);
 
 
