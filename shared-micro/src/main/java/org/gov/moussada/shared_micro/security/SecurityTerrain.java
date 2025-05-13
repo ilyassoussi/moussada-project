@@ -35,7 +35,7 @@ public class SecurityTerrain implements WebMvcConfigurer {
         return
                 http.csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authori -> authori
-                                .requestMatchers("/actuator/health").permitAll()
+                                .requestMatchers("/actuator/*").permitAll()
                                 .anyRequest().authenticated()
                         ).sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

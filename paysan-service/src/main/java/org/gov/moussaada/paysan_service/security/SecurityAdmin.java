@@ -35,7 +35,7 @@ public class SecurityAdmin implements WebMvcConfigurer {
         return
                 http.csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authori -> authori
-                                .requestMatchers("/actuator/health").permitAll()
+                                .requestMatchers("/actuator/*").permitAll()
                                 .requestMatchers("/paysan/reclamation/create","/paysan/reclamation").hasAuthority("ROLE_Paysan")
                                 .requestMatchers("/paysan/reclamation/{id}","/paysan/reclamation/update/{id}").hasAnyAuthority("ROLE_Paysan","ROLE_Admin")
                                 .requestMatchers("/paysan/demande/{id}","/paysan/demande").hasAnyAuthority("ROLE_Paysan","ROLE_Subvention","ROLE_Service_terrain")
