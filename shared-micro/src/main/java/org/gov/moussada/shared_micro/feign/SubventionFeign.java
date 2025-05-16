@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@FeignClient(name ="Subventions-service", fallbackFactory = SubventionFeignFallbackFactory.class)
+@FeignClient(name ="subventions-service", fallbackFactory = SubventionFeignFallbackFactory.class)
 @CircuitBreaker(name = "SubventionFeign")
 
 public interface SubventionFeign {
