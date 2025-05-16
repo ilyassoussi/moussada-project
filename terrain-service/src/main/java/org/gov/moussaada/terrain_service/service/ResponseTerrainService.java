@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -51,7 +53,7 @@ public class ResponseTerrainService implements IResponseTerrain {
     }
 
     @Override
-    public ResponseEntity<?> Create(int id_traitement_subvention, String rapport, String etat, String titre ,String commentaire, String date_de_sortie) {
+    public ResponseEntity<?> Create(int id_traitement_subvention, MultipartFile rapport, String etat, String titre ,String commentaire, String date_de_sortie) {
 
         if (date_de_sortie == null || date_de_sortie.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("Le champ 'date' est requis.");
@@ -59,13 +61,27 @@ public class ResponseTerrainService implements IResponseTerrain {
         if (commentaire == null || commentaire.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("Le champ 'commentaire' est requis.");
         }
+        if (etat == null || etat.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Le champ 'commentaire' est requis.");
+        }
+        if (titre == null || titre.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Le champ 'commentaire' est requis.");
+        }
+        String pdf = null;
+        if (rapport != null && !rapport.isEmpty()) {
+            try {
+                pdf = utile.savePDF(rapport);
+            } catch (IOException e) {
+                throw new RuntimeException("Erreur lors de l'enregistrement de l'image", e);
+            }
+        }
 
         Response response = Response.builder()
                 .id_traitement_subvention(id_traitement_subvention)
                 .titre(titre)
                 .commentaire(commentaire)
                 .etats(etat)
-                .rapport(rapport)
+                .rapport(pdf)
                 .date_de_sortie(utile.ReformulateDate(date_de_sortie))
                 .date_update(utile.CurentDate())
                 .date_creation(utile.CurentDate())
@@ -74,12 +90,12 @@ public class ResponseTerrainService implements IResponseTerrain {
             Response saved = responseDAO.save(response);
             return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>("created with success",201,saved));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la création");
         }
     }
 
     @Override
-    public ResponseEntity<?> Update(int id, String rapport, String etat, String titre ,String commentaire, String date_de_sortie) {
+    public ResponseEntity<?> Update(int id, MultipartFile rapport, String etat, String titre , String commentaire, String date_de_sortie) {
         Optional<Response> response = responseDAO.findById(id);
         if(!response.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("la reponse n'existe pas"));
@@ -93,18 +109,23 @@ public class ResponseTerrainService implements IResponseTerrain {
         if (titre != null ) {
             response.get().setTitre(titre);
         }
-        if(rapport != null){
-            response.get().setRapport(rapport);
-        }
         if(etat != null){
             response.get().setEtats(etat);
+        }
+        if (rapport != null && !rapport.isEmpty()) {
+            try {
+                String pdfUpdated = utile.savePDF(rapport);
+                response.get().setRapport(pdfUpdated);
+            } catch (IOException e) {
+                throw new RuntimeException("Erreur lors de l'enregistrement de l'image", e);
+            }
         }
         response.get().setDate_update(utile.CurentDate());
         try{
             Response updated = responseDAO.save(response.get());
             return ResponseEntity.ok().body(new SuccessResponse<>("Updated with success",200 ,updated));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la mise a jours");
         }
     }
 
@@ -116,16 +137,6 @@ public class ResponseTerrainService implements IResponseTerrain {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    /*
-     * @TODO il faut utilise kafka pour envoyer la mise a jours de status de demande et aussi la date de sortie
-     */
-    @Override
-    public ResponseEntity<?> UpdateStatus(int id, ResponRequestDTO ResponseRequestDTO) {
-
-        return null;
     }
 
     @Override
