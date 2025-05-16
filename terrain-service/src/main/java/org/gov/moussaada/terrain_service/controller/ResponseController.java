@@ -43,8 +43,7 @@ public class ResponseController {
             @RequestParam(name = "date_de_sortie") String date_de_sortie
 
     ) {
-        String rapportName = utile.CheckPdfAccepded(rapport);
-        return responseTerrainService.Create(id_traitement_subvention,titre,rapportName,commentaire,etat,date_de_sortie);
+        return responseTerrainService.Create(id_traitement_subvention,rapport,etat, titre,commentaire,date_de_sortie);
     }
 
     @PutMapping("/update/{id}")
@@ -55,13 +54,7 @@ public class ResponseController {
                                     @RequestParam(name = "commentaire") String commentaire,
                                     @RequestParam(name = "date_de_sortie") String date_de_sortie) {
 
-        String rapportName = utile.CheckPdfAccepded(rapport);
-        return responseTerrainService.Update(id,titre,rapportName,commentaire,etat,date_de_sortie);
-    }
-
-    @PutMapping("/status/update/{id}")
-    public ResponseEntity<?> updateStatus(@PathVariable int id, @RequestBody ResponRequestDTO ResponseRequestDTO) {
-        return responseTerrainService.UpdateStatus(id,ResponseRequestDTO);
+        return responseTerrainService.Update(id,rapport,etat, titre,commentaire,date_de_sortie);
     }
 
     @DeleteMapping("/delete/{id}")
