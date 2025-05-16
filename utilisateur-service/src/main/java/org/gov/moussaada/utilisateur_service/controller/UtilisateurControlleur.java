@@ -42,9 +42,9 @@ public class UtilisateurControlleur {
 //        return null;
 //    }
 
-    @GetMapping("/getInfoUser/{token}")
-    private ResponseEntity<?> getInfoUser(@PathVariable String token){
-        return this.utilisateurservice.getUserByToken(token);
+    @GetMapping("/information")
+    private ResponseEntity<?> getInfoUser(){
+        return this.utilisateurservice.getUserByToken();
     }
 
     @GetMapping("/getbyid/{id}")
