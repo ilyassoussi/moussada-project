@@ -153,10 +153,11 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     }
 
     @Override
-    public ResponseEntity<?> getUserByToken(String token) {
-        Utilisateur user = utilisateurdao.findUserByToken(token);
+    public ResponseEntity<?> getUserByToken() {
+        Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Utilisateur> user = utilisateurdao.findById(utilisateur.getId());
         if(user != null){
-            UtilisateurReponseDTO utilrp = this.modelmapper.map(user,UtilisateurReponseDTO.class);
+            UtilisateurReponseDTO utilrp = this.modelmapper.map(user.get(),UtilisateurReponseDTO.class);
             return ResponseEntity.ok().body(new SuccessResponse<>("utilisateur existe",200,utilrp));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("utilisateur existe"));

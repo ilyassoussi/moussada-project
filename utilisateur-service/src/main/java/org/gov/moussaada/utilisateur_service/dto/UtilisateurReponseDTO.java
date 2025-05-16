@@ -14,7 +14,5 @@ public class UtilisateurReponseDTO {
     private String identite;
     private String nometprenom;
     private String mail;
-    private String mdp;
     private Date date_de_naissance;
-
 }

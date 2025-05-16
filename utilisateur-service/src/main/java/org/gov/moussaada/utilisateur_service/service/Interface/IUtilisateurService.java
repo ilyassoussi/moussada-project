@@ -11,12 +11,14 @@ import java.util.List;
 
 public interface IUtilisateurService {
     ResponseEntity<?> logout();
+
     ResponseEntity<?> update(UtilisateurRequestDTO adminRQ);
 
     ResponseEntity<?> loginUtilisateur(AuthentifDTO RQ);
 
     ResponseEntity<?> createAffilie(UtilisateurRequestDTO utilisateurRequestDTO);
-    ResponseEntity<?> getUserByToken(String token);
+
+    ResponseEntity<?> getUserByToken();
 
     ResponseEntity<?> updatePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO);
 
@@ -24,7 +26,7 @@ public interface IUtilisateurService {
 
     List<Utilisateur> getByStatus(Boolean status);
 
-    public Utilisateur updateCompteById(int id , Boolean isactive);
+    Utilisateur updateCompteById(int id , Boolean isactive);
 
     ResponseEntity<?> ValidateAccount(int id , int numeroValidation);
 

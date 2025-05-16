@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class JwtAuthenticationFilter implements GlobalFilter {
 
-    private static final String AUTH_SERVICE_URL = "http://localhost:8082/utilisateur/auth/verifyToken";
+    private static final String AUTH_SERVICE_URL = "http://utilisateur-service:8082/utilisateur/auth/verifyToken";
     private final WebClient.Builder webClientBuilder;
 
     public JwtAuthenticationFilter(WebClient.Builder webClientBuilder) {
