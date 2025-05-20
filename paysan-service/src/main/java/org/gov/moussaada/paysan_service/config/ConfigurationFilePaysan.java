@@ -26,13 +26,16 @@ public class ConfigurationFilePaysan {
 
     @Bean
     public RequestInterceptor requestInterceptor() {
-        return new RequestInterceptor() {
-            @Override
-            public void apply(RequestTemplate requestTemplate) {
-                String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-                log.info("ici : {}",token);
+        return requestTemplate -> {
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getCredentials() != null) {
+                String token = (String) authentication.getCredentials();
+                log.info("ici : {}", token);
                 requestTemplate.header("Authorization", "Bearer " + token);
+            } else {
+                log.warn("Aucun token JWT trouvé dans le SecurityContext");
             }
         };
     }
+
 }

@@ -48,7 +48,7 @@ public class UtilisateurControlleur {
     }
 
     @GetMapping("/getbyid/{id}")
-    private Utilisateur getInfoId(@PathVariable int id){
+    private ResponseEntity<?> getInfoId(@PathVariable int id){
         return this.utilisateurservice.getById(id);
     }
 
@@ -63,23 +63,23 @@ public class UtilisateurControlleur {
     }
 
     @GetMapping("/compte")
-    public List<Utilisateur> compte(){
+    public ResponseEntity<?> compte(){
         log.info("ici le probleme");
         return utilisateurservice.getCompte();
     }
 
     @GetMapping("/compte/active")
-    public List<Utilisateur> compteActive(){
+    public ResponseEntity<?> compteActive(){
         return utilisateurservice.getByStatus(true);
     }
 
     @GetMapping("/compte/inactive")
-    public List<Utilisateur> compteInActive(){
+    public ResponseEntity<?> compteInActive(){
         return utilisateurservice.getByStatus(false);
     }
 
     @PutMapping("/compte/{id}")
-    public Utilisateur compteById(@PathVariable int id,@RequestBody Boolean isactive){
+    public ResponseEntity<?> compteById(@PathVariable int id,@RequestBody Boolean isactive){
         return utilisateurservice.updateCompteById(id,isactive);
     }
 

@@ -2,9 +2,10 @@ package org.gov.moussaada.paysan_service.service;
 
 import io.spring.guides.gs_producing_web_service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.gov.moussaada.paysan_service.dto.UtilisateurReponseDTO;
 import org.gov.moussaada.paysan_service.feign.UtilisateurFeign;
-import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
@@ -34,14 +35,14 @@ public class TerrainSOAPService {
             Map<String, Object> userDetails = (Map<String, Object>) principal;
             idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
 
-            Utilisateur utilisateur = utilisateurFeign.getById(Math.toIntExact(idUtilisateur));
-            if (utilisateur == null) {
-                log.error("Utilisateur avec ID {} non trouvé", idUtilisateur);
+            ResponseEntity<?> utilisateur = utilisateurFeign.getById(Math.toIntExact(idUtilisateur));
+            if (!utilisateur.getStatusCode().is2xxSuccessful()) {
                 throw new RuntimeException("Utilisateur non trouvé");
             }
-
+            log.info("voila : {}",utilisateur.getBody());
+            UtilisateurReponseDTO utilisateurReponseDTO = (UtilisateurReponseDTO) utilisateur.getBody();
             GetInformationRequest request = new GetInformationRequest();
-            request.setCIN(utilisateur.getIdentite());
+            request.setCIN(utilisateurReponseDTO.getIdentite());
 
             GetInformationsResponse response = (GetInformationsResponse) webServiceTemplate.marshalSendAndReceive(request);
 

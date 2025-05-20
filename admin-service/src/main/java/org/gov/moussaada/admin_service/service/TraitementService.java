@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.admin_service.dao.TraitementDAO;
+import org.gov.moussaada.admin_service.dto.ReclamationReponseDTO;
 import org.gov.moussaada.admin_service.dto.TraitementRequestDTO;
 import org.gov.moussaada.admin_service.feign.PaysanFeign;
 import org.gov.moussaada.admin_service.model.TraitmentReclamation;
@@ -13,7 +14,6 @@ import org.gov.moussaada.admin_service.response.ErrorResponse;
 import org.gov.moussaada.admin_service.response.SuccessResponse;
 import org.gov.moussaada.admin_service.service.inter.ITraitementService;
 import org.gov.moussaada.admin_service.utils.utile;
-import org.gov.moussaada.paysan_service.model.Reclamation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,16 +46,20 @@ public class TraitementService implements ITraitementService {
 
     @Override
     public ResponseEntity<?> CreateTraitement(int id , TraitementRequestDTO traitementRequestDTO) {
-        Reclamation reclamation = paysanFeign.geById(id);
+        ResponseEntity<?> reclamationResponse = paysanFeign.geById(id);
+        if (!reclamationResponse.getStatusCode().is2xxSuccessful() || reclamationResponse.getBody() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Reclamation non trouvée"));
+        }
+        ReclamationReponseDTO reclamationReponseDTO = (ReclamationReponseDTO) reclamationResponse.getBody();
         TraitmentReclamation traitmentReclamation = TraitmentReclamation.builder()
                 .date_creation_reclamation(utile.CurentDate())
-                .id_reclamation(reclamation.getId_reclamation())
+                .id_reclamation(reclamationReponseDTO.getId_reclamation())
                 .reponse(traitementRequestDTO.getReponse())
                 .build();
         TraitmentReclamation savedTra = traitementDAO.save(traitmentReclamation);
         if(savedTra != null) {
             kafkaAdminService.UpdateStatusReclmation(id);
-            return ResponseEntity.ok().body(new SuccessResponse<>("traitement est effectue",201,paysanFeign.updateReclamationById(id)));
+            return paysanFeign.updateReclamationById(id);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Error"));
         }
@@ -63,9 +67,9 @@ public class TraitementService implements ITraitementService {
 
     @Override
     public ResponseEntity<?> GetAll() {
-        List<Reclamation> reclamation =  paysanFeign.getAll();
-        if (!reclamation.isEmpty()){
-            return ResponseEntity.ok().body(new SuccessResponse<>("exist",200,reclamation.stream().collect(Collectors.toList())));
+        ResponseEntity<?> reclamation =  paysanFeign.getAll();
+        if (!reclamation.getStatusCode().is2xxSuccessful()){
+            return reclamation;
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("aucune reclamation No traite"));
         }

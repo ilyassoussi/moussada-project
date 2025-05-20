@@ -107,27 +107,29 @@ public class ReclamationService implements IReclamationService {
     }
 
     @Override
-    public List<Reclamation> GetEncours() {
+    public ResponseEntity<?> GetEncours() {
         List<Reclamation> reclamation =  reclamationDAO.findAllByInTreatment();
         if (reclamation != null){
-            return reclamation;
+            return ResponseEntity.ok().body(new SuccessResponse<>("exist",200,reclamation));
         } else {
             return null;
         }
     }
 
     @Override
-    public Reclamation GetById(int id) {
-        return reclamationDAO.findById(id).get();
+    public ResponseEntity<?> GetById(int id) {
+        ReclamationReponseDTO reclamationReponseDTO = modelMapper.map(reclamationDAO.findById(id).get(),ReclamationReponseDTO.class);
+        return ResponseEntity.ok().body(new SuccessResponse<>("exist",200,reclamationReponseDTO));
+
     }
 
     @Override
-    public Reclamation updateReclamation(int id) {
+    public ResponseEntity<?> updateReclamation(int id) {
         Reclamation reclamation = reclamationDAO.findById(id).get();
         reclamation.setInTreatment(true);
         reclamation.setId_reclamation(id);
         reclamationDAO.save(reclamation);
-        return reclamation;
+        return ResponseEntity.ok().body(new SuccessResponse<>("exist",200,reclamation));
     }
 
 }

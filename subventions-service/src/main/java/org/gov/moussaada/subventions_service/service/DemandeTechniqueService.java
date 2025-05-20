@@ -1,7 +1,5 @@
 package org.gov.moussaada.subventions_service.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.gov.moussaada.subventions_service.dao.DemandeTechniqueDAO;
 import org.gov.moussaada.subventions_service.dto.DemandeTechniqueRequestDTO;
 import org.gov.moussaada.subventions_service.dto.DemandeTechniqueResponseDTO;

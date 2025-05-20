@@ -1,7 +1,7 @@
 package org.gov.moussaada.paysan_service.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
+import org.gov.moussaada.paysan_service.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;

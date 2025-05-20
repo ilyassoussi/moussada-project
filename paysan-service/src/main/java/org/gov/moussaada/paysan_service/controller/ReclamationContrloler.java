@@ -38,17 +38,17 @@ public class ReclamationContrloler {
     }
 
     @GetMapping("/encours")
-    public List<Reclamation> getReclamation(){
+    public ResponseEntity<?> getReclamation(){
         return reclamationService.GetEncours();
     }
 
     @GetMapping("/{id}")
-    public Reclamation getReclamationById(@PathVariable("id") int id){
+    public ResponseEntity<?> getReclamationById(@PathVariable("id") int id){
         return reclamationService.GetById(id);
     }
 
     @PutMapping("/update/{id}")
-    public Reclamation updateReclamationById(@PathVariable("id") int id){
+    public ResponseEntity<?> updateReclamationById(@PathVariable("id") int id){
         return reclamationService.updateReclamation(id);
     }
 
