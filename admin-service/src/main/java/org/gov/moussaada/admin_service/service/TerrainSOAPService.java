@@ -5,13 +5,12 @@ import io.spring.guides.gs_producing_web_service.GetInformationsResponse;
 import io.spring.guides.gs_producing_web_service.GetTerreRequest;
 import io.spring.guides.gs_producing_web_service.GetTerreResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.gov.moussaada.admin_service.dto.UtilisateurReponseDTO;
 import org.gov.moussaada.admin_service.feign.UtilisateurFeign;
-import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,7 +30,7 @@ public class TerrainSOAPService {
     public GetInformationsResponse getTerreByCIN(int id) {
         try {
             // Extraction de l'ID de l'utilisateur à partir du principal
-            Utilisateur utilisateur = utilisateurFeign.getById(Math.toIntExact(id));
+            UtilisateurReponseDTO utilisateur = utilisateurFeign.getById(Math.toIntExact(id));
             if (utilisateur == null) {
                 log.error("Utilisateur avec ID {} non trouvé", id);
                 throw new RuntimeException("Utilisateur non trouvé");
