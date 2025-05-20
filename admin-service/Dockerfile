@@ -6,6 +6,6 @@ RUN mvn -f /home/app/pom.xml clean package  -DskipTests
 
 # Create an Image
 FROM openjdk:17-jdk-alpine
-EXPOSE 8088
-COPY --from=stage1 /home/app/target/*.jar paysan.jar
-CMD java -jar /paysan.jar
+EXPOSE 8087
+COPY --from=stage1 /home/app/target/*.jar admin.jar
+CMD java -jar /admin.jar
