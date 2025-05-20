@@ -3,6 +3,7 @@ package org.gov.moussaada.utilisateur_service.service.Interface;
 
 import org.gov.moussaada.utilisateur_service.dto.AuthentifDTO;
 import org.gov.moussaada.utilisateur_service.dto.UpdatePasswordRequestDTO;
+import org.gov.moussaada.utilisateur_service.dto.UtilisateurReponseDTO;
 import org.gov.moussaada.utilisateur_service.dto.UtilisateurRequestDTO;
 import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,5 @@ public interface IUtilisateurService {
 
     ResponseEntity<?> ValidateAccount(int id , int numeroValidation);
 
-    ResponseEntity<?> getById(int id);
+    UtilisateurReponseDTO getById(int id);
 }

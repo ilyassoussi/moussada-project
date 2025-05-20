@@ -4,6 +4,7 @@ package org.gov.moussaada.utilisateur_service.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.utilisateur_service.dto.AuthentifDTO;
 import org.gov.moussaada.utilisateur_service.dto.UpdatePasswordRequestDTO;
+import org.gov.moussaada.utilisateur_service.dto.UtilisateurReponseDTO;
 import org.gov.moussaada.utilisateur_service.dto.UtilisateurRequestDTO;
 import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.gov.moussaada.utilisateur_service.service.UtilisateurSevice;
@@ -48,7 +49,7 @@ public class UtilisateurControlleur {
     }
 
     @GetMapping("/getbyid/{id}")
-    private ResponseEntity<?> getInfoId(@PathVariable int id){
+    private UtilisateurReponseDTO getInfoId(@PathVariable int id){
         return this.utilisateurservice.getById(id);
     }
 

@@ -1,7 +1,7 @@
 package org.gov.moussaada.paysan_service.feign;
 
+import org.gov.moussaada.paysan_service.dto.UtilisateurReponseDTO;
 import org.springframework.cloud.openfeign.FallbackFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,11 +12,11 @@ public class UtilisateurFeignFallbackFactory implements FallbackFactory<Utilisat
     public UtilisateurFeign create(Throwable cause) {
         return new UtilisateurFeign() {
 
+
             @Override
-            public ResponseEntity<?> getById(int id) {
+            public UtilisateurReponseDTO getById(int id) {
                 return null;
             }
-
         };
     }
 }
