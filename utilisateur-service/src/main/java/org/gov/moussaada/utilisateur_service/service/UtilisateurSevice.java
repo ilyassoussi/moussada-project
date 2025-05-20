@@ -289,13 +289,13 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     }
 
     @Override
-    public ResponseEntity<?> getById(int id) {
+    public UtilisateurReponseDTO getById(int id) {
         Utilisateur utilisateur = utilisateurdao.findById(id).get();
         if(utilisateur!=null){
             UtilisateurReponseDTO utilisateurReponseDTO = modelmapper.map(utilisateur,UtilisateurReponseDTO.class);
-            return ResponseEntity.ok().body(utilisateurReponseDTO);
+            return utilisateurReponseDTO;
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("aucun utilisateur existe"));
+            return null;
         }
     }
 

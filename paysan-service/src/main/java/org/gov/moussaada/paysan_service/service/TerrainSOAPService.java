@@ -35,14 +35,13 @@ public class TerrainSOAPService {
             Map<String, Object> userDetails = (Map<String, Object>) principal;
             idUtilisateur = Long.valueOf(userDetails.get("id_utilisateur").toString());
 
-            ResponseEntity<?> utilisateur = utilisateurFeign.getById(Math.toIntExact(idUtilisateur));
-            if (!utilisateur.getStatusCode().is2xxSuccessful()) {
+            UtilisateurReponseDTO utilisateur = utilisateurFeign.getById(Math.toIntExact(idUtilisateur));
+            if (utilisateur == null) {
                 throw new RuntimeException("Utilisateur non trouvé");
             }
-            log.info("voila : {}",utilisateur.getBody());
-            UtilisateurReponseDTO utilisateurReponseDTO = (UtilisateurReponseDTO) utilisateur.getBody();
+            log.info("voila : {}",utilisateur);
             GetInformationRequest request = new GetInformationRequest();
-            request.setCIN(utilisateurReponseDTO.getIdentite());
+            request.setCIN(utilisateur.getIdentite());
 
             GetInformationsResponse response = (GetInformationsResponse) webServiceTemplate.marshalSendAndReceive(request);
 
