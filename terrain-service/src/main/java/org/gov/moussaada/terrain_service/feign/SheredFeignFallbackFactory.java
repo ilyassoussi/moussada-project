@@ -1,6 +1,5 @@
 package org.gov.moussaada.terrain_service.feign;
 
-import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.ResponseEntity;
 

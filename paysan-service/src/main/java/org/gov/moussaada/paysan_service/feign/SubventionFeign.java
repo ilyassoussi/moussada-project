@@ -2,7 +2,6 @@ package org.gov.moussaada.paysan_service.feign;
 
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

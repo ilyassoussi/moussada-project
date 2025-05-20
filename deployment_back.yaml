@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: elinow-back
+  name: elinow-back
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: elinow-back
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: elinow-back
+    spec:
+      containers:
+        - name: elinow-back
+          image: ilyassoussi/elinow-backend:2.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://elinow-db:5432/elinow-db"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "postgres"  # ⚠️ À stocker dans un Secret Kubernetes
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: elinow-back
+  name: elinow-back
+  namespace: default
+spec:
+  selector:
+    app: elinow-back
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080  # Correction ici
+  type: NodePort
+#  type: LoadBalancer

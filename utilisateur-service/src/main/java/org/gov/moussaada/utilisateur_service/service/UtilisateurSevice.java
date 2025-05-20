@@ -232,23 +232,23 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
         }
     }
 
-    public List<Utilisateur> getCompte() {
+    public ResponseEntity<?> getCompte() {
         List<Utilisateur> utilisateurs = utilisateurdao.findAll();
-        return utilisateurs;
+        return ResponseEntity.ok(new SuccessResponse<>("Password updated successfully" , 201 , utilisateurs));
     }
 
     @Override
-    public List<Utilisateur> getByStatus(Boolean status) {
+    public ResponseEntity<?> getByStatus(Boolean status) {
         List<Utilisateur> utilisateurS = utilisateurdao.findByStatus(status);
         if(utilisateurS.isEmpty()){
-            return null;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("aucun utilisateur "));
         } else {
-            return utilisateurS;
+            return ResponseEntity.ok(new SuccessResponse<>("Password updated successfully" , 201 , utilisateurS));
         }
     }
 
     @Override
-    public Utilisateur updateCompteById(int id , Boolean isactive) {
+    public ResponseEntity<?> updateCompteById(int id , Boolean isactive) {
         Utilisateur utilisateur = utilisateurdao.findById(id).get();
         try{
             utilisateur.setId(id);
@@ -265,9 +265,9 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
                 utilisateur.setRole(role);
             }
             utilisateurdao.save(utilisateur);
-            return utilisateur;
+            return ResponseEntity.ok(new SuccessResponse<>("compte is activated with success" , 201 , utilisateur));
         } catch (Exception e){
-            return null;
+            return ResponseEntity.ok(new SuccessResponse<>("ERROR WHEN compte is activated with success" , 201 , null));
         }
     }
 
@@ -289,8 +289,14 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     }
 
     @Override
-    public Utilisateur getById(int id) {
-        return utilisateurdao.findById(id).get();
+    public ResponseEntity<?> getById(int id) {
+        Utilisateur utilisateur = utilisateurdao.findById(id).get();
+        if(utilisateur!=null){
+            UtilisateurReponseDTO utilisateurReponseDTO = modelmapper.map(utilisateur,UtilisateurReponseDTO.class);
+            return ResponseEntity.ok().body(utilisateurReponseDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("aucun utilisateur existe"));
+        }
     }
 
 

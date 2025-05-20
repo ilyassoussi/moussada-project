@@ -22,13 +22,13 @@ public interface IUtilisateurService {
 
     ResponseEntity<?> updatePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO);
 
-    List<Utilisateur> getCompte();
+    ResponseEntity<?> getCompte();
 
-    List<Utilisateur> getByStatus(Boolean status);
+    ResponseEntity<?> getByStatus(Boolean status);
 
-    Utilisateur updateCompteById(int id , Boolean isactive);
+    ResponseEntity<?> updateCompteById(int id , Boolean isactive);
 
     ResponseEntity<?> ValidateAccount(int id , int numeroValidation);
 
-    Utilisateur getById(int id);
+    ResponseEntity<?> getById(int id);
 }

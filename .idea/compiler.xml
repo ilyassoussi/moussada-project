@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="titration" />
-        <module name="server-config" />
         <module name="gateway-server" />
+        <module name="server-config" />
       </profile>
       <profile name="Annotation profile for shared-micro" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -36,6 +36,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="moussaada" target="1.5" />
+      <module name="moussaada-parent" target="1.5" />
       <module name="shared-lib" target="17" />
     </bytecodeTargetLevel>
   </component>
