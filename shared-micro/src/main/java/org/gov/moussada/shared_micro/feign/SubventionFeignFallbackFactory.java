@@ -1,7 +1,5 @@
 package org.gov.moussada.shared_micro.feign;
 
-import org.gov.moussaada.subventions_service.model.Demande_technique;
-import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.ResponseEntity;
 
