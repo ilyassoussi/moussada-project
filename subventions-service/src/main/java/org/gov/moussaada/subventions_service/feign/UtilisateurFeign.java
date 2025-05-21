@@ -1,33 +1,19 @@
 package org.gov.moussaada.subventions_service.feign;
 
 
-import org.gov.moussaada.utilisateur_service.model.Utilisateur;
+import org.gov.moussaada.subventions_service.dto.UtilisateurReponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
 
 @FeignClient(name ="utilisateur-service", fallbackFactory = UtilisateurFeignFallbackFactory.class)
 @CircuitBreaker(name = "UtilisateurFeign")
 
 public interface UtilisateurFeign {
 
-    @GetMapping("/utilisateur/compte") // <-- OK
-    List<Utilisateur> getAll();
-
     @GetMapping("/utilisateur/getbyid/{id}") // <-- OK
-    Utilisateur getById(@PathVariable("id") int id);
+    UtilisateurReponseDTO getById(@PathVariable("id") int id);
 
-    @GetMapping("/utilisateur/compte/active") // <-- OK
-    List<Utilisateur> getByStatus();
-
-    @GetMapping("/utilisateur/compte/inactive") // <-- OK
-    List<Utilisateur> getByInActive();
-
-    @PutMapping("/utilisateur/compte/{id}") // <-- OK
-    Utilisateur updateCompteById(@PathVariable("id") int id, @RequestBody Boolean isactive);
 }
