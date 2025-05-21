@@ -1,7 +1,6 @@
 package org.gov.moussaada.admin_service.feign;
 
 import org.gov.moussaada.admin_service.dto.UtilisateurReponseDTO;
-import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
