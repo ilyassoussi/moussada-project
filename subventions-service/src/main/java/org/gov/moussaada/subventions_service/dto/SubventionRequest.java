@@ -1,10 +1,6 @@
 package org.gov.moussaada.subventions_service.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import lombok.*;
-import org.gov.moussaada.subventions_service.model.Type_subv;
 
 import java.util.Date;
 import java.util.List;

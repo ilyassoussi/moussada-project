@@ -1,7 +1,5 @@
 package org.gov.moussaada.subventions_service.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import lombok.*;
 
 import java.util.Date;

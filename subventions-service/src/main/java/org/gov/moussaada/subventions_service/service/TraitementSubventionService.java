@@ -10,15 +10,14 @@ import org.gov.moussaada.subventions_service.dto.KafkaUpdateStatusDTO;
 import org.gov.moussaada.subventions_service.dto.TraitementSubventionRequest;
 import org.gov.moussaada.subventions_service.feign.SharedFeign;
 import org.gov.moussaada.subventions_service.model.TraitementSubvention;
+import org.gov.moussaada.subventions_service.response.ErrorResponse;
+import org.gov.moussaada.subventions_service.response.SuccessResponse;
 import org.gov.moussaada.subventions_service.service.inter.ITraitementSubvention;
 import org.gov.moussaada.subventions_service.utils.utile;
-import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
-import org.gov.moussaada.utilisateur_service.response.SuccessResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
