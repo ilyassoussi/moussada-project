@@ -41,6 +41,11 @@ public class SubventionController {
         return subventionService.GetAll();
     }
 
+    @GetMapping("/notexpired")
+    public ResponseEntity<?> getnotexpired(){
+        return subventionService.GetNotExpired();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id){
         return subventionService.GetById(id);

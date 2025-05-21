@@ -48,4 +48,9 @@ public class DemandeSubventionController {
         return this.demandeSubentionService.update(id,id_subvention,numero_titre,description,devisFilename);
     }
 
+    @GetMapping("/subvention/notexpired")
+    public ResponseEntity<?> getnotexpired(){
+        return demandeSubentionService.getnotexpired();
+    }
+
 }

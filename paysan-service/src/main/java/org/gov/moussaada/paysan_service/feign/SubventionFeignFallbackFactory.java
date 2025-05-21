@@ -13,6 +13,11 @@ public class SubventionFeignFallbackFactory implements FallbackFactory<Subventio
             public ResponseEntity<?> getByIdDemande(int id) {
                 return null;
             }
+
+            @Override
+            public ResponseEntity<?> getnotexpired() {
+                return null;
+            }
         };
     }
 }
