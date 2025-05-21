@@ -23,13 +23,6 @@ public class SecurityAdmin implements WebMvcConfigurer {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/paysan/**")
-                .allowedOrigins("http://localhost:3000") // Origine autorisée
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return
@@ -37,7 +30,7 @@ public class SecurityAdmin implements WebMvcConfigurer {
                         .authorizeHttpRequests(authori -> authori
                                 .requestMatchers("/actuator/health").permitAll()
                                 .requestMatchers("/subvention/create","/subvention/update/{id}","/subvention/delete/{id}", "/subvention/traitement/create").hasAuthority("ROLE_Subvention")
-                                .requestMatchers("/subvention/traitement/{id}").hasAnyAuthority("ROLE_Subvention","ROLE_Paysan","ROLE_Service_terrain")
+                                .requestMatchers("/subvention/traitement/{id}","/subvention/notexpired").hasAnyAuthority("ROLE_Subvention","ROLE_Paysan","ROLE_Service_terrain")
                                 .requestMatchers("/subvention/demande-technique/**").hasAnyAuthority("ROLE_Subvention","ROLE_Service_terrain")
                                 .requestMatchers("/subvention/{id}","/subvention/getall").permitAll()
                                 .anyRequest().authenticated()

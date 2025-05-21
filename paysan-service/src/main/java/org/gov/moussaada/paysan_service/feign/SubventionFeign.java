@@ -16,4 +16,7 @@ public interface SubventionFeign {
     @GetMapping("/subvention/traitement/{id}") // <-- OK
     ResponseEntity<?> getByIdDemande(@PathVariable int id);
 
+    @GetMapping("/subvention/notexpired") // <-- OK
+    ResponseEntity<?> getnotexpired();
+
 }

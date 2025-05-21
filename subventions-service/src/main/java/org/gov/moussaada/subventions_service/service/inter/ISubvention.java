@@ -9,4 +9,6 @@ public interface ISubvention {
     ResponseEntity<?> GetAll();
     ResponseEntity<?> GetById(Long id);
     ResponseEntity<?> RemoveSubvention(Long id);
+
+    ResponseEntity<?> GetNotExpired();
 }

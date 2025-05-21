@@ -170,4 +170,14 @@ public class SubventionService implements ISubvention {
             return ResponseEntity.badRequest().body(new ErrorResponse("erreur d'exception : "+ e));
         }
     }
+
+    @Override
+    public ResponseEntity<?> GetNotExpired() {
+        List<Subvention> subventions = subventionDAO.getNotExpired(utile.CurentDate());
+        if(subventions.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("aucune subventions maitenant .."));
+        } else {
+            return ResponseEntity.ok().body(new SuccessResponse<>("voila les subventions",200,subventions));
+        }
+    }
 }

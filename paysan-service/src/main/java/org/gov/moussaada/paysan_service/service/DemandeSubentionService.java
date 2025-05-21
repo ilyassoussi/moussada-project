@@ -119,4 +119,9 @@ public class DemandeSubentionService implements IDemandeSubventionService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("aucune demande existe"));
         }
     }
+
+    @Override
+    public ResponseEntity<?> getnotexpired() {
+        return subventionFeign.getnotexpired();
+    }
 }
