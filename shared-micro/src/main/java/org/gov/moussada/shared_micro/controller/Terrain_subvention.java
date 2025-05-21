@@ -2,8 +2,6 @@ package org.gov.moussada.shared_micro.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.gov.moussaada.subventions_service.model.Demande_technique;
-import org.gov.moussaada.subventions_service.model.TraitementSubvention;
 import org.gov.moussada.shared_micro.feign.PaysanFeign;
 import org.gov.moussada.shared_micro.feign.SubventionFeign;
 import org.springframework.beans.factory.annotation.Autowired;
