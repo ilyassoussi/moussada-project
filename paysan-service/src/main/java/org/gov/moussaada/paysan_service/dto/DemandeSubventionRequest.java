@@ -8,8 +8,6 @@ public class DemandeSubventionRequest {
 
     private String numero_titre;
 
-    private Status_demande statusDemande;
-
     private String devis_fournisseur;
 
     private String description;
