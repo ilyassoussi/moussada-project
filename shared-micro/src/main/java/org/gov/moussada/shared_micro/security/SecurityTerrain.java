@@ -23,13 +23,6 @@ public class SecurityTerrain implements WebMvcConfigurer {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/paysan/**")
-                .allowedOrigins("http://localhost:3000") // Origine autorisée
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return

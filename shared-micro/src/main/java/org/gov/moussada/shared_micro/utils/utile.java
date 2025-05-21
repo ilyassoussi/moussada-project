@@ -1,6 +1,6 @@
 package org.gov.moussada.shared_micro.utils;
 
-import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
+import org.gov.moussada.shared_micro.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
