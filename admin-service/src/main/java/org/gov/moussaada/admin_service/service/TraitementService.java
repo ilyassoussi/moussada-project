@@ -46,13 +46,12 @@ public class TraitementService implements ITraitementService {
     @Override
     public ResponseEntity<?> CreateTraitement(int id , TraitementRequestDTO traitementRequestDTO) {
         ResponseEntity<?> reclamationResponse = paysanFeign.geById(id);
-        if (!reclamationResponse.getStatusCode().is2xxSuccessful() || reclamationResponse.getBody() == null) {
+        if (!reclamationResponse.getStatusCode().is2xxSuccessful()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Reclamation non trouvée"));
         }
-        ReclamationReponseDTO reclamationReponseDTO = (ReclamationReponseDTO) reclamationResponse.getBody();
         TraitmentReclamation traitmentReclamation = TraitmentReclamation.builder()
                 .date_creation_reclamation(utile.CurentDate())
-                .id_reclamation(reclamationReponseDTO.getId_reclamation())
+                .id_reclamation(id)
                 .reponse(traitementRequestDTO.getReponse())
                 .build();
         TraitmentReclamation savedTra = traitementDAO.save(traitmentReclamation);
@@ -67,7 +66,7 @@ public class TraitementService implements ITraitementService {
     @Override
     public ResponseEntity<?> GetAll() {
         ResponseEntity<?> reclamation =  paysanFeign.getAll();
-        if (!reclamation.getStatusCode().is2xxSuccessful()){
+        if (reclamation.getStatusCode().is2xxSuccessful()){
             return reclamation;
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("aucune reclamation No traite"));
