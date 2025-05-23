@@ -52,4 +52,10 @@ public class TraitementController {
     ResponseEntity<?> deleteTraitement(@PathVariable int id){
         return traitementSubventionService.Delete(id);
     }
+
+
+    @GetMapping("/info-demande")
+    ResponseEntity<?> GetInfoDemandeAll(){
+        return traitementSubventionService.GetInfoDemandeAll();
+    }
 }

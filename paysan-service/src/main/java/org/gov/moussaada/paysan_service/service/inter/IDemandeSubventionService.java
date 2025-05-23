@@ -18,4 +18,7 @@ public interface IDemandeSubventionService{
     ResponseEntity<?> getdemandeById(Long id);
 
     ResponseEntity<?> getnotexpired();
+
+    ResponseEntity<?> getAllPaysan();
+
 }

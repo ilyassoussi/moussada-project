@@ -15,4 +15,7 @@ public interface SharedFeign {
 
     @GetMapping("/shared/from-paysan/demande-paysan/{id}")
     ResponseEntity<?> getInfoDemande(@PathVariable Long id);
+
+    @GetMapping("/shared/from-paysan/demande-paysan")
+    ResponseEntity<?> getAllDemande();
 }
