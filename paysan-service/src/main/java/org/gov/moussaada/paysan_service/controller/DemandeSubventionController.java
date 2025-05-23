@@ -19,6 +19,11 @@ public class DemandeSubventionController {
         return demandeSubentionService.getAll();
     }
 
+    @GetMapping("/paysan")
+    public ResponseEntity<?> getAllPaysan(){
+        return demandeSubentionService.getAllPaysan();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getdemandeById(@PathVariable Long id){
         return demandeSubentionService.getdemandeById(id);

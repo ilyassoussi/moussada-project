@@ -144,4 +144,14 @@ public class TraitementSubventionService implements ITraitementSubvention {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Erreur lors de get info de demande"));
         }
     }
+
+    @Override
+    public ResponseEntity<?> GetInfoDemandeAll() {
+        ResponseEntity<?> demande_paysan = sharedFeign.getAllDemande();
+        if(demande_paysan.getStatusCode().is2xxSuccessful()){
+            return demande_paysan;
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Erreur lors de get info de demande"));
+        }
+    }
 }

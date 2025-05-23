@@ -18,4 +18,6 @@ public interface ITraitementSubvention {
 
     ResponseEntity<?> GetInfoDemande(Long id);
 
+    ResponseEntity<?> GetInfoDemandeAll();
+
 }

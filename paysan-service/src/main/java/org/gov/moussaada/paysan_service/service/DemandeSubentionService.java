@@ -68,7 +68,7 @@ public class DemandeSubentionService implements IDemandeSubventionService {
 
     @Override
     public ResponseEntity<?> getAll() {
-        List<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findAll();
+        List<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findAllNoTraitment();
         if(demandeSubvention.isEmpty()){
             return ResponseEntity.ok().body(new SuccessResponse<>("no demande existe ",200,demandeSubvention));
         }else{
@@ -123,5 +123,18 @@ public class DemandeSubentionService implements IDemandeSubventionService {
     @Override
     public ResponseEntity<?> getnotexpired() {
         return subventionFeign.getnotexpired();
+    }
+
+    @Override
+    public ResponseEntity<?> getAllPaysan() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String, Object> userDetails = (Map<String, Object>) principal;
+        int idUtilisateur = Integer.parseInt(userDetails.get("id_utilisateur").toString());
+        List<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findAllIdPaysan(idUtilisateur);
+        if(demandeSubvention.isEmpty()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("no demande existe ",200,demandeSubvention));
+        }else{
+            return ResponseEntity.ok().body(new SuccessResponse<>("all My demande ",200,demandeSubvention));
+        }
     }
 }

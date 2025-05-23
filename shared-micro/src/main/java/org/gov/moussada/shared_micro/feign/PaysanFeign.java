@@ -15,4 +15,7 @@ public interface PaysanFeign {
 
     @GetMapping("/paysan/demande/{id}")
     ResponseEntity<?> getDemande(@PathVariable Long id);
+
+    @GetMapping("/paysan/demande")
+    ResponseEntity<?> getDemandeAll();
 }

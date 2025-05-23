@@ -15,6 +15,11 @@ public class PaysanSharedFeignFallbackFactory implements FallbackFactory<PaysanF
             public ResponseEntity<?> getDemande(Long id) {
                 return null;
             }
+
+            @Override
+            public ResponseEntity<?> getDemandeAll() {
+                return null;
+            }
         };
     }
 }
