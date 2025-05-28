@@ -17,6 +17,14 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 	</properties>
 
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub OWNER Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/ilyassoussi/REPOSITORY</url>
+		</repository>
+	</distributionManagement>
+
 	<dependencies>
 		<!-- Pour la sérialisation JSON des DTOs -->
 		<dependency>
