@@ -5,7 +5,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.paysan_service.dao.DemandeSubventionDAO;
 import org.gov.moussaada.paysan_service.dao.ReclamationDAO;
-import org.gov.moussaada.paysan_service.dto.KafkaMoussaadaDTO;
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.paysan_service.dto.KafkaUpdateStatusDTO;
 import org.gov.moussaada.paysan_service.model.DemandeSubvention;
 import org.gov.moussaada.paysan_service.model.Reclamation;

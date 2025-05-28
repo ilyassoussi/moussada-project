@@ -136,10 +136,15 @@
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.gov.moussaada</groupId>
+            <artifactId>common-dto</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
 
-
-	</dependencies>
+    </dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

@@ -3,7 +3,7 @@ package org.gov.moussaada.admin_service.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.gov.moussaada.admin_service.dto.KafkaMoussaadaDTO;
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
