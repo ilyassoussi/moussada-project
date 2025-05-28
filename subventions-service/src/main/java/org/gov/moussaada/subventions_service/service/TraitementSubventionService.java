@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.subventions_service.dao.ValidateSubventionDAO;
-import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.subventions_service.dto.KafkaUpdateStatusDTO;
 import org.gov.moussaada.subventions_service.dto.TraitementSubventionRequest;
 import org.gov.moussaada.subventions_service.feign.SharedFeign;

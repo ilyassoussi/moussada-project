@@ -2,7 +2,7 @@ package org.gov.moussaada.subventions_service.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;

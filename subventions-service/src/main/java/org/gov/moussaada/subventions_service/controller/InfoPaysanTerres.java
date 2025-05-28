@@ -25,7 +25,7 @@ public class InfoPaysanTerres {
         return ResponseEntity.ok().body(new SuccessResponse<>("information sur le paysan",200,response));
     }
 
-    @GetMapping("/{Numero_titre}")
+    @GetMapping("/numero-titre/{Numero_titre}")
     public ResponseEntity<?> ByTitre(@PathVariable String Numero_titre) {
         GetTerreResponse response = terrainSoapService.getTerreByTitre(Numero_titre);
         return ResponseEntity.ok().body(new SuccessResponse<>("information de terre",200,response));

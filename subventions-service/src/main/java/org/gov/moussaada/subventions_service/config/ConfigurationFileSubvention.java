@@ -4,20 +4,13 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.gov.moussaada.subventions_service.dto.KafkaMoussaadaDTO;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.TopicBuilder;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Configuration
@@ -39,7 +32,6 @@ public class ConfigurationFileSubvention {
             @Override
             public void apply(RequestTemplate requestTemplate) {
                 String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-                log.info("ici : {}",token);
                 requestTemplate.header("Authorization", "Bearer " + token);
             }
         };
