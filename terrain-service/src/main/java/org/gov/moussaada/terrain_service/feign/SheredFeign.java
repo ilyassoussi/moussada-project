@@ -11,10 +11,10 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 @CircuitBreaker(name = "SheredFeign")
 public interface SheredFeign {
 
-    @GetMapping("/shared/from-subvention/{id}") // <-- OK
+    @GetMapping("/shared/from-subvention/{id}") // <-- OK pour avoir les information d'une demande technique
     ResponseEntity<?> getById(@PathVariable int id);
 
-    @GetMapping("/shared/from-subvention") // <-- OK
+    @GetMapping("/shared/from-subvention") // pour avoir toutes les demandes texhnoque <-- OK
     ResponseEntity<?> getAll();
 
     @GetMapping("/shared/from-paysan/demande-paysan/{id}")

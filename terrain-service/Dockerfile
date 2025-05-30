@@ -15,8 +15,8 @@ RUN mvn -f /home/app/pom.xml clean package -DskipTests
 # Stage 2: Runtime
 FROM openjdk:17-jdk-alpine
 
-EXPOSE 8086
+EXPOSE 8083
 
-COPY --from=stage1 /home/app/target/*.jar subvention.jar
+COPY --from=stage1 /home/app/target/*.jar terrain.jar
 
-CMD ["java", "-jar", "subvention.jar"]
+CMD ["java", "-jar", "terrain.jar"]

@@ -20,7 +20,7 @@ public class TraitementController {
 
     @PostMapping("/create")
     ResponseEntity<?> create(@RequestBody TraitementSubventionRequest traitementSubventionRequest){
-        return traitementSubventionService.CreateTraitement(traitementSubventionRequest);
+        return traitementSubventionService.SubventionTraitement(traitementSubventionRequest);
     }
 
     @PutMapping("/update/{id}")

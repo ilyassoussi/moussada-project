@@ -42,24 +42,48 @@ public class TraitementSubventionService implements ITraitementSubvention {
     private SharedFeign sharedFeign;
 
     @Override
-    public ResponseEntity<?> CreateTraitement(TraitementSubventionRequest traitementSubventionRequest) {
-        TraitementSubvention traitementSubvention = modelMapper.map(traitementSubventionRequest,TraitementSubvention.class);
-        traitementSubvention.setDate_traitement(utile.CurentDate());
-        traitementSubvention.setDate_update(utile.CurentDate());
+    public ResponseEntity<?> SubventionTraitement(TraitementSubventionRequest request) {
+        Optional<TraitementSubvention> existantOpt = validateSubvention.findByIDemanade(request.getId_demande());
 
-        try{
-            KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TRAITEMENT", new KafkaUpdateStatusDTO(traitementSubvention.getId_demande(), traitementSubvention.getStatus()));
-            kafkaSubventionService.UpdateStatusDemande(kafkaMoussaadaDTO);
-            /*
-            * @TODO Avoir un appel avec KAFKA au service de Terrain
-            */
-            if(traitementSubvention.getStatus().equals("EN_ATTENTE_EVALUATION_TERRAIN")){
-                System.out.println("ici le traitement d'envoyer la demande au service Technique (Terrain)");
+        try {
+            TraitementSubvention traitement;
+            if (existantOpt.isPresent()) {
+                traitement = existantOpt.get();
+
+                // Mise à jour conditionnelle seulement si champ non null
+                if (request.getStatus() != null) {
+                    traitement.setStatus(request.getStatus());
+                }
+                if (request.getDescription() != null) {
+                    traitement.setDescription(request.getDescription());
+                }
+                if (request.getMontantSubvention() != null) {
+                    traitement.setMontantSubvention(request.getMontantSubvention());
+                }
+                if (request.getNombre_de_plan() != null) {
+                    traitement.setNombre_de_plan(request.getNombre_de_plan());
+                }
+
+                traitement.setDate_update(utile.CurentDate());
+            } else {
+                traitement = modelMapper.map(request, TraitementSubvention.class);
+                traitement.setDate_traitement(utile.CurentDate());
+                traitement.setDate_update(utile.CurentDate());
             }
-            TraitementSubvention saved = validateSubvention.save(traitementSubvention);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>("created",201,saved));
+
+            // Envoi Kafka au paysan
+            if (traitement.getStatus() != null) {
+                KafkaMoussaadaDTO kafkaDTO = new KafkaMoussaadaDTO(
+                        "TRAITEMENT",
+                        new KafkaUpdateStatusDTO(traitement.getId_demande(), traitement.getStatus())
+                );
+                kafkaSubventionService.UpdateStatusDemande(kafkaDTO);
+            }
+
+            TraitementSubvention saved = validateSubvention.save(traitement);
+            return ResponseEntity.ok().body(new SuccessResponse<>("Success", 201, saved));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erreur lors du traitement de la subvention", e);
         }
     }
 
@@ -106,12 +130,12 @@ public class TraitementSubventionService implements ITraitementSubvention {
     @Override
     public ResponseEntity<?> GetByIdDemande(int id) {
 //        Optional<TraitementSubvention> traitementSubvention = validateSubvention.findById(id);
-        TraitementSubvention traitementSubvention = validateSubvention.findByIDemanade(id);
+        Optional<TraitementSubvention> traitementSubvention = validateSubvention.findByIDemanade(id);
         log.info("ici : {}",traitementSubvention);
-        if(traitementSubvention == null){
+        if(!traitementSubvention.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Aucun traitement por cette demande"));
         } else {
-            return ResponseEntity.ok().body(new SuccessResponse<>("voila les traitements par demandes de paysan",200,traitementSubvention));
+            return ResponseEntity.ok().body(new SuccessResponse<>("voila les traitements par demandes de paysan",200,traitementSubvention.get()));
         }
     }
 
