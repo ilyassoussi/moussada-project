@@ -4,7 +4,7 @@ import org.gov.moussaada.subventions_service.dto.TraitementSubventionRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface ITraitementSubvention {
-    ResponseEntity<?> CreateTraitement(TraitementSubventionRequest traitementSubventionRequest);
+    ResponseEntity<?> SubventionTraitement(TraitementSubventionRequest traitementSubventionRequest);
 
     ResponseEntity<?> UpdateTraitement(int id , TraitementSubventionRequest traitementSubventionRequest);
 

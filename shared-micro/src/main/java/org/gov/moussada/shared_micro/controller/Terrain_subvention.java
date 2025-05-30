@@ -30,7 +30,7 @@ public class Terrain_subvention {
     }
 
     @GetMapping("/from-subvention")
-    public ResponseEntity<?> getDemandeTerrainById(){
+    public ResponseEntity<?> getDemandeTerrainAll(){
         return subventionFeign.getAlldm();
     }
 
