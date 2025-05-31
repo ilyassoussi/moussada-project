@@ -3,9 +3,11 @@ package org.gov.moussaada.terrain_service.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.terrain_service.dao.ResponseDAO;
 import org.gov.moussaada.terrain_service.dto.ResponRequestDTO;
 import org.gov.moussaada.terrain_service.feign.SheredFeign;
+import org.gov.moussaada.terrain_service.model.EtatServiceTewrrain;
 import org.gov.moussaada.terrain_service.model.Response;
 import org.gov.moussaada.terrain_service.service.inter.IResponseTerrain;
 import org.gov.moussaada.terrain_service.utils.utile;
@@ -53,80 +55,54 @@ public class ResponseTerrainService implements IResponseTerrain {
     }
 
     @Override
-    public ResponseEntity<?> Create(int id_traitement_subvention, MultipartFile rapport, String etat, String titre ,String commentaire, String date_de_sortie) {
+    public ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, MultipartFile rapport, String etat, String titre ,String commentaire, String date_de_sortie) {
+        Optional<Response> existeResponse = responseDAO.findByIdDemandeSubvention(id_traitement_subvention);
+        try {
+            Response response = null;
+            if (existeResponse.isPresent()){
+                response = existeResponse.get();
+                if (date_de_sortie != null ) {
+                    response.setDate_de_sortie(utile.ReformulateDate(date_de_sortie));
+                }
+                if (commentaire != null ) {
+                    response.setCommentaire(commentaire);
+                }
+                if (titre != null ) {
+                    response.setTitre(titre);
+                }
+                if(etat != null){
+                    response.setEtats(EtatServiceTewrrain.valueOf(etat));
+                }
+                if (rapport != null && !rapport.isEmpty()) {
+                    try {
+                        String pdfUpdated = utile.savePDF(rapport);
+                        response.setRapport(pdfUpdated);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Erreur lors de l'enregistrement de l'image", e);
+                    }
+                }
+                response.setDate_update(utile.CurentDate());
 
-        if (date_de_sortie == null || date_de_sortie.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Le champ 'date' est requis.");
-        }
-        if (commentaire == null || commentaire.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Le champ 'commentaire' est requis.");
-        }
-        if (etat == null || etat.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Le champ 'commentaire' est requis.");
-        }
-        if (titre == null || titre.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Le champ 'commentaire' est requis.");
-        }
-        String pdf = null;
-        if (rapport != null && !rapport.isEmpty()) {
-            try {
-                pdf = utile.savePDF(rapport);
-            } catch (IOException e) {
-                throw new RuntimeException("Erreur lors de l'enregistrement de l'image", e);
+            } else {
+                if (date_de_sortie == null || date_de_sortie.trim().isEmpty()) {
+                    return ResponseEntity.badRequest().body("Le champ 'date de sortie' est requis.");
+                }
+                if (etat == null || etat.trim().isEmpty()) {
+                    return ResponseEntity.badRequest().body("Le champ 'etat' est requis.");
+                }
+                response.setEtats(EtatServiceTewrrain.valueOf(etat));
+                response.setId_traitement_subvention(id_traitement_subvention);
+                response.setDate_de_sortie(utile.ReformulateDate(date_de_sortie));
+                response.setDate_creation(utile.CurentDate());
+                response.setDate_update(utile.CurentDate());
             }
-        }
-
-        Response response = Response.builder()
-                .id_traitement_subvention(id_traitement_subvention)
-                .titre(titre)
-                .commentaire(commentaire)
-                .etats(etat)
-                .rapport(pdf)
-                .date_de_sortie(utile.ReformulateDate(date_de_sortie))
-                .date_update(utile.CurentDate())
-                .date_creation(utile.CurentDate())
-                .build();
-        try{
             Response saved = responseDAO.save(response);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResponse<>("created with success",201,saved));
+            return ResponseEntity.ok().body(new SuccessResponse<>("Success",200,saved));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la création");
+            throw new RuntimeException(e);
         }
-    }
 
-    @Override
-    public ResponseEntity<?> Update(int id, MultipartFile rapport, String etat, String titre , String commentaire, String date_de_sortie) {
-        Optional<Response> response = responseDAO.findById(id);
-        if(!response.isPresent()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("la reponse n'existe pas"));
-        }
-        if (date_de_sortie != null ) {
-            response.get().setDate_de_sortie(utile.ReformulateDate(date_de_sortie));
-        }
-        if (commentaire != null ) {
-            response.get().setCommentaire(commentaire);
-        }
-        if (titre != null ) {
-            response.get().setTitre(titre);
-        }
-        if(etat != null){
-            response.get().setEtats(etat);
-        }
-        if (rapport != null && !rapport.isEmpty()) {
-            try {
-                String pdfUpdated = utile.savePDF(rapport);
-                response.get().setRapport(pdfUpdated);
-            } catch (IOException e) {
-                throw new RuntimeException("Erreur lors de l'enregistrement de l'image", e);
-            }
-        }
-        response.get().setDate_update(utile.CurentDate());
-        try{
-            Response updated = responseDAO.save(response.get());
-            return ResponseEntity.ok().body(new SuccessResponse<>("Updated with success",200 ,updated));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la mise a jours");
-        }
+
     }
 
     @Override

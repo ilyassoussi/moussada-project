@@ -9,9 +9,7 @@ public interface IResponseTerrain {
 
     ResponseEntity<?> getById(int id);
 
-    ResponseEntity<?> Create(int id_traitement_subvention, MultipartFile rapport, String etat, String titre , String commentaire, String date_de_sortie);
-
-    ResponseEntity<?> Update(int id, MultipartFile rapport, String etat, String titre ,String commentaire, String date_de_sortie);
+    ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, MultipartFile rapport, String etat, String titre , String commentaire, String date_de_sortie);
 
     ResponseEntity<?> Delete(int id);
 
