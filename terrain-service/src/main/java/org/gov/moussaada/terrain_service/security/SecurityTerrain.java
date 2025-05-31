@@ -36,7 +36,8 @@ public class SecurityTerrain implements WebMvcConfigurer {
                 http.csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authori -> authori
                                 .requestMatchers("/actuator/**").permitAll()
-                                .requestMatchers("/terrain/demande/**","admin/reclamation").hasAuthority("ROLE_Admin")
+                                .requestMatchers("/terrain/response/create").hasAuthority("ROLE_Service_terrain")
+                                .requestMatchers("/terrain/response").hasAnyAuthority("ROLE_Service_terrain","ROLE_Subvention")
                                 .anyRequest().authenticated()
                         ).sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
