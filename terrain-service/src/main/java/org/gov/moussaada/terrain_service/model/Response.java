@@ -38,7 +38,7 @@ public class Response implements Serializable {
      * EN_TERRAIN,
      * EN_COURS
      */
-    private String etats;
+    private EtatServiceTewrrain etats;
 
     private Date date_de_sortie;
 

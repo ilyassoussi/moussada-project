@@ -43,18 +43,7 @@ public class ResponseController {
             @RequestParam(name = "date_de_sortie") String date_de_sortie
 
     ) {
-        return responseTerrainService.Create(id_traitement_subvention,rapport,etat, titre,commentaire,date_de_sortie);
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable int id,
-                                    @RequestParam(name = "titre") String titre,
-                                    @RequestParam(name = "rapport") MultipartFile rapport,
-                                    @RequestParam(name = "etat") String etat,
-                                    @RequestParam(name = "commentaire") String commentaire,
-                                    @RequestParam(name = "date_de_sortie") String date_de_sortie) {
-
-        return responseTerrainService.Update(id,rapport,etat, titre,commentaire,date_de_sortie);
+        return responseTerrainService.createOrUpdateResponse(id_traitement_subvention,rapport,etat, titre,commentaire,date_de_sortie);
     }
 
     @DeleteMapping("/delete/{id}")
