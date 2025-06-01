@@ -1,7 +1,7 @@
 package org.gov.moussaada.terrain_service.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.gov.moussaada.terrain_service.model.Rapport;
 
 import java.util.Date;
 
@@ -24,7 +24,7 @@ public class ResponResponseDTO {
     /*
      *   sous Form PDF
      **/
-    private String rapport;
+    private Rapport rapport;
 
     private String commentaire;
 

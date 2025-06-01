@@ -1,5 +1,6 @@
 package org.gov.moussaada.terrain_service.controller;
 
+import org.gov.moussaada.terrain_service.model.Rapport;
 import org.gov.moussaada.terrain_service.service.ResponseTerrainService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class ResponseController {
     public ResponseEntity<?> create(
             @RequestParam(name = "id_traitement_subvention") int  id_traitement_subvention,
             @RequestParam(name = "titre") String titre,
-            @RequestParam(name = "rapport") MultipartFile rapport,
+            @RequestParam(name = "rapport") Rapport rapport,
             @RequestParam(name = "etat") String etat,
             @RequestParam(name = "commentaire") String commentaire,
             @RequestParam(name = "date_de_sortie") String date_de_sortie

@@ -22,13 +22,11 @@ public class Response implements Serializable {
 
     private int id_traitement_subvention;
 
+    @OneToOne
+    @JoinColumn(name = "rapport_id") // nom de la colonne FK dans la table Response
+    private Rapport id_rapport;
+
     private String titre;
-
-
-    /*
-    *   sous Form PDF
-    **/
-    private String rapport;
 
     private String commentaire;
 
