@@ -127,12 +127,6 @@
 			<groupId>io.github.resilience4j</groupId>
 			<artifactId>resilience4j-annotations</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.gov.moussaada</groupId>
-			<artifactId>utilisateur-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
-		</dependency>
         <dependency>
             <groupId>org.gov.moussaada</groupId>
             <artifactId>common-dto</artifactId>
