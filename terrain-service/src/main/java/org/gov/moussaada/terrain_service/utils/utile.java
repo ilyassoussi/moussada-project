@@ -1,6 +1,6 @@
 package org.gov.moussaada.terrain_service.utils;
 
-import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
+import org.gov.moussaada.terrain_service.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
