@@ -1,6 +1,7 @@
 package org.gov.moussaada.terrain_service.service.inter;
 
 import org.gov.moussaada.terrain_service.dto.ResponRequestDTO;
+import org.gov.moussaada.terrain_service.model.Rapport;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +10,7 @@ public interface IResponseTerrain {
 
     ResponseEntity<?> getById(int id);
 
-    ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, MultipartFile rapport, String etat, String titre , String commentaire, String date_de_sortie);
+    ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, Rapport rapport, String etat, String titre , String commentaire, String date_de_sortie);
 
     ResponseEntity<?> Delete(int id);
 

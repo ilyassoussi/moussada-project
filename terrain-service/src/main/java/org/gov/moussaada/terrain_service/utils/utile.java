@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class utile {
 
     private static final Path rootLocation = Paths.get("/var/tmp/PDF");
-    private final Path rootLocationimg = Paths.get("src/main/resources/image");
+    private static final Path rootLocationImage = Paths.get("/var/tmp/image");
 
     public static java.util.Date CurentDate() {
         // Obtenir la date et l'heure courante
@@ -59,7 +59,7 @@ public class utile {
         // Vérifier si le fichier existe déjà
         if (Files.exists(destinationFile)) {
             // Si le fichier existe, ajouter un suffixe incrémental
-            String newFileName = generateUniqueFileName(fileName);
+            String newFileName = generateUniqueFileName(fileName,rootLocation);
             destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
         }
 
@@ -76,14 +76,13 @@ public class utile {
         return destinationFile.getFileName().toString();
     }
 
-    private static String generateUniqueFileName(String originalFileName) {
+    private static String generateUniqueFileName(String originalFileName,Path rootLocation) {
         String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
         String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
         int count = 1;
 
         Path destinationFile = rootLocation.resolve(Paths.get(originalFileName)).normalize().toAbsolutePath();
 
-        // Boucle jusqu'à trouver un nom de fichier qui n'existe pas déjà
         while (Files.exists(destinationFile)) {
             String newFileName = baseName + "(" + count + ")" + extension;
             destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
@@ -93,8 +92,30 @@ public class utile {
         return destinationFile.getFileName().toString();
     }
 
-    public static void imageBloc(){
+    public static String generatePdfFileName(int id_reponse, String titreFoncier) {
+        // Nettoyer titreFoncier pour enlever les caractères spéciaux non autorisés dans un nom de fichier
+        String cleanTitre = titreFoncier.trim().replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+        return id_reponse + "_" + cleanTitre + ".pdf";
+    }
+    public static String saveGeneratedPdf(byte[] pdfBytes, String fileName) throws IOException {
+        if (!Files.exists(rootLocation)) {
+            Files.createDirectories(rootLocation);
+        }
 
+        Path destinationFile = rootLocation.resolve(Paths.get(fileName)).normalize().toAbsolutePath();
+
+        if (Files.exists(destinationFile)) {
+            String newFileName = generateUniqueFileName(fileName, rootLocation);
+            destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
+        }
+
+        if (!destinationFile.getParent().equals(rootLocation.toAbsolutePath())) {
+            throw new IOException("Impossible de stocker le fichier en dehors du répertoire courant.");
+        }
+
+        Files.write(destinationFile, pdfBytes);
+
+        return destinationFile.getFileName().toString();
     }
 
     public static boolean isPDF(MultipartFile file) {
@@ -147,6 +168,62 @@ public class utile {
             return null;
         }
         return dateDebut;
+    }
+
+
+    /****************************************************************************Image save*******************************************************/
+
+    /**
+     * cette partie pour sauvegarder les images des blocs
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static String saveImage(MultipartFile file) throws IOException {
+        if (!Files.exists(rootLocationImage)) {
+            Files.createDirectories(rootLocationImage);
+        }
+
+        if (!isValidImage(file)) {
+            throw new IOException("Ce fichier n'est pas supporté (seuls les fichiers PNG, JPEG et WEBP sont autorisés).");
+        }
+
+        if (file.isEmpty()) {
+            throw new IOException("Impossible de stocker un fichier vide.");
+        }
+
+        String fileName = file.getOriginalFilename();
+        Path destinationFile = rootLocationImage.resolve(Paths.get(fileName)).normalize().toAbsolutePath();
+
+        if (Files.exists(destinationFile)) {
+            String newFileName = generateUniqueFileName(fileName,rootLocationImage);
+            destinationFile = rootLocationImage.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
+        }
+
+        if (!destinationFile.getParent().equals(rootLocationImage.toAbsolutePath())) {
+            throw new IOException("Impossible de stocker le fichier en dehors du répertoire courant.");
+        }
+
+        try {
+            Files.copy(file.getInputStream(), destinationFile);
+        } catch (IOException e) {
+            throw new IOException("Impossible de stocker le fichier.", e);
+        }
+
+        return destinationFile.getFileName().toString();
+    }
+
+    public static boolean isValidImage(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) {
+            return false;
+        }
+
+        String lowerCaseFileName = fileName.toLowerCase();
+        return  lowerCaseFileName.endsWith(".png") ||
+                lowerCaseFileName.endsWith(".jpeg") ||
+                lowerCaseFileName.endsWith(".jpg") ||
+                lowerCaseFileName.endsWith(".webp");
     }
 
 }

@@ -23,20 +23,13 @@ public class SecurityTerrain implements WebMvcConfigurer {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/admin/**")
-                .allowedOrigins("http://localhost:3000") // Origine autorisée
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return
                 http.csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authori -> authori
                                 .requestMatchers("/actuator/**").permitAll()
-                                .requestMatchers("/terrain/response/create","/terrain/response/info-demande/{id}","/terrain/response/{id}","/terrain/response/alldemande").hasAuthority("ROLE_Service_terrain")
+                                .requestMatchers("/terrain/response/create","/terrain/response/info-demande/{id}","/terrain/response/{id}","/terrain/response/alldemande","/terrain/rapport/**").hasAuthority("ROLE_Service_terrain")
                                 .requestMatchers("/terrain/response/alldemande").hasAnyAuthority("ROLE_Service_terrain","ROLE_Subvention")
                                 .anyRequest().authenticated()
                         ).sessionManagement(httpSecuritySessionManagementConfigurer ->

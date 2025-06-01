@@ -3,16 +3,15 @@ package org.gov.moussaada.terrain_service.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.terrain_service.dao.ResponseDAO;
-import org.gov.moussaada.terrain_service.dto.ResponRequestDTO;
 import org.gov.moussaada.terrain_service.feign.SheredFeign;
 import org.gov.moussaada.terrain_service.model.EtatServiceTewrrain;
+import org.gov.moussaada.terrain_service.model.Rapport;
 import org.gov.moussaada.terrain_service.model.Response;
+import org.gov.moussaada.terrain_service.response.ErrorResponse;
+import org.gov.moussaada.terrain_service.response.SuccessResponse;
 import org.gov.moussaada.terrain_service.service.inter.IResponseTerrain;
 import org.gov.moussaada.terrain_service.utils.utile;
-import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
-import org.gov.moussaada.utilisateur_service.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +55,7 @@ public class ResponseTerrainService implements IResponseTerrain {
     }
 
     @Override
-    public ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, MultipartFile rapport, String etat, String titre ,String commentaire, String date_de_sortie) {
+    public ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, Rapport rapport, String etat, String titre , String commentaire, String date_de_sortie) {
         Optional<Response> existeResponse = responseDAO.findByIdDemandeSubvention(id_traitement_subvention);
         try {
             Response response = null;
@@ -74,17 +73,11 @@ public class ResponseTerrainService implements IResponseTerrain {
                 if(etat != null){
                     response.setEtats(EtatServiceTewrrain.valueOf(etat));
                 }
-                if (rapport != null && !rapport.isEmpty()) {
-                    try {
-                        String pdfUpdated = utile.savePDF(rapport);
-                        response.setRapport(pdfUpdated);
-                    } catch (IOException e) {
-                        throw new RuntimeException("Erreur lors de l'enregistrement de l'image", e);
-                    }
-                }
+
                 response.setDate_update(utile.CurentDate());
 
             } else {
+                response = new Response();
                 if (date_de_sortie == null || date_de_sortie.trim().isEmpty()) {
                     return ResponseEntity.badRequest().body("Le champ 'date de sortie' est requis.");
                 }
