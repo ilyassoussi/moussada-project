@@ -19,6 +19,12 @@ public class ResponseController {
     }
 
     @GetMapping("")
+    public ResponseEntity<?> getAllResponse(){
+        return responseTerrainService.getAllReponse();
+    }
+
+
+    @GetMapping("/alldemande")
     public ResponseEntity<?> getAll(){
         return responseTerrainService.getAll();
     }
