@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -122,6 +123,16 @@ public class ResponseTerrainService implements IResponseTerrain {
             return getInfoDemande;
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Erreur lors la recuperation de liste des inforamtions des demandes "));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getAllReponse() {
+        List<Response> allReponse = responseDAO.findAll();
+        if(allReponse.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Aucune repopnse existe"));
+        }else{
+            return ResponseEntity.ok().body(new SuccessResponse<>("Success",200,allReponse));
         }
     }
 }

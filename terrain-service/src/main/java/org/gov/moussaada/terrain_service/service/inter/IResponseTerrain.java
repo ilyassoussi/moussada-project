@@ -15,4 +15,5 @@ public interface IResponseTerrain {
 
     ResponseEntity<?> getInfoDemande(Long id);
 
+    ResponseEntity<?> getAllReponse();
 }
