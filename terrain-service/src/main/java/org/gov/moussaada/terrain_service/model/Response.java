@@ -26,15 +26,15 @@ public class Response implements Serializable {
     @JoinColumn(name = "rapport_id") // nom de la colonne FK dans la table Response
     private Rapport id_rapport;
 
+    private String nomTechnicien;
+
     private String titre;
 
     private String commentaire;
 
     /*
-     * EN_ATTENTE,
-     * DONE,
-     * EN_TERRAIN,
-     * EN_COURS
+        * SUR_TERRAIN,
+        * TERMINEE
      */
     private EtatServiceTewrrain etats;
 
