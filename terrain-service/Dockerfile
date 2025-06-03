@@ -14,7 +14,8 @@ RUN mvn -f /home/app/pom.xml clean package -DskipTests
 
 # Stage 2: Runtime
 FROM openjdk:17-jdk-alpine
-
+RUN mkdir -p /var/tmp/PDF
+RUN mkdir -p /var/tmp/images
 EXPOSE 8083
 
 COPY --from=stage1 /home/app/target/*.jar terrain.jar

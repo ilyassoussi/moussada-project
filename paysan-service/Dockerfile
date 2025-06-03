@@ -8,6 +8,8 @@ RUN mvn -f /home/app/pom.xml clean package  -DskipTests
 
 # Create an Image
 FROM openjdk:17-jdk-alpine
+RUN mkdir -p /var/tmp/PDF
+RUN mkdir -p /var/tmp/images
 EXPOSE 8088
 COPY --from=stage1 /home/app/target/*.jar paysan.jar
 CMD java -jar /paysan.jar
