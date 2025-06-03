@@ -144,7 +144,7 @@ public class PdfGeneratorService {
             for (MultipartFile photoFile : photosTerrain) {
                 try {
                     String photoPathString = utile.saveImage(photoFile);
-                    Image img = Image.getInstance(photoPathString);
+                    Image img = Image.getInstance("/var/tmp/images/"+photoPathString);
                     img.scaleToFit(400, 250);
                     img.setSpacingBefore(10);
                     document.add(img);
@@ -156,7 +156,7 @@ public class PdfGeneratorService {
 
         document.close();
 
-        String fileName = utile.generatePdfFileName(id_reponse, titreFoncier);
+        String fileName = utile.generatePdfFileName(id_reponse, titreFoncier,dateVisite);
         String savedFileName = utile.saveGeneratedPdf(baos.toByteArray(), fileName);
         try {
             Optional<Response> reponse = responseDAO.findById(id_reponse);
