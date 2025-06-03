@@ -55,7 +55,7 @@ public class ResponseTerrainService implements IResponseTerrain {
     }
 
     @Override
-    public ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, String etat, String titre , String commentaire, String date_de_sortie) {
+    public ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, String nomTechnicien, String titre , String commentaire, String date_de_sortie) {
         Optional<Response> existeResponse = responseDAO.findByIdDemandeSubvention(id_traitement_subvention);
         try {
             Response response = null;
@@ -70,10 +70,6 @@ public class ResponseTerrainService implements IResponseTerrain {
                 if (titre != null ) {
                     response.setTitre(titre);
                 }
-                if(etat != null){
-                    response.setEtats(EtatServiceTewrrain.valueOf(etat));
-                }
-
                 response.setDate_update(utile.CurentDate());
 
             } else {
@@ -81,11 +77,9 @@ public class ResponseTerrainService implements IResponseTerrain {
                 if (date_de_sortie == null || date_de_sortie.trim().isEmpty()) {
                     return ResponseEntity.badRequest().body("Le champ 'date de sortie' est requis.");
                 }
-                if (etat == null || etat.trim().isEmpty()) {
-                    return ResponseEntity.badRequest().body("Le champ 'etat' est requis.");
-                }
-                response.setEtats(EtatServiceTewrrain.valueOf(etat));
+                response.setEtats(EtatServiceTewrrain.SUR_TERRAIN);
                 response.setId_traitement_subvention(id_traitement_subvention);
+                response.setNomTechnicien(nomTechnicien);
                 response.setDate_de_sortie(utile.ReformulateDate(date_de_sortie));
                 response.setDate_creation(utile.CurentDate());
                 response.setDate_update(utile.CurentDate());

@@ -162,7 +162,7 @@ public class PdfGeneratorService {
             Optional<Response> reponse = responseDAO.findById(id_reponse);
             if (reponse.isPresent()){
                 Rapport rapport = Rapport.builder()
-                        .isvalid(true)
+                        .isvalid(false)
                         .id_reponse(reponse.get())
                         .rapport(savedFileName)
                         .build();
@@ -170,6 +170,8 @@ public class PdfGeneratorService {
 
                 reponse.get().setId_response(reponse.get().getId_response());
                 reponse.get().setEtats(EtatServiceTewrrain.TERMINEE);
+                reponse.get().setTitre(avis);
+                reponse.get().setCommentaire(justificationAvis);
                 reponse.get().setId_rapport(rapport);
                 responseDAO.save(reponse.get());
             }
