@@ -88,10 +88,10 @@ public class ResponseTerrainService implements IResponseTerrain {
                 response.setDate_de_sortie(utile.ReformulateDate(date_de_sortie));
                 response.setDate_creation(utile.CurentDate());
                 response.setDate_update(utile.CurentDate());
-                KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(response.getId_response(),String.valueOf(response.getEtats())));
-                kafkaTerrainService.SendIdReponseTraitementDemandeSubvention(kafkaMoussaadaDTO);
             }
             Response saved = responseDAO.save(response);
+            KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(saved.getId_response(),String.valueOf(saved.getEtats())));
+            kafkaTerrainService.SendIdReponseTraitementDemandeSubvention(kafkaMoussaadaDTO);
             return ResponseEntity.ok().body(new SuccessResponse<>("Success",200,saved));
         } catch (Exception e) {
             throw new RuntimeException(e);

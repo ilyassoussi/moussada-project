@@ -36,6 +36,7 @@ public class Response implements Serializable {
         * SUR_TERRAIN,
         * TERMINEE
      */
+    @Enumerated(EnumType.STRING)
     private EtatServiceTewrrain etats;
 
     private Date date_de_sortie;

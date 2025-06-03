@@ -180,9 +180,9 @@ public class PdfGeneratorService {
                 reponse.get().setCommentaire(justificationAvis);
                 reponse.get().setId_rapport(rapport);
 
-                KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(reponse.get().getId_response(),String.valueOf(reponse.get().getEtats())));
+                Response Saved = responseDAO.save(reponse.get());
+                KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(Saved.getId_response(),String.valueOf(Saved.getEtats())));
                 kafkaTerrainService.SendIdReponseTraitementDemandeSubvention(kafkaMoussaadaDTO);
-                responseDAO.save(reponse.get());
             }
             return savedFileName;
         } catch (Exception e){
