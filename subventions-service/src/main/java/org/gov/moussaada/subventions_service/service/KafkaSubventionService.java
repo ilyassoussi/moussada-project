@@ -49,15 +49,16 @@ public class KafkaSubventionService {
         log.info("voila le nv reclamation : {}", demandeTechnique);
     }
 
-    @KafkaListener( topics = "admin-topic", groupId = "Subvention-group" )
+    @KafkaListener( topics = "admin-topic", groupId = "subventions-group" )
 
-    public void handleAdminMessage(KafkaMoussaadaDTO message) {
+    public void handleSubventionMessage(KafkaMoussaadaDTO message) {
         log.info("ici : {}",message);
         try {
             log.info("Message reçu : {}", message);
             switch (message.getType()) {
                 case "TERRAIN":
                     KafkaUpdateStatusDTO traitementDto = objectMapper.convertValue(message.getPayload(), KafkaUpdateStatusDTO.class);
+                    log.info("Message reçu kafdakaTraitement : {}", traitementDto);
                     UpdateDemandeReclamation(traitementDto.getId(),traitementDto.getStatus());
                     break;
                 default:
