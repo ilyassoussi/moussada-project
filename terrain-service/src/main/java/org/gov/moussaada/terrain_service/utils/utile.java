@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class utile {
 
     private static final Path rootLocation = Paths.get("/var/tmp/PDF");
-    private static final Path rootLocationImage = Paths.get("/var/tmp/image");
+    private static final Path rootLocationImage = Paths.get("/var/tmp/images");
 
     public static java.util.Date CurentDate() {
         // Obtenir la date et l'heure courante
@@ -92,10 +92,10 @@ public class utile {
         return destinationFile.getFileName().toString();
     }
 
-    public static String generatePdfFileName(int id_reponse, String titreFoncier) {
+    public static String generatePdfFileName(int id_reponse, String titreFoncier , String date) {
         // Nettoyer titreFoncier pour enlever les caractères spéciaux non autorisés dans un nom de fichier
         String cleanTitre = titreFoncier.trim().replaceAll("[^a-zA-Z0-9-_\\.]", "_");
-        return id_reponse + "_" + cleanTitre + ".pdf";
+        return id_reponse + "_" + cleanTitre + "_" + date + ".pdf";
     }
     public static String saveGeneratedPdf(byte[] pdfBytes, String fileName) throws IOException {
         if (!Files.exists(rootLocation)) {
