@@ -156,7 +156,7 @@ public class PdfGeneratorService {
 
         document.close();
 
-        String fileName = utile.generatePdfFileName(id_reponse, titreFoncier,dateVisite);
+        String fileName = utile.generatePdfFileName(id_reponse, titreFoncier);
         String savedFileName = utile.saveGeneratedPdf(baos.toByteArray(), fileName);
         try {
             Optional<Response> reponse = responseDAO.findById(id_reponse);
@@ -173,11 +173,11 @@ public class PdfGeneratorService {
                 reponse.get().setId_rapport(rapport);
                 responseDAO.save(reponse.get());
             }
+            return savedFileName;
         } catch (Exception e){
-
+            return "Error";
         }
 
-        return savedFileName;
     }
 
     // Méthode helper pour titre section (réutilisable)
