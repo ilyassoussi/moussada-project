@@ -77,11 +77,10 @@ public class RapportController {
 
             // Lire le fichier généré en bytes
             Path file = Paths.get(pdfFilePath);
-            byte[] pdfContent = Files.readAllBytes(file);
-
+            byte[] pdfContent = Files.readAllBytes(Path.of("/var/tmp/PDF/" + file));
             // Réponse HTTP avec PDF en attachment
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getFileName().toString() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file + "\"")
                     .header(HttpHeaders.CONTENT_TYPE, "application/pdf")
                     .body(pdfContent);
 

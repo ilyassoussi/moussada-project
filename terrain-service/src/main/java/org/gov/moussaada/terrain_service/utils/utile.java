@@ -92,10 +92,10 @@ public class utile {
         return destinationFile.getFileName().toString();
     }
 
-    public static String generatePdfFileName(int id_reponse, String titreFoncier , String date) {
+    public static String generatePdfFileName(int id_reponse, String titreFoncier) {
         // Nettoyer titreFoncier pour enlever les caractères spéciaux non autorisés dans un nom de fichier
         String cleanTitre = titreFoncier.trim().replaceAll("[^a-zA-Z0-9-_\\.]", "_");
-        return id_reponse + "_" + cleanTitre + "_" + date + ".pdf";
+        return id_reponse + "_" + cleanTitre + ".pdf";
     }
     public static String saveGeneratedPdf(byte[] pdfBytes, String fileName) throws IOException {
         if (!Files.exists(rootLocation)) {
