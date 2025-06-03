@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +76,8 @@ public class PdfGeneratorService {
         identifiants.addCell("Nom Technicien");
         identifiants.addCell(nomTechnicien);
         identifiants.addCell("Date Visite");
-        identifiants.addCell(utile.ReformulateDate(dateVisite).toString());
+        Date parsedDate = utile.ReformulateDate(dateVisite);
+        identifiants.addCell(parsedDate != null ? parsedDate.toString() : "Date invalide ou vide");
         document.add(identifiants);
 
         // Section 2 : Localisation

@@ -10,7 +10,7 @@ public interface IResponseTerrain {
 
     ResponseEntity<?> getById(int id);
 
-    ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, Rapport rapport, String etat, String titre , String commentaire, String date_de_sortie);
+    ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, String etat, String titre , String commentaire, String date_de_sortie);
 
     ResponseEntity<?> Delete(int id);
 

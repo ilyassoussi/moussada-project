@@ -55,7 +55,7 @@ public class ResponseTerrainService implements IResponseTerrain {
     }
 
     @Override
-    public ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, Rapport rapport, String etat, String titre , String commentaire, String date_de_sortie) {
+    public ResponseEntity<?> createOrUpdateResponse(int id_traitement_subvention, String etat, String titre , String commentaire, String date_de_sortie) {
         Optional<Response> existeResponse = responseDAO.findByIdDemandeSubvention(id_traitement_subvention);
         try {
             Response response = null;
