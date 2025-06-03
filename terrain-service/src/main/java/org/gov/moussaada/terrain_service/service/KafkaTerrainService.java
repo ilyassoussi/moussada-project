@@ -20,8 +20,7 @@ public class KafkaTerrainService {
 
     private final KafkaTemplate<String, KafkaMoussaadaDTO> kafkaTemplateUpdateResponse;
 
-    public void UpdateStatusTraitementDemandeSubvention(int id) {
-        KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",id);
+    public void SendIdReponseTraitementDemandeSubvention( KafkaMoussaadaDTO kafkaMoussaadaDTO) {
         Message<KafkaMoussaadaDTO> message = MessageBuilder.withPayload(kafkaMoussaadaDTO)
                 .setHeader(KafkaHeaders.TOPIC,  newTopic.name())
                 .build();

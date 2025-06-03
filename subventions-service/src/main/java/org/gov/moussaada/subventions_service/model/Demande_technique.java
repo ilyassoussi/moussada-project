@@ -21,6 +21,8 @@ public class Demande_technique {
 
     private int id_traitent_demande;
 
+    private int id_reponse_technique;
+
     private String titre;
 
     private String description;

@@ -3,7 +3,9 @@ package org.gov.moussaada.terrain_service.service;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.terrain_service.dao.ResponseDAO;
+import org.gov.moussaada.terrain_service.dto.KafkaUpdateStatus;
 import org.gov.moussaada.terrain_service.feign.SheredFeign;
 import org.gov.moussaada.terrain_service.model.EtatServiceTewrrain;
 import org.gov.moussaada.terrain_service.model.Rapport;
@@ -30,6 +32,9 @@ public class ResponseTerrainService implements IResponseTerrain {
 
     @Autowired
     private ResponseDAO responseDAO;
+
+    @Autowired
+    private KafkaTerrainService kafkaTerrainService;
 
     @Autowired
     private SheredFeign sharedFeign;
@@ -83,6 +88,8 @@ public class ResponseTerrainService implements IResponseTerrain {
                 response.setDate_de_sortie(utile.ReformulateDate(date_de_sortie));
                 response.setDate_creation(utile.CurentDate());
                 response.setDate_update(utile.CurentDate());
+                KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(response.getId_response(),String.valueOf(response.getEtats())));
+                kafkaTerrainService.SendIdReponseTraitementDemandeSubvention(kafkaMoussaadaDTO);
             }
             Response saved = responseDAO.save(response);
             return ResponseEntity.ok().body(new SuccessResponse<>("Success",200,saved));

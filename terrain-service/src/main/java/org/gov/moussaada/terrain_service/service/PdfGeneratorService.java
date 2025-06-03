@@ -3,12 +3,15 @@ package org.gov.moussaada.terrain_service.service;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.terrain_service.dao.RapportDAO;
 import org.gov.moussaada.terrain_service.dao.ResponseDAO;
+import org.gov.moussaada.terrain_service.dto.KafkaUpdateStatus;
 import org.gov.moussaada.terrain_service.model.EtatServiceTewrrain;
 import org.gov.moussaada.terrain_service.model.Rapport;
 import org.gov.moussaada.terrain_service.model.Response;
 import org.gov.moussaada.terrain_service.utils.utile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +25,9 @@ public class PdfGeneratorService {
 
     private ResponseDAO responseDAO;
     private RapportDAO rapportDAO;
+
+    @Autowired
+    private KafkaTerrainService kafkaTerrainService;
 
     public PdfGeneratorService(ResponseDAO responseDAO, RapportDAO rapportDAO) {
         this.responseDAO = responseDAO;
@@ -173,6 +179,9 @@ public class PdfGeneratorService {
                 reponse.get().setTitre(avis);
                 reponse.get().setCommentaire(justificationAvis);
                 reponse.get().setId_rapport(rapport);
+
+                KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(reponse.get().getId_response(),String.valueOf(reponse.get().getEtats())));
+                kafkaTerrainService.SendIdReponseTraitementDemandeSubvention(kafkaMoussaadaDTO);
                 responseDAO.save(reponse.get());
             }
             return savedFileName;
