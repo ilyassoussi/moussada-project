@@ -178,6 +178,7 @@ public class PdfGeneratorService {
                 reponse.get().setEtats(EtatServiceTewrrain.TERMINEE);
                 reponse.get().setTitre(avis);
                 reponse.get().setCommentaire(justificationAvis);
+                reponse.get().setDate_de_sortie(parsedDate);
                 reponse.get().setId_rapport(rapport);
 
                 Response Saved = responseDAO.save(reponse.get());
