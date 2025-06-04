@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.gov.moussada.shared_micro.feign.PaysanFeign;
 import org.gov.moussada.shared_micro.feign.SubventionFeign;
+import org.gov.moussada.shared_micro.feign.TerrainFeign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,9 @@ public class Terrain_subvention {
     @Autowired
     private PaysanFeign paysanFeign;
 
+    @Autowired
+    private TerrainFeign terrainFeign;
+
     @GetMapping("/from-subvention/{id}")
     public ResponseEntity<?> getDemandeTerrainById(@PathVariable int id){
         return subventionFeign.getById(id);
@@ -37,6 +41,11 @@ public class Terrain_subvention {
     @GetMapping("/from-subvention/subvention-traitement/{id}")
     public ResponseEntity<?> getDemandetraitementById(@PathVariable int id){
         return subventionFeign.getByIdSubventionDemande(id);
+    }
+
+    @GetMapping("/from-terrain/reponse/{id}")
+    public ResponseEntity<?> getResponseById(@PathVariable int id){
+        return terrainFeign.getById(id);
     }
 
     @GetMapping("/from-paysan/demande-paysan/{id}")
