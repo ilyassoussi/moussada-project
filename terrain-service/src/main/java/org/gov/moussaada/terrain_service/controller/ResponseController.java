@@ -22,6 +22,11 @@ public class ResponseController {
         return responseTerrainService.getAllReponse();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTraitementTechnique(@PathVariable int id){
+        return responseTerrainService.getByIdReponse(id);
+    }
+
 
     @GetMapping("/alldemande")
     public ResponseEntity<?> getAll(){
@@ -33,7 +38,7 @@ public class ResponseController {
         return responseTerrainService.getInfoDemande(id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/demande-nontraite/{id}")
     public ResponseEntity<?> getById(@PathVariable int id){
         return responseTerrainService.getById(id);
     }

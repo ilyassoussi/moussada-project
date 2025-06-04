@@ -49,4 +49,9 @@ public class DemandeTechniqueController {
     public ResponseEntity<?> Delete(@PathVariable int id) {
         return demandeTechniqueService.Delete(id);
     }
+
+    @GetMapping("/reponse/{id}")
+    public ResponseEntity<?> getResponseById(@PathVariable int id){
+        return demandeTechniqueService.getResponseById(id);
+    }
 }

@@ -52,7 +52,7 @@ public class ResponseTerrainService implements IResponseTerrain {
     @Override
     public ResponseEntity<?> getById(int id) {
         ResponseEntity<?> DemandebyId = sharedFeign.getById(id);
-        if(DemandebyId.getStatusCode().is2xxSuccessful()){
+        if(DemandebyId.getStatusCode().is2xxSuccessful()) {
             return DemandebyId;
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Erreur lors la recuperation de liste des demande non traite"));
@@ -127,6 +127,16 @@ public class ResponseTerrainService implements IResponseTerrain {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Aucune repopnse existe"));
         }else{
             return ResponseEntity.ok().body(new SuccessResponse<>("Success",200,allReponse));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getByIdReponse(int id) {
+        Optional<Response> response = responseDAO.findById(id);
+        if(response.isPresent()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("la reponse existe",200,response.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("la reponse n'existe pas!"));
         }
     }
 }

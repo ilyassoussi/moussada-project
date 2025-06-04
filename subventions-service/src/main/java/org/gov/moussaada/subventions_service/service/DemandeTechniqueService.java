@@ -3,6 +3,7 @@ package org.gov.moussaada.subventions_service.service;
 import org.gov.moussaada.subventions_service.dao.DemandeTechniqueDAO;
 import org.gov.moussaada.subventions_service.dto.DemandeTechniqueRequestDTO;
 import org.gov.moussaada.subventions_service.dto.DemandeTechniqueResponseDTO;
+import org.gov.moussaada.subventions_service.feign.SharedFeign;
 import org.gov.moussaada.subventions_service.model.Demande_technique;
 import org.gov.moussaada.subventions_service.model.Status_demande_technique;
 import org.gov.moussaada.subventions_service.response.ErrorResponse;
@@ -25,9 +26,12 @@ public class DemandeTechniqueService implements IDemandeTechnique {
 
     private ModelMapper modelMapper;
 
-    public DemandeTechniqueService(DemandeTechniqueDAO demandeTechniqueDAO, ModelMapper modelMapper) {
+    private SharedFeign sharedFeign;
+
+    public DemandeTechniqueService(DemandeTechniqueDAO demandeTechniqueDAO, ModelMapper modelMapper, SharedFeign sharedFeign) {
         this.demandeTechniqueDAO = demandeTechniqueDAO;
         this.modelMapper = modelMapper;
+        this.sharedFeign = sharedFeign;
     }
 
     @Override
@@ -108,6 +112,16 @@ public class DemandeTechniqueService implements IDemandeTechnique {
             return ResponseEntity.ok().body(new SuccessResponse<>("tout les demande sont traite par le service technique",200,AllNOtfinished));
         } else {
             return ResponseEntity.ok().body(new SuccessResponse<>("voila la liste",200,AllNOtfinished));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getResponseById(int id) {
+        ResponseEntity<?> reponse = sharedFeign.getResponseById(id);
+        if(reponse.getStatusCode().is2xxSuccessful()){
+            return reponse;
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("n'existe pas"));
         }
     }
 }

@@ -12,4 +12,5 @@ public interface IDemandeTechnique {
     ResponseEntity<?> Delete(int id);
     ResponseEntity<?> getAllNotFinished();
 
+    ResponseEntity<?> getResponseById(int id);
 }
