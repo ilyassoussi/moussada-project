@@ -1,5 +1,6 @@
 package org.gov.moussaada.terrain_service.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class Rapport implements Serializable {
     private int id_rapport;
 
     @OneToOne(mappedBy = "id_rapport")
+    @JsonBackReference
     private Response id_reponse;
 
     private String rapport;

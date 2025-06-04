@@ -1,5 +1,6 @@
 package org.gov.moussaada.terrain_service.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,6 +25,7 @@ public class Response implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "rapport_id") // nom de la colonne FK dans la table Response
+    @JsonManagedReference
     private Rapport id_rapport;
 
     private String nomTechnicien;
