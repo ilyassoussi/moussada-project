@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface TerrainFeign {
 
     @GetMapping("/terrain/response/{id}") // <-- OK
-    ResponseEntity<?> getById(@PathVariable int id);;
+    ResponseEntity<?> getById(@PathVariable int id);
+
+    @GetMapping("/terrain/response/get-rapport") // <-- OK
+    ResponseEntity<?> getRapport();
 
 }

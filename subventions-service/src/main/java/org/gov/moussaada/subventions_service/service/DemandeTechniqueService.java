@@ -124,4 +124,14 @@ public class DemandeTechniqueService implements IDemandeTechnique {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("n'existe pas"));
         }
     }
+
+    @Override
+    public ResponseEntity<?> getAllRapport() {
+        ResponseEntity<?> getAllRapport = sharedFeign.getRapport();
+        if(getAllRapport.getStatusCode().is2xxSuccessful()){
+            return getAllRapport;
+        } else {
+            return getAllRapport;
+        }
+    }
 }

@@ -12,6 +12,11 @@ public class TerrainFeignFallbackFactory implements FallbackFactory<TerrainFeign
             public ResponseEntity<?> getById(int id) {
                 return null;
             }
+
+            @Override
+            public ResponseEntity<?> getRapport() {
+                return null;
+            }
         };
     }
 }

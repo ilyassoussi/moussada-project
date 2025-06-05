@@ -19,4 +19,7 @@ public interface IResponseTerrain {
     ResponseEntity<?> getAllReponse();
 
     ResponseEntity<?> getByIdReponse(int id);
+
+    ResponseEntity<?> getAllRapport();
+
 }
