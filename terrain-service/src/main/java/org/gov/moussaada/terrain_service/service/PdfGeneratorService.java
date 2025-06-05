@@ -6,7 +6,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.terrain_service.dao.RapportDAO;
 import org.gov.moussaada.terrain_service.dao.ResponseDAO;
-import org.gov.moussaada.terrain_service.dto.KafkaUpdateStatus;
+import org.gov.moussaada.terrain_service.dto.KafkaUpdateStatusTerrain;
 import org.gov.moussaada.terrain_service.model.EtatServiceTewrrain;
 import org.gov.moussaada.terrain_service.model.Rapport;
 import org.gov.moussaada.terrain_service.model.Response;
@@ -82,8 +82,7 @@ public class PdfGeneratorService {
         identifiants.addCell("Nom Technicien");
         identifiants.addCell(nomTechnicien);
         identifiants.addCell("Date Visite");
-        Date parsedDate = utile.ReformulateDate(dateVisite);
-        identifiants.addCell(parsedDate != null ? parsedDate.toString() : "Date invalide ou vide");
+        identifiants.addCell(dateVisite);
         document.add(identifiants);
 
         // Section 2 : Localisation
@@ -178,11 +177,11 @@ public class PdfGeneratorService {
                 reponse.get().setEtats(EtatServiceTewrrain.TERMINEE);
                 reponse.get().setTitre(avis);
                 reponse.get().setCommentaire(justificationAvis);
-                reponse.get().setDate_de_sortie(parsedDate);
+                reponse.get().setDate_de_sortie(utile.ReformulateDate(dateVisite));
                 reponse.get().setId_rapport(rapport);
 
                 Response Saved = responseDAO.save(reponse.get());
-                KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(Saved.getId_response(),String.valueOf(Saved.getEtats())));
+                KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatusTerrain(Saved.getId_traitement_subvention(),Saved.getId_response(), Saved.getDate_de_sortie(), String.valueOf(Saved.getEtats())));
                 kafkaTerrainService.SendIdReponseTraitementDemandeSubvention(kafkaMoussaadaDTO);
             }
             return savedFileName;
