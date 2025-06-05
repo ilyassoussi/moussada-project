@@ -5,10 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.terrain_service.dao.ResponseDAO;
-import org.gov.moussaada.terrain_service.dto.KafkaUpdateStatus;
+import org.gov.moussaada.terrain_service.dto.KafkaUpdateStatusTerrain;
 import org.gov.moussaada.terrain_service.feign.SheredFeign;
 import org.gov.moussaada.terrain_service.model.EtatServiceTewrrain;
-import org.gov.moussaada.terrain_service.model.Rapport;
 import org.gov.moussaada.terrain_service.model.Response;
 import org.gov.moussaada.terrain_service.response.ErrorResponse;
 import org.gov.moussaada.terrain_service.response.SuccessResponse;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -90,7 +88,7 @@ public class ResponseTerrainService implements IResponseTerrain {
                 response.setDate_update(utile.CurentDate());
             }
             Response saved = responseDAO.save(response);
-            KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatus(saved.getId_response(),String.valueOf(saved.getEtats())));
+            KafkaMoussaadaDTO kafkaMoussaadaDTO = new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatusTerrain(saved.getId_traitement_subvention(),saved.getId_response(), saved.getDate_de_sortie(), String.valueOf(saved.getEtats())));
             kafkaTerrainService.SendIdReponseTraitementDemandeSubvention(kafkaMoussaadaDTO);
             return ResponseEntity.ok().body(new SuccessResponse<>("Success",200,saved));
         } catch (Exception e) {
