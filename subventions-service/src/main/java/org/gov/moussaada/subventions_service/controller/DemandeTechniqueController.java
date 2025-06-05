@@ -25,6 +25,11 @@ public class DemandeTechniqueController {
         return demandeTechniqueService.create(demandeTechniqueRequestDTO);
     }
 
+    @PostMapping("/vaildate-rapport/{id}")
+    public void create(@PathVariable int id_rapport) {
+         demandeTechniqueService.validateRapport(id_rapport);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable int id, @RequestBody DemandeTechniqueRequestDTO demandeTechniqueRequestDTO) {
         return demandeTechniqueService.update(id , demandeTechniqueRequestDTO);

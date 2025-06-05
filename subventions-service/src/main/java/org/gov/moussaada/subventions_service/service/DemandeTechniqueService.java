@@ -1,8 +1,10 @@
 package org.gov.moussaada.subventions_service.service;
 
+import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.subventions_service.dao.DemandeTechniqueDAO;
 import org.gov.moussaada.subventions_service.dto.DemandeTechniqueRequestDTO;
 import org.gov.moussaada.subventions_service.dto.DemandeTechniqueResponseDTO;
+import org.gov.moussaada.subventions_service.dto.KafkaUpdateStatusDTO;
 import org.gov.moussaada.subventions_service.feign.SharedFeign;
 import org.gov.moussaada.subventions_service.model.Demande_technique;
 import org.gov.moussaada.subventions_service.model.Status_demande_technique;
@@ -28,10 +30,13 @@ public class DemandeTechniqueService implements IDemandeTechnique {
 
     private SharedFeign sharedFeign;
 
-    public DemandeTechniqueService(DemandeTechniqueDAO demandeTechniqueDAO, ModelMapper modelMapper, SharedFeign sharedFeign) {
+    private KafkaSubventionService kafkaSubventionService;
+
+    public DemandeTechniqueService(DemandeTechniqueDAO demandeTechniqueDAO, ModelMapper modelMapper, SharedFeign sharedFeign, KafkaSubventionService kafkaSubventionService) {
         this.demandeTechniqueDAO = demandeTechniqueDAO;
         this.modelMapper = modelMapper;
         this.sharedFeign = sharedFeign;
+        this.kafkaSubventionService = kafkaSubventionService;
     }
 
     @Override
@@ -133,5 +138,10 @@ public class DemandeTechniqueService implements IDemandeTechnique {
         } else {
             return getAllRapport;
         }
+    }
+
+    @Override
+    public void validateRapport(int idRapport) {
+        kafkaSubventionService.UpdateStatusDemande(new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatusDTO(idRapport,"true")));
     }
 }
