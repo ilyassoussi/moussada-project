@@ -4,7 +4,6 @@ import org.gov.moussaada.terrain_service.model.Rapport;
 import org.gov.moussaada.terrain_service.service.ResponseTerrainService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/terrain/response")
@@ -27,6 +26,11 @@ public class ResponseController {
         return responseTerrainService.getByIdReponse(id);
     }
 
+
+    @GetMapping("/get-rapport")
+    public ResponseEntity<?> getAllRapport(){
+        return responseTerrainService.getAllRapport();
+    }
 
     @GetMapping("/alldemande")
     public ResponseEntity<?> getAll(){

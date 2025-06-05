@@ -21,4 +21,7 @@ public interface SharedFeign {
 
     @GetMapping("/shared/from-terrain/reponse/{id}")
     ResponseEntity<?> getResponseById(@PathVariable int id);
+
+    @GetMapping("/shared/from-terrain/reponse/get-rapport")
+    ResponseEntity<?> getRapport();
 }

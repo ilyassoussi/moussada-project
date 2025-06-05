@@ -35,6 +35,11 @@ public class DemandeTechniqueController {
         return demandeTechniqueService.getAll();
     }
 
+    @GetMapping("/reponse/get-rapport")
+    public ResponseEntity<?> getAllRapport() {
+        return demandeTechniqueService.getAllRapport();
+    }
+
     @GetMapping("/en-cours")
     public ResponseEntity<?> getAllNotFinished() {
         return demandeTechniqueService.getAllNotFinished();

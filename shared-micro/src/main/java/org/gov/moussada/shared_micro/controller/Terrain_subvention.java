@@ -48,6 +48,11 @@ public class Terrain_subvention {
         return terrainFeign.getById(id);
     }
 
+    @GetMapping("/from-terrain/reponse/get-rapport")
+    public ResponseEntity<?> getRapport(){
+        return terrainFeign.getRapport();
+    }
+
     @GetMapping("/from-paysan/demande-paysan/{id}")
     public ResponseEntity<?> getDemandeById(@PathVariable Long id){
         return paysanFeign.getDemande(id);

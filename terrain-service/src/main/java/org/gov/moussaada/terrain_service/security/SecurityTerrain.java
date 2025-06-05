@@ -30,7 +30,7 @@ public class SecurityTerrain implements WebMvcConfigurer {
                         .authorizeHttpRequests(authori -> authori
                                 .requestMatchers("/actuator/**").permitAll()
                                 .requestMatchers("/terrain/response/create","/terrain/response/info-demande/{id}","/terrain/response/demande-nontraite/{id}","/terrain/response/alldemande","/terrain/rapport/**").hasAuthority("ROLE_Service_terrain")
-                                .requestMatchers("/terrain/response/alldemande","/terrain/response/{id}").hasAnyAuthority("ROLE_Service_terrain","ROLE_Subvention")
+                                .requestMatchers("/terrain/response/alldemande","/terrain/response/{id}","/terrain/response/get-rapport").hasAnyAuthority("ROLE_Service_terrain","ROLE_Subvention")
                                 .anyRequest().authenticated()
                         ).sessionManagement(httpSecuritySessionManagementConfigurer ->
                                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
+import org.gov.moussaada.terrain_service.dao.RapportDAO;
 import org.gov.moussaada.terrain_service.dao.ResponseDAO;
 import org.gov.moussaada.terrain_service.dto.KafkaUpdateStatusTerrain;
 import org.gov.moussaada.terrain_service.feign.SheredFeign;
 import org.gov.moussaada.terrain_service.model.EtatServiceTewrrain;
+import org.gov.moussaada.terrain_service.model.Rapport;
 import org.gov.moussaada.terrain_service.model.Response;
 import org.gov.moussaada.terrain_service.response.ErrorResponse;
 import org.gov.moussaada.terrain_service.response.SuccessResponse;
@@ -18,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,9 @@ public class ResponseTerrainService implements IResponseTerrain {
 
     @Autowired
     private ResponseDAO responseDAO;
+
+    @Autowired
+    private RapportDAO rapportDAO;
 
     @Autowired
     private KafkaTerrainService kafkaTerrainService;
@@ -135,6 +139,16 @@ public class ResponseTerrainService implements IResponseTerrain {
             return ResponseEntity.ok().body(new SuccessResponse<>("la reponse existe",200,response.get()));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("la reponse n'existe pas!"));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getAllRapport() {
+        List<Rapport> AllRapport = rapportDAO.findAll();
+        if(AllRapport.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Auccun rapport existe "));
+        } else {
+            return ResponseEntity.ok().body(new SuccessResponse<>("toutes les rapports",200,AllRapport));
         }
     }
 }

@@ -13,4 +13,7 @@ public interface IDemandeTechnique {
     ResponseEntity<?> getAllNotFinished();
 
     ResponseEntity<?> getResponseById(int id);
+
+    ResponseEntity<?> getAllRapport();
+
 }

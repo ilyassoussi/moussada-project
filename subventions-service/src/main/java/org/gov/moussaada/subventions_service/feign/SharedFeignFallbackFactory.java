@@ -23,6 +23,11 @@ public class SharedFeignFallbackFactory implements FallbackFactory<SharedFeign> 
             public ResponseEntity<?> getResponseById(int id) {
                 return null;
             }
+
+            @Override
+            public ResponseEntity<?> getRapport() {
+                return null;
+            }
         };
     }
 }
