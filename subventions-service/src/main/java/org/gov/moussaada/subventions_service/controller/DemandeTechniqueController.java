@@ -26,8 +26,8 @@ public class DemandeTechniqueController {
     }
 
     @PostMapping("/vaildate-rapport/{id}")
-    public void ValidateRapport(@PathVariable int id_rapport) {
-         demandeTechniqueService.validateRapport(id_rapport);
+    public void ValidateRapport(@PathVariable int id) {
+         demandeTechniqueService.validateRapport(id);
     }
 
     @PutMapping("/update/{id}")
