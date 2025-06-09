@@ -151,4 +151,14 @@ public class ResponseTerrainService implements IResponseTerrain {
             return ResponseEntity.ok().body(new SuccessResponse<>("toutes les rapports",200,AllRapport));
         }
     }
+
+    @Override
+    public ResponseEntity<?> getDemandeByIdRespone(int id) {
+        ResponseEntity<?> demadne = sharedFeign.getByIdReponse(id);
+        if(demadne.getStatusCode().is2xxSuccessful()){
+            return demadne;
+        } else {
+            return demadne;
+        }
+    }
 }

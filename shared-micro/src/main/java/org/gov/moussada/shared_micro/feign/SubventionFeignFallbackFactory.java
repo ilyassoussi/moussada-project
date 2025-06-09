@@ -23,6 +23,11 @@ public class SubventionFeignFallbackFactory implements FallbackFactory<Subventio
                 return null;
             }
 
+            @Override
+            public ResponseEntity<?> getByIdreponse(int id) {
+                return null;
+            }
+
 
         };
     }

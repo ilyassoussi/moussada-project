@@ -16,9 +16,12 @@ public interface SubventionFeign {
     @GetMapping("/subvention/demande-technique/{id}") // <-- OK
     ResponseEntity<?> getById(@PathVariable int id);
 
-    @GetMapping("/subvention/demande-technique/en-cours") // <-- OK
+    @GetMapping("/subvention/demande-technique") // <-- OK
     ResponseEntity<?> getAlldm();
 
     @GetMapping("/subvention/traitement/{id}") // <-- OK
     ResponseEntity<?> getByIdSubventionDemande(@PathVariable int id);
+
+    @GetMapping("/subvention/demande-technique/by-reponse/{id}") // <-- OK
+    ResponseEntity<?> getByIdreponse(@PathVariable int id);
 }

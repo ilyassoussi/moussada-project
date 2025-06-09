@@ -43,6 +43,11 @@ public class Terrain_subvention {
         return subventionFeign.getByIdSubventionDemande(id);
     }
 
+    @GetMapping("/from-subvention/getby-idreponse/{id}")
+    public ResponseEntity<?> getbyidreponse(@PathVariable int id) {
+        return subventionFeign.getByIdreponse(id);
+    }
+
     @GetMapping("/from-terrain/reponse/{id}")
     public ResponseEntity<?> getResponseById(@PathVariable int id){
         return terrainFeign.getById(id);

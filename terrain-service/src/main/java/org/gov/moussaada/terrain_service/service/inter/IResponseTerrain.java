@@ -22,4 +22,6 @@ public interface IResponseTerrain {
 
     ResponseEntity<?> getAllRapport();
 
+    ResponseEntity<?> getDemandeByIdRespone(int id);
+
 }

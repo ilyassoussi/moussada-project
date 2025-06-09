@@ -20,5 +20,6 @@ public interface SheredFeign {
     @GetMapping("/shared/from-paysan/demande-paysan/{id}")
     ResponseEntity<?> getDemandeInfo(@PathVariable Long id);
 
-
+    @GetMapping("/shared/from-subvention/getby-idreponse/{id}") // pour avoir toutes les demandes texhnoque <-- OK
+    ResponseEntity<?> getByIdReponse(@PathVariable  int id);
 }

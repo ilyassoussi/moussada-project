@@ -1,5 +1,6 @@
 package org.gov.moussaada.subventions_service.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.gov.moussaada.common_dto.KafkaMoussaadaDTO;
 import org.gov.moussaada.subventions_service.dao.DemandeTechniqueDAO;
 import org.gov.moussaada.subventions_service.dto.DemandeTechniqueRequestDTO;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class DemandeTechniqueService implements IDemandeTechnique {
 
     private DemandeTechniqueDAO demandeTechniqueDAO;
@@ -41,12 +43,22 @@ public class DemandeTechniqueService implements IDemandeTechnique {
 
     @Override
     public ResponseEntity<?> create(DemandeTechniqueRequestDTO demandeTechniqueRequestDTO) {
+        if(demandeTechniqueRequestDTO.getTitre() == null || demandeTechniqueRequestDTO.getTitre().isEmpty()){
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("champs de titre est requis."));
+        }
+        if(demandeTechniqueRequestDTO.getNumero_terre() == null || demandeTechniqueRequestDTO.getNumero_terre().isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("champs de numero de terre est requis."));
+        }
+        if(demandeTechniqueRequestDTO.getSuvbention_demande() == null || demandeTechniqueRequestDTO.getSuvbention_demande().isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("champs de subvention demande est requis."));
+        }
         Demande_technique demandeTechnique = Demande_technique.builder()
                 .id_traitent_demande(demandeTechniqueRequestDTO.getId_traitent_demande())
                 .statusDemande(Status_demande_technique.EN_ATTENTE)
                 .date_creation(utile.CurentDate())
-                .date_de_sortie(utile.ReformulateDate(demandeTechniqueRequestDTO.getDate_de_sortie()))
                 .titre(demandeTechniqueRequestDTO.getTitre())
+                .numero_terre(demandeTechniqueRequestDTO.getNumero_terre())
+                .Suvbention_demande(demandeTechniqueRequestDTO.getSuvbention_demande())
                 .description(demandeTechniqueRequestDTO.getDescription())
                 .Date_update(utile.CurentDate())
                 .build();
@@ -67,9 +79,7 @@ public class DemandeTechniqueService implements IDemandeTechnique {
         if(demandeTechniqueRequestDTO.getDescription() != null || !demandeTechniqueRequestDTO.getDescription().isEmpty()){
             demandeTechnique.setDescription(demandeTechniqueRequestDTO.getDescription());
         }
-        if(demandeTechniqueRequestDTO.getDate_de_sortie() != null || !demandeTechniqueRequestDTO.getDate_de_sortie().isEmpty()){
-            demandeTechnique.setDate_de_sortie(utile.ReformulateDate(demandeTechniqueRequestDTO.getDate_de_sortie()));
-        }
+
         demandeTechnique.setDate_update(utile.CurentDate());
         try{
             demandeTechniqueDAO.save(demandeTechnique);
@@ -143,5 +153,16 @@ public class DemandeTechniqueService implements IDemandeTechnique {
     @Override
     public void validateRapport(int idRapport) {
         kafkaSubventionService.UpdateStatusDemande(new KafkaMoussaadaDTO("TERRAIN",new KafkaUpdateStatusDTO(idRapport,"true")));
+    }
+
+    @Override
+    public ResponseEntity<?> getByIdResponse(int id) {
+        Demande_technique demandeTechnique = demandeTechniqueDAO.findByIdReponse(id);
+        log.info("voila demande : {}",demandeTechnique);
+        if(demandeTechnique != null){
+            return ResponseEntity.ok().body(new SuccessResponse<>("voila la demande ",200,demandeTechnique));
+        } else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("n'existe pas"));
+        }
     }
 }

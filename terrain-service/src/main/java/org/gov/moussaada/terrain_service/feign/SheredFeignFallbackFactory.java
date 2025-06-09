@@ -22,6 +22,11 @@ public class SheredFeignFallbackFactory implements FallbackFactory<SheredFeign> 
             public ResponseEntity<?> getDemandeInfo(Long id) {
                 return null;
             }
+
+            @Override
+            public ResponseEntity<?> getByIdReponse(int id) {
+                return null;
+            }
         };
     }
 }

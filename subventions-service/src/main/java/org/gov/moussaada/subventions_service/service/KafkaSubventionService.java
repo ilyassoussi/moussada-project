@@ -44,7 +44,8 @@ public class KafkaSubventionService {
      }
 
     public void UpdateDemandeReclamation(int id, String status, Date dateSortie, int idReponse){
-        Demande_technique demandeTechnique = demandeTechniqueDAO.findById(id).get();
+        Demande_technique demandeTechnique = demandeTechniqueDAO.findByIdTraitementDemande(id);
+        log.info("voila le nv demandeTechnique : {}",  demandeTechnique );
         demandeTechnique.setId_reponse_technique(idReponse);
         demandeTechnique.setStatusDemande(Status_demande_technique.valueOf(status));
         demandeTechnique.setDate_de_sortie(dateSortie);

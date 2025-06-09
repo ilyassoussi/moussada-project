@@ -64,4 +64,9 @@ public class ResponseController {
         return responseTerrainService.Delete(id);
     }
 
+    @GetMapping("/demande/by-idreponse/{id}")
+    public ResponseEntity<?> getByIdreponse(@PathVariable int id){
+        return responseTerrainService.getDemandeByIdRespone(id);
+    }
+
 }

@@ -64,4 +64,10 @@ public class DemandeTechniqueController {
     public ResponseEntity<?> getResponseById(@PathVariable int id){
         return demandeTechniqueService.getResponseById(id);
     }
+
+
+    @GetMapping("/by-reponse/{id}")
+    public ResponseEntity<?> getByIdResponse(@PathVariable int id){
+        return demandeTechniqueService.getByIdResponse(id);
+    }
 }

@@ -18,8 +18,10 @@ public class DemandeTechniqueRequestDTO {
 
     private String titre;
 
-    private String description;
+    private String numero_terre;
 
-    private String date_de_sortie;
+    private String Suvbention_demande;
+
+    private String description;
 
 }

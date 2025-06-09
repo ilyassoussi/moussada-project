@@ -68,7 +68,7 @@ public class DemandeSubentionService implements IDemandeSubventionService {
 
     @Override
     public ResponseEntity<?> getAll() {
-        List<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findAllNoTraitment();
+        List<DemandeSubvention> demandeSubvention = demandeSubventionDAO.findAll();
         if(demandeSubvention.isEmpty()){
             return ResponseEntity.ok().body(new SuccessResponse<>("no demande existe ",200,demandeSubvention));
         }else{

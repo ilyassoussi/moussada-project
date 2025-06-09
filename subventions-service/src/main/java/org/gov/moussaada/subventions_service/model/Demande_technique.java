@@ -25,6 +25,10 @@ public class Demande_technique {
 
     private String titre;
 
+    private String numero_terre;
+
+    private String Suvbention_demande;
+
     private String description;
 
     private Date date_de_sortie;
