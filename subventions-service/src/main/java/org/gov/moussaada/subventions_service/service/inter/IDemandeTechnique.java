@@ -17,4 +17,6 @@ public interface IDemandeTechnique {
     ResponseEntity<?> getAllRapport();
 
     void validateRapport(int idRapport);
+
+    ResponseEntity<?> getByIdResponse(int id);
 }
