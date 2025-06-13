@@ -22,14 +22,18 @@ public class ActualiteController {
     }
 
     @GetMapping("/getall")
-    private List<ActualiteReponseDTO> getActualite(){
-        System.out.println("test");
-        return actualiteService.findAll();
+    private List<ActualiteReponseDTO> getActualite(@RequestParam(defaultValue = "fr") String lang){
+        return actualiteService.findAll(lang);
     }
 
     @GetMapping("/{id}")
     private ResponseEntity<?> getActualite(@PathVariable int id){
         return actualiteService.findById(id);
+    }
+
+    @GetMapping("/{id}")
+    private ResponseEntity<?> getActualiteByLang(@PathVariable int id, @RequestParam(defaultValue = "fr") String lang){
+        return actualiteService.getByIdAndLang(id,lang);
     }
 
     @GetMapping("/titre/{titre}")
@@ -38,21 +42,29 @@ public class ActualiteController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> saveActualite(@RequestParam("titre") String titre,
-                                           @RequestParam("description") String description,
-                                           @RequestParam(value = "pdf" , required = false) MultipartFile pdf) {
+    public ResponseEntity<?> saveActualite(@RequestParam("titreAr") String titreAr,
+                                           @RequestParam("titreFr") String titreFr,
+                                           @RequestParam("descriptionAr") String descriptionAr,
+                                           @RequestParam("descriptionFr") String descriptionFr,
+                                           @RequestParam("IsActive") boolean isactive,
+                                           @RequestParam(value = "pdf" , required = false) MultipartFile pdf
+
+    ) {
         String pdfFilename = utile.CheckPdfAccepded(pdf);
-        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(titre, description, pdfFilename, utile.CurentDate());
+        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr,descriptionAr, titreAr, descriptionFr , utile.CurentDate(),isactive);
         return actualiteService.save(actualiteRQ);
     }
 
     @PutMapping("/update/{id}")
     private ResponseEntity<?> update(@PathVariable int id,
-                                     @RequestParam("titre") String titre,
-                                     @RequestParam("description") String description,
+                                     @RequestParam("titreAr") String titreAr,
+                                     @RequestParam("titreFr") String titreFr,
+                                     @RequestParam("descriptionAr") String descriptionAr,
+                                     @RequestParam("descriptionFr") String descriptionFr,
+                                     @RequestParam("IsActive") boolean isactive,
                                      @RequestParam(value = "pdf" , required = false) MultipartFile pdf){
         String pdfFilename = utile.CheckPdfAccepded(pdf);
-        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(titre, description, pdfFilename, utile.CurentDate());
+        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr,descriptionAr, titreAr, descriptionFr , utile.CurentDate(),isactive);
         return actualiteService.update(actualiteRQ,id);
     }
 
