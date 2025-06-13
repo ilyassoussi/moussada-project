@@ -10,7 +10,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class ActualiteReponseDTO {
     private int id;
-    private Integer language;
     private String titre;
     private String description;
     private String pdf;

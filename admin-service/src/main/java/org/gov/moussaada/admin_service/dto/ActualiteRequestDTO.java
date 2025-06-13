@@ -10,8 +10,12 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActualiteRequestDTO {
-    private String titre;
-    private String description;
     private String pdf;
-    private Date date_creation ;
+    private String titreFr;
+    private String descriptionFr;
+    private String titreAr;
+    private String descriptionAr;
+    private Date date_creation;
+    private boolean isActive;
+
 }
