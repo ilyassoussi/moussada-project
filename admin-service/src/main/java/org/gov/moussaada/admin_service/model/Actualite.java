@@ -1,5 +1,6 @@
 package org.gov.moussaada.admin_service.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +24,7 @@ public class Actualite implements Serializable {
     private Date date_creation;
 
     @OneToMany(mappedBy = "actualite", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<ActualiteLangue> traductions;
 
     private boolean isActive;

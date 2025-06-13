@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +33,8 @@ public class FormationService implements IFormation {
         formation.setDateCreation(utile.CurentDate());
         formation.setLieu(dto.getLieu());
         formation.setIntervenant(dto.getIntervenant());
-        formation.setDate(dto.getDate());
-        formation.setHeure(dto.getHeure());
+        formation.setDate(utile.ReformulateDate(dto.getDate()));
+        formation.setHeure(LocalTime.parse(dto.getHeure()));
         formation.setParticipantsMax(dto.getParticipantsMax());
         formation.setActive(dto.getActive());
 

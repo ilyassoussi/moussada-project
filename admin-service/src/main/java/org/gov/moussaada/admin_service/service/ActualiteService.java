@@ -62,17 +62,6 @@ public class ActualiteService implements IActualiteService {
     }
 
     @Override
-    public ResponseEntity<?> findById(Integer id) {
-        Optional<Actualite> actualiteOptional = actualitedao.findById(id);
-
-        if (actualiteOptional.isPresent()) {
-            return ResponseEntity.ok(new SuccessResponse<>("Actualite found successfully",200,actualiteOptional.get()));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Actualite with id " + id + " not found"));
-        }
-    }
-
-    @Override
     public ResponseEntity<?> findByTitre(String titre) {
         Actualite actualite = actualitedao.findByTitre(titre);
         if(actualite!=null){

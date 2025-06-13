@@ -1,5 +1,6 @@
 package org.gov.moussaada.admin_service.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +29,7 @@ public class ActualiteLangue implements Serializable {
     private String description;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_actualite", nullable = false)
     private Actualite actualite;
 }

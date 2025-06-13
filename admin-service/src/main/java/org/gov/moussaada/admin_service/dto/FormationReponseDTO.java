@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 @Data
 @Getter
@@ -17,7 +18,7 @@ public class FormationReponseDTO {
     private String description;
     private String lieu;
     private String intervenant;
-    private LocalDate date;
+    private Date date;
     private LocalTime heure;
     private Integer participantsMax;
     private Boolean active;

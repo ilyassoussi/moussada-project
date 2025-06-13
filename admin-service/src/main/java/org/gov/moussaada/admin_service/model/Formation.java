@@ -1,5 +1,6 @@
 package org.gov.moussaada.admin_service.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Formation implements Serializable {
 
     private String lieu;
     private String intervenant;
-    private LocalDate date;
+    private Date date;
     private LocalTime heure;
     private Integer participantsMax;
     private Boolean active;
@@ -34,5 +35,6 @@ public class Formation implements Serializable {
     private Date dateCreation;
 
     @OneToMany(mappedBy = "formation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<FormationLangue> traductions;
 }
