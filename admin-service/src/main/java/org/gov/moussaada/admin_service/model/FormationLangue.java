@@ -1,5 +1,6 @@
 package org.gov.moussaada.admin_service.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,5 +27,6 @@ public class FormationLangue implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "formation_id")
+    @JsonBackReference
     private Formation formation;
 }

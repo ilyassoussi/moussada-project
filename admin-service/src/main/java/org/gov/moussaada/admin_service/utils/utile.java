@@ -9,9 +9,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -134,4 +137,16 @@ public class utile {
         return matcher.matches();
     }
 
+
+    public static Date ReformulateDate(String date){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateDebut;
+
+        try {
+            dateDebut = formatter.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+        return dateDebut;
+    }
 }

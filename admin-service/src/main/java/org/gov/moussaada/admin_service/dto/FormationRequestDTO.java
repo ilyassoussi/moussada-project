@@ -18,8 +18,8 @@ public class FormationRequestDTO {
     private String descriptionAr;
     private String lieu;
     private String intervenant;
-    private LocalDate date;
-    private LocalTime heure;
+    private String date;
+    private String heure;
     private Integer participantsMax;
     private Boolean active;
 }

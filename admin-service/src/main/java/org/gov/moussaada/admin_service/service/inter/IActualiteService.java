@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface IActualiteService {
     ResponseEntity<?> save(ActualiteRequestDTO actualiteRQ);
-    ResponseEntity<?> findById(Integer id);
     ResponseEntity<?> findByTitre(String titre);
     ResponseEntity<?> update(ActualiteRequestDTO actualiteRQ , Integer id);
     ResponseEntity<?> Delete(Integer id);

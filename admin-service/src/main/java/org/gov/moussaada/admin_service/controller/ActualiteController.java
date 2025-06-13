@@ -27,11 +27,6 @@ public class ActualiteController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<?> getActualite(@PathVariable int id){
-        return actualiteService.findById(id);
-    }
-
-    @GetMapping("/{id}")
     private ResponseEntity<?> getActualiteByLang(@PathVariable int id, @RequestParam(defaultValue = "fr") String lang){
         return actualiteService.getByIdAndLang(id,lang);
     }
@@ -51,7 +46,7 @@ public class ActualiteController {
 
     ) {
         String pdfFilename = utile.CheckPdfAccepded(pdf);
-        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr,descriptionAr, titreAr, descriptionFr , utile.CurentDate(),isactive);
+        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr,descriptionFr, titreAr, descriptionAr , utile.CurentDate(),isactive);
         return actualiteService.save(actualiteRQ);
     }
 
@@ -64,7 +59,7 @@ public class ActualiteController {
                                      @RequestParam("IsActive") boolean isactive,
                                      @RequestParam(value = "pdf" , required = false) MultipartFile pdf){
         String pdfFilename = utile.CheckPdfAccepded(pdf);
-        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr,descriptionAr, titreAr, descriptionFr , utile.CurentDate(),isactive);
+        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr, descriptionFr, titreAr, descriptionAr , utile.CurentDate(),isactive);
         return actualiteService.update(actualiteRQ,id);
     }
 

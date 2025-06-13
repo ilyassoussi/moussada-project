@@ -19,12 +19,12 @@ public class FormationController {
     @Autowired
     private FormationService formationService;
 
-    @PostMapping
+    @PostMapping("create")
     public ResponseEntity<?> create(@RequestBody FormationRequestDTO dto) {
         return formationService.save(dto);
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<?> getAll(@RequestParam(defaultValue = "fr") String lang) {
         List<FormationReponseDTO> list = formationService.findAll(lang);
         return ResponseEntity.ok(new SuccessResponse<>("Liste des formations", 200, list));
