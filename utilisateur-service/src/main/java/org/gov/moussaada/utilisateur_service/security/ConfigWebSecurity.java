@@ -43,7 +43,7 @@ public class ConfigWebSecurity {
         return
                 http.csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authori -> authori
-                                .requestMatchers("/utilisateur/auth/**" , "/utilisateur/auth/pdf/download/**", "/actuator/health").permitAll()
+                                .requestMatchers("/utilisateur/auth/**" , "/utilisateur/auth/pdf/download/**", "/actuator/health","/utilisateur/media/**").permitAll()
                                 .requestMatchers("/utilisateur/compte/**").hasAuthority("ROLE_Admin")
                                 .anyRequest().authenticated()
                         ).sessionManagement(httpSecuritySessionManagementConfigurer ->

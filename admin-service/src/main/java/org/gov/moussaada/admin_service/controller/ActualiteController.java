@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,11 @@ public class ActualiteController {
         return actualiteService.getByIdAndLang(id,lang);
     }
 
+    @GetMapping("/withoutLang/{id}")
+    private ResponseEntity<?> getActualiteByLang(@PathVariable int id){
+        return actualiteService.getById(id);
+    }
+
     @GetMapping("/titre/{titre}")
     private ResponseEntity<?> getActualiteTitre(@PathVariable String titre){
         return actualiteService.findByTitre(titre);
@@ -42,11 +48,11 @@ public class ActualiteController {
                                            @RequestParam("descriptionAr") String descriptionAr,
                                            @RequestParam("descriptionFr") String descriptionFr,
                                            @RequestParam("IsActive") boolean isactive,
-                                           @RequestParam(value = "pdf" , required = false) MultipartFile pdf
+                                           @RequestParam(value = "image" , required = false) MultipartFile image
 
-    ) {
-        String pdfFilename = utile.CheckPdfAccepded(pdf);
-        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr,descriptionFr, titreAr, descriptionAr , utile.CurentDate(),isactive);
+    ) throws IOException {
+        String imageFilename = utile.saveImage(image);
+        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(imageFilename,titreFr,descriptionFr, titreAr, descriptionAr , utile.CurentDate(),isactive);
         return actualiteService.save(actualiteRQ);
     }
 
@@ -57,9 +63,9 @@ public class ActualiteController {
                                      @RequestParam("descriptionAr") String descriptionAr,
                                      @RequestParam("descriptionFr") String descriptionFr,
                                      @RequestParam("IsActive") boolean isactive,
-                                     @RequestParam(value = "pdf" , required = false) MultipartFile pdf){
-        String pdfFilename = utile.CheckPdfAccepded(pdf);
-        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(pdfFilename,titreFr, descriptionFr, titreAr, descriptionAr , utile.CurentDate(),isactive);
+                                     @RequestParam(value = "image" , required = false) MultipartFile image) throws IOException {
+        String imageFilename = utile.saveImage(image);
+        ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(imageFilename,titreFr, descriptionFr, titreAr, descriptionAr , utile.CurentDate(),isactive);
         return actualiteService.update(actualiteRQ,id);
     }
 

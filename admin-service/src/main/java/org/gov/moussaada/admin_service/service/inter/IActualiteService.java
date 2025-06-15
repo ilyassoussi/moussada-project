@@ -14,4 +14,6 @@ public interface IActualiteService {
     List<ActualiteReponseDTO> findAll(String lang);
     ResponseEntity<?> DeleteAll();
     ResponseEntity<?> getByIdAndLang(int id, String lang);
+
+    ResponseEntity<?> getById(int id);
 }
