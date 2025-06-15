@@ -31,7 +31,7 @@ public class ActualiteService implements IActualiteService {
     @Override
     public ResponseEntity<?> save(ActualiteRequestDTO actualiteRQ) {
         Actualite actualite = new Actualite();
-        actualite.setPdf(actualiteRQ.getPdf());
+        actualite.setImage(actualiteRQ.getImage());
         actualite.setDate_creation(actualiteRQ.getDate_creation());
         actualite.setActive(actualiteRQ.isActive());
 
@@ -80,8 +80,8 @@ public class ActualiteService implements IActualiteService {
             // Mise à jour de la date et du PDF
             existing.setDate_creation(utile.CurentDate());
             existing.setActive(actualiteRQ.isActive());
-            if (actualiteRQ.getPdf() != null) {
-                existing.setPdf(actualiteRQ.getPdf());
+            if (actualiteRQ.getImage() != null) {
+                existing.setImage(actualiteRQ.getImage());
             }
 
             // Mettre à jour les traductions
@@ -150,7 +150,8 @@ public class ActualiteService implements IActualiteService {
             if (selectedLang != null) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("id", actualite.getId());
-                response.put("pdf", actualite.getPdf());
+                response.put("pdf", actualite.getImage());
+                response.put("is_active", actualite.isActive());
                 response.put("date_creation", actualite.getDate_creation());
                 response.put("titre", selectedLang.getTitre());
                 response.put("description", selectedLang.getDescription());
@@ -165,6 +166,16 @@ public class ActualiteService implements IActualiteService {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse("Actualité non trouvée avec l'id : " + id));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getById(int id) {
+        Optional<Actualite> optionalActualite = actualitedao.findById(id);
+        if(optionalActualite.isPresent()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("actualite ", 200 , optionalActualite.get()));
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("no actualite"));
         }
     }
 
@@ -184,10 +195,11 @@ public class ActualiteService implements IActualiteService {
             if (selectedLang != null) {
                 ActualiteReponseDTO dto = new ActualiteReponseDTO();
                 dto.setId(actualite.getId());
-                dto.setPdf(actualite.getPdf());
+                dto.setImage(actualite.getImage());
                 dto.setDate_creation(actualite.getDate_creation());
                 dto.setTitre(selectedLang.getTitre());
                 dto.setDescription(selectedLang.getDescription());
+                dto.set_active(selectedLang.getActualite().isActive());
                 result.add(dto);
             }
         }

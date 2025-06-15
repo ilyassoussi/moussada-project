@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActualiteRequestDTO {
-    private String pdf;
+    private String image;
     private String titreFr;
     private String descriptionFr;
     private String titreAr;

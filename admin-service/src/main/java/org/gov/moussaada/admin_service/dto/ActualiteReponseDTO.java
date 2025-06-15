@@ -12,6 +12,7 @@ public class ActualiteReponseDTO {
     private int id;
     private String titre;
     private String description;
-    private String pdf;
+    private String image;
     private Date date_creation;
+    private boolean is_active;
 }

@@ -17,8 +17,8 @@ public class Actualite implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "pdf")
-    private String pdf;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "date_creation", nullable = false)
     private Date date_creation;
