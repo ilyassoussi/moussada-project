@@ -64,7 +64,10 @@ public class ActualiteController {
                                      @RequestParam("descriptionFr") String descriptionFr,
                                      @RequestParam("IsActive") boolean isactive,
                                      @RequestParam(value = "image" , required = false) MultipartFile image) throws IOException {
-        String imageFilename = utile.saveImage(image);
+        String imageFilename = null;
+        if(image != null || !image.isEmpty()){
+            imageFilename = utile.saveImage(image);
+        }
         ActualiteRequestDTO actualiteRQ = new ActualiteRequestDTO(imageFilename,titreFr, descriptionFr, titreAr, descriptionAr , utile.CurentDate(),isactive);
         return actualiteService.update(actualiteRQ,id);
     }
