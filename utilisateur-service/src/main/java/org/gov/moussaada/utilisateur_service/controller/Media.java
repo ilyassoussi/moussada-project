@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("/utilisateur/media")
+@RequestMapping("/utilisateur/auth/media")
 
 public class Media {
     private final String imageDirectory = "/var/tmp/images/";

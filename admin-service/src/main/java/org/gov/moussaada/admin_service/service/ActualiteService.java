@@ -77,27 +77,41 @@ public class ActualiteService implements IActualiteService {
 
         if (existingOptional.isPresent()) {
             Actualite existing = existingOptional.get();
-            // Mise à jour de la date et du PDF
+
+            // Ne pas modifier la date de création, mais enregistrer une date de modification
             existing.setDate_creation(utile.CurentDate());
+
+            // Mise à jour du champ actif uniquement si présent dans la requête
             existing.setActive(actualiteRQ.isActive());
-            if (actualiteRQ.getImage() != null) {
+
+            // Mise à jour conditionnelle de l'image (seulement si non null)
+            if (actualiteRQ.getImage() != null && !actualiteRQ.getImage().isEmpty()) {
                 existing.setImage(actualiteRQ.getImage());
             }
 
-            // Mettre à jour les traductions
+            // Mise à jour conditionnelle des traductions FR et AR
             for (ActualiteLangue traduction : existing.getTraductions()) {
                 if ("fr".equalsIgnoreCase(traduction.getLangue())) {
-                    traduction.setTitre(actualiteRQ.getTitreFr());
-                    traduction.setDescription(actualiteRQ.getDescriptionFr());
+                    if (actualiteRQ.getTitreFr() != null) {
+                        traduction.setTitre(actualiteRQ.getTitreFr());
+                    }
+                    if (actualiteRQ.getDescriptionFr() != null) {
+                        traduction.setDescription(actualiteRQ.getDescriptionFr());
+                    }
                 } else if ("ar".equalsIgnoreCase(traduction.getLangue())) {
-                    traduction.setTitre(actualiteRQ.getTitreAr());
-                    traduction.setDescription(actualiteRQ.getDescriptionAr());
+                    if (actualiteRQ.getTitreAr() != null) {
+                        traduction.setTitre(actualiteRQ.getTitreAr());
+                    }
+                    if (actualiteRQ.getDescriptionAr() != null) {
+                        traduction.setDescription(actualiteRQ.getDescriptionAr());
+                    }
                 }
             }
 
-            // Sauvegarde
+            // Sauvegarde en base
             Actualite updated = actualitedao.save(existing);
             ActualiteReponseDTO responseDTO = modelmapper.map(updated, ActualiteReponseDTO.class);
+
             return ResponseEntity.accepted()
                     .body(new SuccessResponse<>("Actualite updated successfully", 202, responseDTO));
 
@@ -106,6 +120,7 @@ public class ActualiteService implements IActualiteService {
                     .body(new ErrorResponse("Actualite with id " + id + " not found"));
         }
     }
+
 
 
     @Override
