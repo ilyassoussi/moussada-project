@@ -9,6 +9,9 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.cloud.gateway.discovery.DiscoveryClientRouteDefinitionLocator;
 import org.springframework.cloud.gateway.discovery.DiscoveryLocatorProperties;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -17,6 +20,21 @@ public class GatewayServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayServerApplication.class, args);
 	}
+
+	@Bean
+	public CorsWebFilter corsFilter() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOrigin("http://localhost:3000"); // ou "http://localhost:3000" (React)
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+
+		return new CorsWebFilter(source);
+	}
+
 
 	@Bean
 	public RouteLocator customRoutes(RouteLocatorBuilder builder) {
@@ -30,15 +48,18 @@ public class GatewayServerApplication {
 				.route("paysan-service", r -> r
 						.path("/paysan/**")
 						.uri("lb://paysan-service"))
-				.route("subvention-service", r -> r
+				.route("subventions-service", r -> r
 						.path("/subvention/**")
-						.uri("lb://subvention-service"))
+						.uri("lb://subventions-service"))
 				.route("terrain-service", r -> r
 						.path("/terrain/**")
 						.uri("lb://terrain-service"))
 				.route("appel-service", r -> r
 						.path("/appel/**")
 						.uri("lb://appel-service"))
+				.route("shared-micro", r -> r
+						.path("/shared/**")
+						.uri("lb://shared-micro"))
 				.build();
 	}
 

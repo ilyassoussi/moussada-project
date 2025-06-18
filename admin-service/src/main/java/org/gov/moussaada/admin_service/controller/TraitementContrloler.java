@@ -1,10 +1,8 @@
 package org.gov.moussaada.admin_service.controller;
 
-import org.gov.moussaada.admin_service.config.KafkaBroker;
+import org.gov.moussaada.admin_service.service.KafkaAdminService;
 import org.gov.moussaada.admin_service.dto.TraitementRequestDTO;
-import org.gov.moussaada.admin_service.model.TraitmentReclamation;
 import org.gov.moussaada.admin_service.service.TraitementService;
-import org.gov.moussaada.shared_lib.DTO.ReclamationTraite;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class TraitementContrloler {
     private TraitementService traitementService;
 
-    private KafkaBroker kafkaBroker;
+    private KafkaAdminService kafkaBroker;
 
-    public TraitementContrloler(TraitementService traitementService , KafkaBroker kafkaBroker) {
+    public TraitementContrloler(TraitementService traitementService , KafkaAdminService kafkaBroker) {
         this.traitementService = traitementService;
         this.kafkaBroker = kafkaBroker;
     }
@@ -36,8 +34,7 @@ public class TraitementContrloler {
     }
 
     @GetMapping("response/{id}")
-    public ReclamationTraite getTraitementByReclmation(@PathVariable int id){
-        kafkaBroker.envoyerTraiteReclamtionAuPaysan(traitementService.GetByIdByReclamation(id));
+    public ResponseEntity<?> getTraitementByReclmation(@PathVariable int id){
         return traitementService.GetByIdByReclamation(id);
     }
 

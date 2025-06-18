@@ -3,6 +3,7 @@ package org.gov.moussaada.utilisateur_service.service.Interface;
 
 import org.gov.moussaada.utilisateur_service.dto.AuthentifDTO;
 import org.gov.moussaada.utilisateur_service.dto.UpdatePasswordRequestDTO;
+import org.gov.moussaada.utilisateur_service.dto.UtilisateurReponseDTO;
 import org.gov.moussaada.utilisateur_service.dto.UtilisateurRequestDTO;
 import org.gov.moussaada.utilisateur_service.model.Utilisateur;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +12,24 @@ import java.util.List;
 
 public interface IUtilisateurService {
     ResponseEntity<?> logout();
+
     ResponseEntity<?> update(UtilisateurRequestDTO adminRQ);
 
     ResponseEntity<?> loginUtilisateur(AuthentifDTO RQ);
 
     ResponseEntity<?> createAffilie(UtilisateurRequestDTO utilisateurRequestDTO);
-    ResponseEntity<?> getUserByToken(String token);
+
+    ResponseEntity<?> getUserByToken();
 
     ResponseEntity<?> updatePassword(UpdatePasswordRequestDTO updatePasswordRequestDTO);
 
-    List<Utilisateur> getCompte();
+    ResponseEntity<?> getCompte();
 
-    List<Utilisateur> getByStatus(Boolean status);
+    ResponseEntity<?> getByStatus(Boolean status);
 
-    public Utilisateur updateCompteById(int id , Boolean isactive);
+    ResponseEntity<?> updateCompteById(int id , Boolean isactive);
+
+    ResponseEntity<?> ValidateAccount(int id , int numeroValidation);
+
+    UtilisateurReponseDTO getById(int id);
 }

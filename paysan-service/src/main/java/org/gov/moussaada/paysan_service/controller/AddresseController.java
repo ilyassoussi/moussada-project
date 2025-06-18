@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("addresse")
+@RequestMapping("/paysan/addresse")
 public class AddresseController {
     @Autowired
     private AddresseService addresseService;
@@ -18,12 +18,12 @@ public class AddresseController {
         return addresseService.getAdress();
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<?> createAddresse(@RequestBody AddresseRequestDTO addresseRq){
         return this.addresseService.ValideAddresse(addresseRq);
     }
 
-    @GetMapping("ville")
+    @GetMapping("/ville")
     public ResponseEntity<?> VilleSelect(){
         return addresseService.getVille();
     }

@@ -41,12 +41,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Extraire les rôles depuis le token JWT
                 Map<String, Object> roleMap = (Map<String, Object>) claims.get("role");
                 List<GrantedAuthority> authorities = new ArrayList<>();
-                if ("Admin".equals((String)roleMap.get("type_role"))) {
+                if ("Paysan".equals((String)roleMap.get("type_role"))) {
                     authorities.add(new SimpleGrantedAuthority("ROLE_Paysan"));
+                } else if ("Admin".equals((String)roleMap.get("type_role"))) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_Admin"));
+                } else if ("Subvention".equals((String)roleMap.get("type_role"))) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_Subvention"));
+                } else if ("Service_terrain".equals((String)roleMap.get("type_role"))) {
+                    authorities.add(new SimpleGrantedAuthority("ROLE_Service_terrain"));
                 }
 
                 // zdte les autorités l la requete dyal authentification dyali bash takhodha en censideration
-                Authentication authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), token, authorities);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(claims, token, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

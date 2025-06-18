@@ -1,6 +1,11 @@
 package org.gov.moussaada.utilisateur_service;
 
+import jakarta.annotation.PostConstruct;
 import org.gov.moussaada.utilisateur_service.dao.UtilisateurDAO;
+import org.gov.moussaada.utilisateur_service.model.Role;
+import org.gov.moussaada.utilisateur_service.model.Type_Role;
+import org.gov.moussaada.utilisateur_service.model.Utilisateur;
+import org.gov.moussaada.utilisateur_service.utils.utile;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -27,26 +32,25 @@ public class UtilisateurServiceApplication {
 	}
 	@Bean
 	public ModelMapper modelMapper(){return new ModelMapper();}
-//
+
 //	@PostConstruct //had la methode katexecuta automatique lors dyal demarrage dyal application
 //	public void createAdmin() {
-//		if (!utilisateurdao.findByEmail("moussaada.admin@moussada-admin.com").isPresent()) {
 //			Utilisateur utilisateur = Utilisateur.builder()
-//					.mdp(this.passwordEncoder.encode("Moussaada%@Boadmin2026@@'"))
+//					.mdp(this.passwordEncoder.encode("Mous%@%@Terrain2026@'"))
 //					.date_de_naissance(utile.CurentDate())
-//					.mail("moussaada.admin@moussada-admin.com")
+//					.mail("moussaada.terrain@moussada-terrain.ma")
 //					.is_active(true)
+//					.phone("")
+//					.is_valide(true)
+//					.validation(0)
 //					.nometprenom("Admin Moussada")
-//					.identite("XXXXXX")
+//					.identite("TR-976303RR")
 //					.build();
 //
 //			Role role = new Role();
-//			role.setType_role(Type_Role.Admin);
+//			role.setType_role(Type_Role.Service_terrain);
 //			utilisateur.setRole(role);
 //
 //			Utilisateur saved = this.utilisateurdao.save(utilisateur);
-//		} else {
-//			System.out.println("Admin account already exists.");
-//		}
 //	}
 }

@@ -45,14 +45,17 @@ import java.util.Optional;
 @Slf4j
 public class UtilisateurSevice implements IUtilisateurService,UserDetailsService {
 
-    private static final String TOKEN = "Token";
     private UtilisateurDAO utilisateurdao;
+    private static final String TOKEN = "Token";
 
     @Autowired
     private ModelMapper modelmapper;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SmsService smsService;
 
     @Autowired
     @Lazy
@@ -67,21 +70,30 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     public ResponseEntity<?> createAffilie(UtilisateurRequestDTO utilisateurRequestDTO) {
         Utilisateur utilisateur = this.modelmapper.map(utilisateurRequestDTO,Utilisateur.class);
         if(utilisateurdao.findByEmail(utilisateur.getMail()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("vous avez deja un compte , s'il vous plait connecetz-vous..."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Vous avez deja un compte , s'il vous plait connecetz-vous..."));
         }
         if(utilisateurdao.findByIdentite(utilisateur.getIdentite()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("vous avez deja un compte , s'il vous plait connecetz-vous..."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Vous avez deja un compte , s'il vous plait connecetz-vous..."));
         }
         if(!utile.isValidEmail(utilisateurRequestDTO.getMail())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("le mail n'est as compatible avec les normes de securites"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Le mail n'est as compatible avec les normes de securites"));
         }
         if(!utile.isValidPassword(utilisateurRequestDTO.getMdp())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("le mot de passe n'est as compatible avec les normes de securites"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Le mot de passe n'est as compatible avec les normes de securites"));
+        }
+        if(!utile.isValidPhone(utilisateurRequestDTO.getPhone())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Le numéro de téléphone doit être au format marocain (+2126... ou +2127...)"));
         }
         utilisateur.setMdp(this.passwordEncoder.encode(utilisateurRequestDTO.getMdp()));
         Role role = new Role();
         role.setType_role(Type_Role.Unkown);
         utilisateur.setRole(role);
+        int code_validation = utile.GenerateCodeValidation();
+        utilisateur.setValidation(code_validation);
+        // Envoi du SMS
+        String phoneNumber = utilisateurRequestDTO.getPhone(); // s'assurer qu’il est bien au format international
+        String message = "Votre code de validation est : " + code_validation + " , Ce code est valide pendant 5 min";
+        smsService.sendSms(phoneNumber, message);
         Utilisateur saved = this.utilisateurdao.save(utilisateur);
         if(saved!=null){
             UtilisateurReponseDTO utilrp = this.modelmapper.map(saved,UtilisateurReponseDTO.class);
@@ -141,10 +153,11 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
     }
 
     @Override
-    public ResponseEntity<?> getUserByToken(String token) {
-        Utilisateur user = utilisateurdao.findUserByToken(token);
+    public ResponseEntity<?> getUserByToken() {
+        Utilisateur utilisateur = (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Utilisateur> user = utilisateurdao.findById(utilisateur.getId());
         if(user != null){
-            UtilisateurReponseDTO utilrp = this.modelmapper.map(user,UtilisateurReponseDTO.class);
+            UtilisateurReponseDTO utilrp = this.modelmapper.map(user.get(),UtilisateurReponseDTO.class);
             return ResponseEntity.ok().body(new SuccessResponse<>("utilisateur existe",200,utilrp));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("utilisateur existe"));
@@ -219,33 +232,69 @@ public class UtilisateurSevice implements IUtilisateurService,UserDetailsService
         }
     }
 
-    public List<Utilisateur> getCompte() {
+    public ResponseEntity<?> getCompte() {
         List<Utilisateur> utilisateurs = utilisateurdao.findAll();
-        return utilisateurs;
+        return ResponseEntity.ok(new SuccessResponse<>("Password updated successfully" , 201 , utilisateurs));
     }
 
     @Override
-    public List<Utilisateur> getByStatus(Boolean status) {
+    public ResponseEntity<?> getByStatus(Boolean status) {
         List<Utilisateur> utilisateurS = utilisateurdao.findByStatus(status);
         if(utilisateurS.isEmpty()){
-            return null;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("aucun utilisateur "));
         } else {
-            return utilisateurS;
+            return ResponseEntity.ok(new SuccessResponse<>("Password updated successfully" , 201 , utilisateurS));
         }
     }
 
     @Override
-    public Utilisateur updateCompteById(int id , Boolean isactive) {
+    public ResponseEntity<?> updateCompteById(int id , Boolean isactive) {
         Utilisateur utilisateur = utilisateurdao.findById(id).get();
         try{
-            Role role = new Role();
-            role.setType_role(Type_Role.Paysan);
-            utilisateur.set_active(isactive);
             utilisateur.setId(id);
-            utilisateur.setRole(role);
+            utilisateur.set_active(isactive);
+            if(isactive == true){
+                Role role = new Role();
+                role.setType_role(Type_Role.Paysan);
+
+                utilisateur.setRole(role);
+                log.info("utilisqateur : {}",utilisateur);
+            }else {
+                Role role = new Role();
+                role.setType_role(Type_Role.Unkown);
+                utilisateur.setRole(role);
+            }
             utilisateurdao.save(utilisateur);
-            return utilisateur;
+            return ResponseEntity.ok(new SuccessResponse<>("compte is activated with success" , 201 , utilisateur));
         } catch (Exception e){
+            return ResponseEntity.ok(new SuccessResponse<>("ERROR WHEN compte is activated with success" , 201 , null));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> ValidateAccount(int id , int numeroValidation) {
+            try{
+                Optional<Utilisateur> utilisateur = utilisateurdao.findById(id);
+                if(utilisateur.get().getValidation() == numeroValidation) {
+                    utilisateur.get().set_valide(true);
+                    utilisateur.get().setValidation(0);
+                    utilisateurdao.save(utilisateur.get());
+                    return ResponseEntity.ok().body(new SuccessResponse<>("Merci pour votre inscription. Nous allons maintenant effectuer une recherche pour vérifier l'existence de votre dossier dans notre base de données afin d'activer votre compte. Merci !",200,utilisateur));
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("le code que vous avez entrer est invalide !");
+                }
+            } catch (Exception e){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error"+e);
+            }
+    }
+
+    @Override
+    public UtilisateurReponseDTO getById(int id) {
+        Utilisateur utilisateur = utilisateurdao.findById(id).get();
+        if(utilisateur!=null){
+            UtilisateurReponseDTO utilisateurReponseDTO = modelmapper.map(utilisateur,UtilisateurReponseDTO.class);
+            return utilisateurReponseDTO;
+        } else {
             return null;
         }
     }

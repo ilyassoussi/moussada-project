@@ -12,13 +12,19 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class utile {
 
     private static final Path rootLocation = Paths.get("/var/tmp/PDF");
-    private final Path rootLocationimg = Paths.get("src/main/resources/image");
+//    private final Path rootLocationimg = Paths.get("/var/tmp/IMAGE");
+
+    public static int GenerateCodeValidation(){
+        Random random = new Random();
+        return 100000 + random.nextInt(900000);
+    }
 
     public static java.util.Date CurentDate() {
         // Obtenir la date et l'heure courante
@@ -90,9 +96,9 @@ public class utile {
         return destinationFile.getFileName().toString();
     }
 
-    public static void imageBloc(){
-
-    }
+//    public static void imageBloc(){
+//
+//    }
 
     public static boolean isPDF(MultipartFile file) {
         String fileName = file.getOriginalFilename();
@@ -131,6 +137,16 @@ public class utile {
             return false;
         }
         Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    public static boolean isValidPhone(String phone) {
+        String phoneRegex = "^\\+212[67]\\d{8}$";
+        Pattern pattern = Pattern.compile(phoneRegex);
+        if (phone == null) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(phone);
         return matcher.matches();
     }
 

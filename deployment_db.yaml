@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: elinow-db
+  name: elinow-db
+  namespace: default
+spec:
+  replicas: 2
+  minReadySeconds: 45
+  selector:
+    matchLabels:
+      app: elinow-db
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: elinow-db
+    spec:
+      containers:
+        - name: elinow-db
+          image: ilyassoussi/postgres:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "elinow-db"
+            - name: PGDATA
+              value: "/var/lib/postgresql/pgdata/data"  # Utiliser un sous-dossier
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/pgdata  # Monter le volume ici
+              name: postgres-storage
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc  # Utilisation d'un PVC pour la persistance des données
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: elinow-db
+  name: elinow-db
+  namespace: default
+spec:
+  selector:
+    app: elinow-db
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+  type: ClusterIP  # LoadBalancer inutile pour une base de données interne
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi  # Stockage persistant pour la base de données

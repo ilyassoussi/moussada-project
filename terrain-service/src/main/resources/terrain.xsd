@@ -1,0 +1,85 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://spring.io/guides/gs-producing-web-service"
+           targetNamespace="http://spring.io/guides/gs-producing-web-service"
+           elementFormDefault="qualified">
+
+    <!-- Requête -->
+    <xs:element name="getTerreRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numero_titre" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Réponse -->
+    <xs:element name="getTerreResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:int"/>
+                <xs:element name="numero_titre" type="xs:string"/>
+                <xs:element name="localisation" type="xs:string"/>
+                <xs:element name="superficie_m2" type="xs:string"/>
+                <xs:element name="usage" type="xs:string"/>
+                <xs:element name="en_litige" type="xs:boolean"/>
+                <xs:element name="hypothequee" type="xs:boolean"/>
+                <xs:element name="date_enregistrement" type="xs:date"/>
+                <xs:element name="proprietaires" type="tns:proprietaires"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getInformationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="CIN" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getInformationsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="getInfoResponse" type="tns:getInfoResponse" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getInfoResponse" type="tns:getInfoResponse"/>
+
+    <xs:complexType name="getInfoResponse">
+        <xs:sequence>
+            <xs:element name="id" type="xs:int"/>
+            <xs:element name="numero_titre" type="xs:string"/>
+            <xs:element name="localisation" type="xs:string"/>
+            <xs:element name="superficie_m2" type="xs:string"/>
+            <xs:element name="usage" type="xs:string"/>
+            <xs:element name="en_litige" type="xs:boolean"/>
+            <xs:element name="hypothequee" type="xs:boolean"/>
+            <xs:element name="date_enregistrement" type="xs:date"/>
+            <xs:element name="proprietaires" type="tns:proprietaires"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- Type Terre -->
+<!--    <xs:complexType name="terres">-->
+<!--        <xs:sequence>-->
+<!--            <xs:element name="id" type="xs:int"/>-->
+<!--            <xs:element name="numero_titre" type="xs:string"/>-->
+<!--            <xs:element name="localisation" type="xs:string"/>-->
+<!--            <xs:element name="superficie_m2" type="xs:string"/>-->
+<!--            <xs:element name="usage" type="xs:string"/>-->
+<!--            <xs:element name="en_litiqe" type="xs:boolean"/>-->
+<!--            <xs:element name="hypothequee" type="xs:boolean"/>-->
+<!--            <xs:element name="date_enregistrement" type="xs:date"/>-->
+<!--        </xs:sequence>-->
+<!--    </xs:complexType>-->
+
+    <!-- Type Propriétaire -->
+    <xs:complexType name="proprietaires">
+        <xs:sequence>
+            <xs:element name="nom_complet" type="xs:string"/>
+            <xs:element name="cin" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

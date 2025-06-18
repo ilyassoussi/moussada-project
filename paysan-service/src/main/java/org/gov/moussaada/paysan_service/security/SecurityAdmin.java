@@ -23,20 +23,17 @@ public class SecurityAdmin implements WebMvcConfigurer {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/paysan/**")
-                .allowedOrigins("http://localhost:3000") // Origine autorisée
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return
                 http.csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests(authori -> authori
-                                .requestMatchers("/actuator/health").permitAll()
-                                .requestMatchers("/paysan/**").hasAuthority("ROLE_Paysan")
+                                .requestMatchers("/actuator/*").permitAll()
+                                .requestMatchers("/paysan/reclamation/create","/paysan/reclamation").hasAuthority("ROLE_Paysan")
+                                .requestMatchers("/paysan/reclamation/{id}","/paysan/reclamation/update/{id}").hasAnyAuthority("ROLE_Paysan","ROLE_Admin")
+                                .requestMatchers("/paysan/demande/{id}","/paysan/demande").hasAnyAuthority("ROLE_Paysan","ROLE_Subvention","ROLE_Service_terrain")
+                                .requestMatchers("/paysan/demande/paysan","/paysan/demande/create","/paysan/demande/update/{id}").hasAuthority("ROLE_Paysan")
+                                .requestMatchers("/paysan/addresse/**").hasAuthority("ROLE_Paysan")
                                 .requestMatchers("/paysan/reclamation/encours").hasAuthority("ROLE_Admin")
                                 .anyRequest().authenticated()
                         ).sessionManagement(httpSecuritySessionManagementConfigurer ->

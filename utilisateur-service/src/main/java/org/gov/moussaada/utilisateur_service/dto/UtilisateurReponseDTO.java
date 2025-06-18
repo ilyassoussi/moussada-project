@@ -1,6 +1,7 @@
 package org.gov.moussaada.utilisateur_service.dto;
 
 import lombok.*;
+import org.gov.moussaada.utilisateur_service.model.Role;
 
 import java.util.Date;
 
@@ -14,7 +15,7 @@ public class UtilisateurReponseDTO {
     private String identite;
     private String nometprenom;
     private String mail;
-    private String mdp;
+    private String phone;
+    private Role role;
     private Date date_de_naissance;
-
 }

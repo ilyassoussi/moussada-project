@@ -5,5 +5,6 @@ public enum Type_Role {
     Admin,
     Paysan,
     Subvention,
-    Service_terrain
+    Service_terrain,
+    Appel
 }

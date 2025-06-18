@@ -1,9 +1,7 @@
 package org.gov.moussaada.paysan_service.service.inter;
 
 
-//import org.gov.moussaada.admin_service.dto.ReclamationTraitement;
 import org.gov.moussaada.paysan_service.dto.ReclamationRequestDTO;
-import org.gov.moussaada.paysan_service.model.Reclamation;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -17,9 +15,9 @@ public interface IReclamationService {
 
     ResponseEntity<?> GetReclamationById(int id);
 
-    List<Reclamation> GetEncours();
+    ResponseEntity<?> GetEncours();
 
-    Reclamation GetById(int id);
+    ResponseEntity<?> GetById(int id);
 
-    Reclamation updateReclamation(int id);
+    ResponseEntity<?> updateReclamation(int id);
 }
