@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Setter
 @Table(name ="address")
 @Entity
+@Builder
 
 public class Addresse implements Serializable {
     @Id
@@ -20,7 +21,7 @@ public class Addresse implements Serializable {
     @Column(name = "id_addresse")
     private int id;
 
-    private Long id_utilisateur;
+    private int id_paysan;
 
     private Integer id_ville;
 

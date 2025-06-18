@@ -1,6 +1,5 @@
 package org.gov.moussaada.utilisateur_service.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -46,11 +45,20 @@ public class Utilisateur implements Serializable, UserDetails {
     @Column(name = "birthday" , nullable = false)
     private Date date_de_naissance;
 
+    @Column(name = "phone" , nullable = false)
+    private String phone;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;
 
     @Column(name = "is_active")
     private boolean is_active = false;
+
+    @Column(name = "validation_code")
+    private int validation;
+
+    @Column(name = "is_valide")
+    private boolean is_valide = false;
 
     public boolean isIs_active() {
         return is_active;

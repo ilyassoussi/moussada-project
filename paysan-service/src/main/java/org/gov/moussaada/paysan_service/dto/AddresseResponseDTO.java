@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class AddresseResponseDTO {
     private int id;
-    private int id_utilisateur;
+    private int id_paysan;
     private Integer id_ville;
     private String addresse;
     private String quartier;

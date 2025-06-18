@@ -10,9 +10,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class ActualiteReponseDTO {
     private int id;
-    private Integer language;
     private String titre;
     private String description;
-    private String pdf;
+    private String image;
     private Date date_creation;
+    private boolean is_active;
 }

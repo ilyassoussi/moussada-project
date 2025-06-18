@@ -12,8 +12,8 @@ import java.util.Optional;
 @Repository
 public interface AddresseDAO extends JpaRepository<Addresse,Integer> {
 
-    @Query("FROM Addresse a WHERE a.id_utilisateur = :id")
-    Optional<Addresse> findByUser(Long id);
+    @Query("FROM Addresse a WHERE a.id_paysan = :id")
+    Optional<Addresse> findByUser(int id);
 
     @Query("FROM Ville v")
     List<Ville> getAllVille();

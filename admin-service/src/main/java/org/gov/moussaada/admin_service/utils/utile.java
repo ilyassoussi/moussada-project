@@ -1,6 +1,6 @@
 package org.gov.moussaada.admin_service.utils;
 
-import org.gov.moussaada.utilisateur_service.response.ErrorResponse;
+import org.gov.moussaada.admin_service.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,16 +9,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class utile {
 
     private static final Path rootLocation = Paths.get("/var/tmp/PDF");
-    private final Path rootLocationimg = Paths.get("src/main/resources/image");
+    private static final Path rootLocationImage = Paths.get("/var/tmp/images");
 
     public static java.util.Date CurentDate() {
         // Obtenir la date et l'heure courante
@@ -56,7 +59,7 @@ public class utile {
         // Vérifier si le fichier existe déjà
         if (Files.exists(destinationFile)) {
             // Si le fichier existe, ajouter un suffixe incrémental
-            String newFileName = generateUniqueFileName(fileName);
+            String newFileName = generateUniqueFileName(fileName, rootLocation);
             destinationFile = rootLocation.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
         }
 
@@ -73,7 +76,7 @@ public class utile {
         return destinationFile.getFileName().toString();
     }
 
-    private static String generateUniqueFileName(String originalFileName) {
+    private static String generateUniqueFileName(String originalFileName, Path rootLocationImage) {
         String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
         String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
         int count = 1;
@@ -132,6 +135,74 @@ public class utile {
         }
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();
+    }
+
+
+    public static Date ReformulateDate(String date){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateDebut;
+
+        try {
+            dateDebut = formatter.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+        return dateDebut;
+    }
+
+    /****************************************************************************Image save*******************************************************/
+
+    /**
+     * cette partie pour sauvegarder les images des blocs
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static String saveImage(MultipartFile file) throws IOException {
+        if (!Files.exists(rootLocationImage)) {
+            Files.createDirectories(rootLocationImage);
+        }
+
+        if (!isValidImage(file)) {
+            throw new IOException("Ce fichier n'est pas supporté (seuls les fichiers PNG, JPEG et WEBP sont autorisés).");
+        }
+
+        if (file.isEmpty()) {
+            throw new IOException("Impossible de stocker un fichier vide.");
+        }
+
+        String fileName = file.getOriginalFilename();
+        Path destinationFile = rootLocationImage.resolve(Paths.get(fileName)).normalize().toAbsolutePath();
+
+        if (Files.exists(destinationFile)) {
+            String newFileName = generateUniqueFileName(fileName,rootLocationImage);
+            destinationFile = rootLocationImage.resolve(Paths.get(newFileName)).normalize().toAbsolutePath();
+        }
+
+        if (!destinationFile.getParent().equals(rootLocationImage.toAbsolutePath())) {
+            throw new IOException("Impossible de stocker le fichier en dehors du répertoire courant.");
+        }
+
+        try {
+            Files.copy(file.getInputStream(), destinationFile);
+        } catch (IOException e) {
+            throw new IOException("Impossible de stocker le fichier.", e);
+        }
+
+        return destinationFile.getFileName().toString();
+    }
+
+    public static boolean isValidImage(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) {
+            return false;
+        }
+
+        String lowerCaseFileName = fileName.toLowerCase();
+        return  lowerCaseFileName.endsWith(".png") ||
+                lowerCaseFileName.endsWith(".jpeg") ||
+                lowerCaseFileName.endsWith(".jpg") ||
+                lowerCaseFileName.endsWith(".webp");
     }
 
 }

@@ -7,25 +7,39 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="server-config" />
+        <module name="titration" />
         <module name="gateway-server" />
+        <module name="server-config" />
       </profile>
-      <profile name="Annotation profile for paysan-service" enabled="true">
+      <profile name="Annotation profile for shared-micro" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+        </processorPath>
+        <module name="shared-micro" />
+      </profile>
+      <profile name="Annotation profile for terrain-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
-        <module name="paysan-service" />
-        <module name="terrain-service" />
-        <module name="shared-lib" />
         <module name="subventions-service" />
         <module name="utilisateur-service" />
+        <module name="terrain-service" />
+        <module name="paysan-service" />
         <module name="appel-service" />
         <module name="admin-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="moussaada" target="1.5" />
+      <module name="moussaada-parent" target="1.5" />
+      <module name="shared-lib" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -35,8 +49,10 @@
       <module name="paysan-service" options="-parameters" />
       <module name="server-config" options="-parameters" />
       <module name="shared-lib" options="-parameters" />
+      <module name="shared-micro" options="-parameters" />
       <module name="subventions-service" options="-parameters" />
       <module name="terrain-service" options="-parameters" />
+      <module name="titration" options="-parameters" />
       <module name="utilisateur-service" options="-parameters" />
     </option>
   </component>

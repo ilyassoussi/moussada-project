@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RestController
-@RequestMapping("/pdf")
+@RequestMapping("/utilisateur/auth/pdf")
 public class PdfController {
 
     private final String pdfDirectory = "/var/tmp/PDF";
@@ -24,12 +24,16 @@ public class PdfController {
         try {
             Path path = Paths.get(pdfDirectory).resolve(fileName);
             Resource resource = new UrlResource(path.toUri());
-            if (resource.exists()) {
-                System.out.println("here");
+            System.out.println("ici : "+ resource);
+            System.out.println("ici : "+ resource.exists());
+            if (resource.exists() && resource.isReadable()) {
+                System.out.println("PDF trouvé et lisible.");
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                        .header(HttpHeaders.CONTENT_TYPE, "application/pdf")
                         .body(resource);
             } else {
+                System.out.println("Fichier introuvable ou illisible : " + path.toString());
                 return ResponseEntity.notFound().build();
             }
         } catch (MalformedURLException e) {

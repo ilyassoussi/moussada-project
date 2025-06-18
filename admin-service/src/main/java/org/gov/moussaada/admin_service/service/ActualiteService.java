@@ -5,6 +5,7 @@ import org.gov.moussaada.admin_service.dao.ActualiteDAO;
 import org.gov.moussaada.admin_service.dto.ActualiteReponseDTO;
 import org.gov.moussaada.admin_service.dto.ActualiteRequestDTO;
 import org.gov.moussaada.admin_service.model.Actualite;
+import org.gov.moussaada.admin_service.model.ActualiteLangue;
 import org.gov.moussaada.admin_service.response.ErrorResponse;
 import org.gov.moussaada.admin_service.response.SuccessResponse;
 import org.gov.moussaada.admin_service.service.inter.IActualiteService;
@@ -16,8 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,27 +30,34 @@ public class ActualiteService implements IActualiteService {
 
     @Override
     public ResponseEntity<?> save(ActualiteRequestDTO actualiteRQ) {
-        actualiteRQ.setDate_creation(utile.CurentDate());
-        Actualite actualite = modelmapper.map(actualiteRQ, Actualite.class); // convertir actualiteRQ >> Actualite.class
-        Actualite saved = actualitedao.save(actualite);
-        if (saved != null) {
-            ActualiteReponseDTO responseDTO = modelmapper.map(saved, ActualiteReponseDTO.class);
-            return ResponseEntity.created(URI.create(String.format("/actualite/%d", responseDTO.getId())))
-                    .body(new SuccessResponse<>("Actualite Added successfully",201,responseDTO));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Actualite does not add"));
-        }
-    }
+        Actualite actualite = new Actualite();
+        actualite.setImage(actualiteRQ.getImage());
+        actualite.setDate_creation(actualiteRQ.getDate_creation());
+        actualite.setActive(actualiteRQ.isActive());
 
-    @Override
-    public ResponseEntity<?> findById(Integer id) {
-        Optional<Actualite> actualiteOptional = actualitedao.findById(id);
+        ActualiteLangue fr = new ActualiteLangue();
+        fr.setLangue("fr");
+        fr.setTitre(actualiteRQ.getTitreFr());
+        fr.setDescription(actualiteRQ.getDescriptionFr());
+        fr.setActualite(actualite);
 
-        if (actualiteOptional.isPresent()) {
-            ActualiteReponseDTO responseDTO = modelmapper.map(actualiteOptional.get(), ActualiteReponseDTO.class);
-            return ResponseEntity.ok(new SuccessResponse<>("Actualite found successfully",200,responseDTO));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Actualite with id " + id + " not found"));
+        ActualiteLangue ar = new ActualiteLangue();
+        ar.setLangue("ar");
+        ar.setTitre(actualiteRQ.getTitreAr());
+        ar.setDescription(actualiteRQ.getDescriptionAr());
+        ar.setActualite(actualite);
+
+        actualite.setTraductions(List.of(fr, ar));
+        try{
+            Actualite saved = actualitedao.save(actualite);
+            if (saved != null) {
+                return ResponseEntity.created(URI.create(String.format("/actualite/%d", saved.getId())))
+                        .body(new SuccessResponse<>("Actualite Added successfully",201,saved));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Actualite does not add"));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -58,8 +65,7 @@ public class ActualiteService implements IActualiteService {
     public ResponseEntity<?> findByTitre(String titre) {
         Actualite actualite = actualitedao.findByTitre(titre);
         if(actualite!=null){
-            ActualiteReponseDTO responseDTO = modelmapper.map(actualite, ActualiteReponseDTO.class);
-            return ResponseEntity.ok(new SuccessResponse<>("Actualite found successfully",200,responseDTO));
+            return ResponseEntity.ok(new SuccessResponse<>("Actualite found successfully",200,actualite));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Actualite with title " + titre + " not found"));
         }
@@ -67,22 +73,55 @@ public class ActualiteService implements IActualiteService {
 
     @Override
     public ResponseEntity<?> update(ActualiteRequestDTO actualiteRQ, Integer id) {
-        actualiteRQ.setDate_creation(utile.CurentDate());
-        Optional<Actualite> existingActualite = actualitedao.findById(id);
-        if(existingActualite.isPresent()){
+        Optional<Actualite> existingOptional = actualitedao.findById(id);
 
-            Actualite updatedActu = modelmapper.map(actualiteRQ, Actualite.class);
-            updatedActu.setId(existingActualite.get().getId());
-            if(updatedActu.getPdf() == null){
-                updatedActu.setPdf(existingActualite.get().getPdf());
+        if (existingOptional.isPresent()) {
+            Actualite existing = existingOptional.get();
+
+            // Ne pas modifier la date de création, mais enregistrer une date de modification
+            existing.setDate_creation(utile.CurentDate());
+
+            // Mise à jour du champ actif uniquement si présent dans la requête
+            existing.setActive(actualiteRQ.isActive());
+
+            // Mise à jour conditionnelle de l'image (seulement si non null)
+            if (actualiteRQ.getImage() != null && !actualiteRQ.getImage().isEmpty()) {
+                existing.setImage(actualiteRQ.getImage());
             }
-            Actualite updated = actualitedao.save(updatedActu);
-            ActualiteReponseDTO responseDTO = modelmapper.map(updated,ActualiteReponseDTO.class);
-            return ResponseEntity.accepted().body(new SuccessResponse<>("Actualite Updated successfully",202,responseDTO));
+
+            // Mise à jour conditionnelle des traductions FR et AR
+            for (ActualiteLangue traduction : existing.getTraductions()) {
+                if ("fr".equalsIgnoreCase(traduction.getLangue())) {
+                    if (actualiteRQ.getTitreFr() != null) {
+                        traduction.setTitre(actualiteRQ.getTitreFr());
+                    }
+                    if (actualiteRQ.getDescriptionFr() != null) {
+                        traduction.setDescription(actualiteRQ.getDescriptionFr());
+                    }
+                } else if ("ar".equalsIgnoreCase(traduction.getLangue())) {
+                    if (actualiteRQ.getTitreAr() != null) {
+                        traduction.setTitre(actualiteRQ.getTitreAr());
+                    }
+                    if (actualiteRQ.getDescriptionAr() != null) {
+                        traduction.setDescription(actualiteRQ.getDescriptionAr());
+                    }
+                }
+            }
+
+            // Sauvegarde en base
+            Actualite updated = actualitedao.save(existing);
+            ActualiteReponseDTO responseDTO = modelmapper.map(updated, ActualiteReponseDTO.class);
+
+            return ResponseEntity.accepted()
+                    .body(new SuccessResponse<>("Actualite updated successfully", 202, responseDTO));
+
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Actualite with id " + id + " not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Actualite with id " + id + " not found"));
         }
     }
+
+
 
     @Override
     public ResponseEntity<?> Delete(Integer id) {
@@ -97,16 +136,8 @@ public class ActualiteService implements IActualiteService {
     }
 
     @Override
-    public List<ActualiteReponseDTO> findAll() {
-        return actualitedao.findAllActualite()
-                .stream()
-                .map(el->modelmapper.map(el,ActualiteReponseDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public ResponseEntity<?> DeleteAll() {
-        List<ActualiteReponseDTO> allActualite = this.findAll();
+        List<ActualiteReponseDTO> allActualite = this.findAll("fr");
         if(allActualite!=null){
             for (ActualiteReponseDTO actuali : allActualite){
                 actualitedao.deleteById(actuali.getId());
@@ -116,4 +147,79 @@ public class ActualiteService implements IActualiteService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Error....."));
         }
     }
+
+    @Override
+    public ResponseEntity<?> getByIdAndLang(int id, String lang) {
+        Optional<Actualite> optionalActualite = actualitedao.findById(id);
+
+        if (optionalActualite.isPresent()) {
+            Actualite actualite = optionalActualite.get();
+
+            // Cherche la traduction correspondante
+            ActualiteLangue selectedLang = actualite.getTraductions()
+                    .stream()
+                    .filter(t -> t.getLangue().equalsIgnoreCase(lang))
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedLang != null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("id", actualite.getId());
+                response.put("pdf", actualite.getImage());
+                response.put("is_active", actualite.isActive());
+                response.put("date_creation", actualite.getDate_creation());
+                response.put("titre", selectedLang.getTitre());
+                response.put("description", selectedLang.getDescription());
+                response.put("langue", selectedLang.getLangue());
+
+                return ResponseEntity.ok(new SuccessResponse<>("Actualité récupérée avec succès", 200, response));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ErrorResponse("Traduction non trouvée pour la langue : " + lang));
+            }
+
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Actualité non trouvée avec l'id : " + id));
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getById(int id) {
+        Optional<Actualite> optionalActualite = actualitedao.findById(id);
+        if(optionalActualite.isPresent()){
+            return ResponseEntity.ok().body(new SuccessResponse<>("actualite ", 200 , optionalActualite.get()));
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("no actualite"));
+        }
+    }
+
+
+    @Override
+    public List<ActualiteReponseDTO> findAll(String lang) {
+        List<Actualite> all = actualitedao.findAll();
+        List<ActualiteReponseDTO> result = new ArrayList<>();
+
+        for (Actualite actualite : all) {
+            ActualiteLangue selectedLang = actualite.getTraductions()
+                    .stream()
+                    .filter(t -> t.getLangue().equalsIgnoreCase(lang))
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedLang != null) {
+                ActualiteReponseDTO dto = new ActualiteReponseDTO();
+                dto.setId(actualite.getId());
+                dto.setImage(actualite.getImage());
+                dto.setDate_creation(actualite.getDate_creation());
+                dto.setTitre(selectedLang.getTitre());
+                dto.setDescription(selectedLang.getDescription());
+                dto.set_active(selectedLang.getActualite().isActive());
+                result.add(dto);
+            }
+        }
+
+        return result;
+    }
+
 }

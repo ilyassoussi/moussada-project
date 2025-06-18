@@ -18,8 +18,8 @@ public class Ville implements Serializable {
     @Column(name = "id_ville")
     private int id;
 
-    @OneToOne(cascade = {CascadeType.DETACH , CascadeType.MERGE})
-    private Region region;
+    private int id_region;
 
     private String ville;
 }
+
