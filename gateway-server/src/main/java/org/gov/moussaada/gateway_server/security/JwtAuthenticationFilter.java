@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class JwtAuthenticationFilter implements GlobalFilter {
 
-    private static final String AUTH_SERVICE_URL = "http://utilisateur-service:8082/utilisateur/auth/verifyToken";
+    private static final String AUTH_SERVICE_URL = "lb://utilisateur-service/utilisateur/auth/verifyToken";
     private final WebClient.Builder webClientBuilder;
 
     public JwtAuthenticationFilter(WebClient.Builder webClientBuilder) {
@@ -33,6 +33,9 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         String path = exchange.getRequest().getURI().getPath();
 
+        if ("true".equals(exchange.getRequest().getHeaders().getFirst("X-Internal-Call"))) {
+            return chain.filter(exchange);
+        }
         System.out.println("Requested path: " + path);
 
         if (path.startsWith("/utilisateur/auth") || path.startsWith("/pdf") || path.startsWith("/admin/actualite/getall") || path.startsWith("/actuator/health") || path.startsWith("/subvention/getall")) {
@@ -57,6 +60,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         return webClientBuilder.build()
                 .get()
                 .uri(AUTH_SERVICE_URL + "?token=" + token)
+                .header("X-Internal-Call", "true")
                 .retrieve()
                 .onStatus(
                         status -> status.is4xxClientError() || status.is5xxServerError(),

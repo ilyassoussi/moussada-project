@@ -1,0 +1,5 @@
+apiVersion: v2
+name: utilisateur-service
+description: Spring Utilisateur Service
+version: 0.1.0
+appVersion: "1.0"

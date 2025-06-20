@@ -1,0 +1,5 @@
+apiVersion: v2
+name: server-config
+description: Spring Cloud Config Server
+version: 0.1.0
+appVersion: "1.0"
