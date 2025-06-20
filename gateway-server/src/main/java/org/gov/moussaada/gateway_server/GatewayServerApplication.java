@@ -22,21 +22,6 @@ public class GatewayServerApplication {
 	}
 
 	@Bean
-	public CorsWebFilter corsFilter() {
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.addAllowedOrigin("http://localhost:3000"); // ou "http://localhost:3000" (React)
-		config.addAllowedHeader("*");
-		config.addAllowedMethod("*");
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", config);
-
-		return new CorsWebFilter(source);
-	}
-
-
-	@Bean
 	public RouteLocator customRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route("admin-service", r -> r
