@@ -1,5 +1,7 @@
 package org.gov.moussaada.gateway_server.security;
 import org.apache.hc.core5.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.http.HttpStatus;
@@ -14,10 +16,11 @@ import reactor.core.publisher.Mono;
 public class JwtAuthenticationFilter implements GlobalFilter {
 
     private static final String AUTH_SERVICE_URL = "lb://utilisateur-service/utilisateur/auth/verifyToken";
-    private final WebClient.Builder webClientBuilder;
+    private WebClient.Builder webClientBuilder;
 
     public JwtAuthenticationFilter(WebClient.Builder webClientBuilder) {
         this.webClientBuilder = webClientBuilder;
+        System.out.println("WebClient.Builder injected: " + (webClientBuilder != null));
     }
 
         public boolean matchesPath(String path , String pattern) {

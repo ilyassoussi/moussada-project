@@ -21,8 +21,8 @@ env:
   CONFIG_SERVER_URL: http://server-config:8081
   CONSUL_HOST: server-consul
   CONSUL_PORT: 8500
-  DB_HOST: moussaadaa-postgres-postgresql
+  DB_HOST: moussaadaa-postgres
   DB_PORT: 5432
   DB_NAME: utilisateur-db
   DB_USER: moussaadaDB
-  DB_PASS: R3pp6sva%
+  DB_PASS: R3pp6sva

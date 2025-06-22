@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: moussaada-global-ingress
-  namespace: moussaada
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
@@ -10,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: moussaada.35.193.46.96.nip.io
+    - host: moussaada.34.10.96.230.nip.io
       http:
         paths:
           - path: /((utilisateur|subvention|paysan|admin|terrain|shared|appel).*)
