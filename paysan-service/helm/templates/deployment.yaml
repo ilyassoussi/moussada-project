@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paysan-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: paysan-service
+  template:
+    metadata:
+      labels:
+        app: paysan-service
+    spec:
+      containers:
+        - name: paysan-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8088
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+            - name: SPRING_CONFIG_IMPORT
+              value: "optional:configserver:{{ .Values.env.CONFIG_SERVER_URL }}"
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: "{{ .Values.env.CONSUL_HOST }}"
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "{{ .Values.env.CONSUL_PORT }}"
