@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.cloud.gateway.discovery.DiscoveryLocatorProperties;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -20,6 +22,36 @@ public class GatewayServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayServerApplication.class, args);
 	}
+
+	@Bean
+	public CorsWebFilter corsWebFilter() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.addAllowedOrigin("http://moussaada.34.10.96.230.nip.io"); // ✅ ton frontend
+		config.addAllowedMethod("*");
+		config.addAllowedHeader("*");
+		config.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+
+		return new CorsWebFilter(source);
+	}
+
+	@Bean
+	@LoadBalanced
+	public WebClient.Builder webClientBuilder() {
+		return WebClient.builder();
+	}
+
+
+//	@Override
+//	public void addCorsMappings(CorsRegistry registry) {
+//		registry.addMapping("/api/**") // Appliquer uniquement aux routes API
+//				.allowedOrigins("https://elinowai.com", "https://elinow.ai", "https://www.elinowai.com") // Origines autorisées
+//				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Méthodes HTTP autorisées
+//				.allowedHeaders("*") // Tous les en-têtes sont autorisés
+//				.allowCredentials(true); // Autoriser les cookies et les sessions
+//	}
 
 	@Bean
 	public RouteLocator customRoutes(RouteLocatorBuilder builder) {
