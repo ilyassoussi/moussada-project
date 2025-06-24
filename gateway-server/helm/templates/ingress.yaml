@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: moussaada.34.10.96.230.nip.io
+    - host: moussaada.34.9.129.237.nip.io
       http:
         paths:
           - path: /((utilisateur|subvention|paysan|admin|terrain|shared|appel).*)

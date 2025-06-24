@@ -27,3 +27,13 @@ spec:
               value: "{{ .Values.env.CONSUL_HOST }}"
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "{{ .Values.env.CONSUL_PORT }}"
+          volumeMounts:
+            - name: tmp-pdf
+              mountPath: /var/tmp/PDF
+            - name: tmp-images
+              mountPath: /var/tmp/images
+      volumes:
+        - name: tmp-pdf
+          emptyDir: { }
+        - name: tmp-images
+          emptyDir: { }

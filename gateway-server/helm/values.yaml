@@ -24,5 +24,5 @@ env:
 
 ingress:
   enabled: true
-  host: moussaada.34.10.96.230.nip.io  # ← adapte ce host si besoin
+  host: moussaada.34.9.129.237.nip.io  # ← adapte ce host si besoin
 
