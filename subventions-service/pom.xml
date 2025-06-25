@@ -53,13 +53,18 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>6.2.0</version>
 		</dependency>
+
+
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>3.2.2</version>
 			<scope>compile</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         }
         System.out.println("Requested path: " + path);
 
-        if (path.startsWith("/utilisateur/auth") || path.startsWith("/pdf") || path.startsWith("/admin/actualite/getall") || path.startsWith("/actuator/health") || path.startsWith("/subvention/getall")) {
+        if (path.startsWith("/utilisateur/auth") || path.startsWith("/pdf") || path.startsWith("/admin/actualite/getall") || path.startsWith("/actuator/**") || path.startsWith("/subvention/getall")) {
             System.out.println("Skipping token verification for path: " + path);
             return chain.filter(exchange);
         }
