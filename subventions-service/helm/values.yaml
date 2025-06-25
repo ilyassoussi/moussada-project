@@ -1,13 +1,13 @@
 replicaCount: 1
 
 image:
-  repository: ilyassoussi/paysan-service
+  repository: ilyassoussi/subventions-service
   tag: 1.0.0.preprod
   pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
-  port: 8088
+  port: 8086
 
 resources:
   limits:
@@ -23,6 +23,6 @@ env:
   CONSUL_PORT: 8500
   DB_HOST: moussaadaa-postgres
   DB_PORT: 5432
-  DB_NAME: paysan-db
+  DB_NAME: subvention-db
   DB_USER: moussaadaDB
   DB_PASS: R3pp6sva

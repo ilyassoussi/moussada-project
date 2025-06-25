@@ -1,6 +1,7 @@
 package org.gov.moussaada.gateway_server.security;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Mono;
 public class JwtAuthenticationFilter implements GlobalFilter {
 
     private static final String AUTH_SERVICE_URL = "lb://utilisateur-service/utilisateur/auth/verifyToken";
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
     public JwtAuthenticationFilter(WebClient.Builder webClientBuilder) {
         this.webClientBuilder = webClientBuilder;
@@ -58,11 +59,12 @@ public class JwtAuthenticationFilter implements GlobalFilter {
         // Extraire le token de l'en-tête Authorization
         String token = authHeader.substring(7); // Remove "Bearer "
         System.out.println("Extracted token: " + token);
-
+        System.out.println("ici le res http://utilisateur-service/utilisateur/auth/verifyToken?token="+ token);
+        System.out.println("ici le ressadas"+ exchange);
         // Effectuer la vérification du token en appelant l'API utilisateur
         return webClientBuilder.build()
                 .get()
-                .uri(AUTH_SERVICE_URL + "?token=" + token)
+                .uri("http://utilisateur-service/utilisateur/auth/verifyToken?token=" + token)
                 .header("X-Internal-Call", "true")
                 .retrieve()
                 .onStatus(
@@ -74,6 +76,7 @@ public class JwtAuthenticationFilter implements GlobalFilter {
                 .doOnError(e -> System.out.println("Token validation failed: " + e.getMessage()))
                 .flatMap(response -> chain.filter(exchange)) // Continuer avec le flux
                 .onErrorResume(e -> {
+                    System.out.println("hereeee");
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                     return exchange.getResponse().setComplete();
                 });

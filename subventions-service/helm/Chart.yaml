@@ -1,5 +1,5 @@
 apiVersion: v2
-name: paysan-service
+name: subventions-service
 description: Spring Paysan Service
 version: 0.1.0
 appVersion: "1.0"

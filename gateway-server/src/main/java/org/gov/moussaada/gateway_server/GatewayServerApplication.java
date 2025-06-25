@@ -26,7 +26,7 @@ public class GatewayServerApplication {
 	@Bean
 	public CorsWebFilter corsWebFilter() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.addAllowedOrigin("http://moussaada.34.10.96.230.nip.io"); // ✅ ton frontend
+		config.addAllowedOrigin("http://moussaada.34.9.129.237.nip.io"); // ✅ ton frontend
 		config.addAllowedMethod("*");
 		config.addAllowedHeader("*");
 		config.setAllowCredentials(true);
@@ -39,19 +39,9 @@ public class GatewayServerApplication {
 
 	@Bean
 	@LoadBalanced
-	public WebClient.Builder webClientBuilder() {
+	public WebClient.Builder loadBalancedWebClientBuilder() {
 		return WebClient.builder();
 	}
-
-
-//	@Override
-//	public void addCorsMappings(CorsRegistry registry) {
-//		registry.addMapping("/api/**") // Appliquer uniquement aux routes API
-//				.allowedOrigins("https://elinowai.com", "https://elinow.ai", "https://www.elinowai.com") // Origines autorisées
-//				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Méthodes HTTP autorisées
-//				.allowedHeaders("*") // Tous les en-têtes sont autorisés
-//				.allowCredentials(true); // Autoriser les cookies et les sessions
-//	}
 
 	@Bean
 	public RouteLocator customRoutes(RouteLocatorBuilder builder) {
@@ -71,10 +61,7 @@ public class GatewayServerApplication {
 				.route("terrain-service", r -> r
 						.path("/terrain/**")
 						.uri("lb://terrain-service"))
-				.route("appel-service", r -> r
-						.path("/appel/**")
-						.uri("lb://appel-service"))
-				.route("shared-micro", r -> r
+ 				.route("shared-micro", r -> r
 						.path("/shared/**")
 						.uri("lb://shared-micro"))
 				.build();

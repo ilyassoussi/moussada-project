@@ -2,6 +2,7 @@ package org.gov.moussaada.admin_service.feign;
 
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import org.gov.moussaada.admin_service.config.FeignClientConfig;
 import org.gov.moussaada.admin_service.dto.UtilisateurReponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@FeignClient(name ="utilisateur-service", fallbackFactory = UtilisateurFeignFallbackFactory.class)
+@FeignClient(name ="utilisateur-service", fallbackFactory = UtilisateurFeignFallbackFactory.class, configuration = FeignClientConfig.class)
 @CircuitBreaker(name = "UtilisateurFeign")
 public interface UtilisateurFeign {
 

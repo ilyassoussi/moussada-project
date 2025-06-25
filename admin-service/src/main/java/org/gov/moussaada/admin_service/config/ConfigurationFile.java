@@ -26,13 +26,19 @@ public class ConfigurationFile {
 
     @Bean
     public RequestInterceptor requestInterceptor() {
-        return new RequestInterceptor() {
-            @Override
-            public void apply(RequestTemplate requestTemplate) {
-                String token = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-                requestTemplate.header("Authorization", "Bearer " + token);
+        return requestTemplate -> {
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.getCredentials() instanceof String) {
+                String token = (String) auth.getCredentials();
+                if (token != null && !token.isEmpty()) {
+                    requestTemplate.header("Authorization", "Bearer " + token);
+                }
+            } else {
+                log.warn("No JWT token found in SecurityContext");
             }
+            requestTemplate.header("X-Internal-Call", "true");
         };
     }
+
 
 }

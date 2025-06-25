@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: paysan-service
+  name: subventions-service
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: paysan-service
+      app: subventions-service
   template:
     metadata:
       labels:
-        app: paysan-service
+        app: subventions-service
     spec:
       containers:
-        - name: paysan-service
+        - name: subventions-service
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: 8088
+            - containerPort: 8086
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "kubernetes"

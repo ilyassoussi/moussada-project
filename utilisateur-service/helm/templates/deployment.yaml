@@ -27,3 +27,15 @@ spec:
               value: "{{ .Values.env.CONSUL_HOST }}"
             - name: SPRING_CLOUD_CONSUL_PORT
               value: "{{ .Values.env.CONSUL_PORT }}"
+          volumeMounts:
+            - name: shared-images
+              mountPath: /var/tmp/images
+            - name: shared-pdf
+              mountPath: /var/tmp/PDF
+      volumes:
+        - name: shared-images
+          persistentVolumeClaim:
+            claimName: shared-images-pvc
+        - name: shared-pdf
+          persistentVolumeClaim:
+            claimName: shared-pdf-pvc

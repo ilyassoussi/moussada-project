@@ -28,8 +28,9 @@ public class SecurityAdmin implements WebMvcConfigurer {
                         .authorizeHttpRequests(authori -> authori
                                 .requestMatchers("/admin/actualite/getall" , "/admin/actualite/{id}", "/actuator/health").permitAll()
                                 .requestMatchers("/admin/actualite/create").hasAuthority("ROLE_Admin")
-                                .requestMatchers("/admin/actualite/delete/**").hasAuthority("ROLE_Admin")
-                                .requestMatchers("/admin/actualite/update/**").hasAuthority("ROLE_Admin")
+                                .requestMatchers("/admin/actualite/withoutLang/{id}").hasAuthority("ROLE_Admin")
+                                .requestMatchers("/admin/actualite/delete/{id}").hasAuthority("ROLE_Admin")
+                                .requestMatchers("/admin/actualite/update/{id}").hasAuthority("ROLE_Admin")
                                 .requestMatchers("admin/formations/**").hasAnyAuthority("ROLE_Admin","ROLE_Paysan")
                                 .requestMatchers("/admin/compte/**").hasAuthority("ROLE_Admin")
                                 .requestMatchers("/admin/reclamation/create","admin/reclamation").hasAuthority("ROLE_Admin")
