@@ -2,6 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: utilisateur-service
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "8082" # adapte au port de ton app
 spec:
   selector:
     app: utilisateur-service
