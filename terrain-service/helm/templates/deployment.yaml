@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terrain-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: terrain-service
+  template:
+    metadata:
+      labels:
+        app: terrain-service
+    spec:
+      containers:
+        - name: terrain-service
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+            - name: SPRING_CONFIG_IMPORT
+              value: "optional:configserver:{{ .Values.env.CONFIG_SERVER_URL }}"
+            - name: SPRING_CLOUD_CONSUL_HOST
+              value: "{{ .Values.env.CONSUL_HOST }}"
+            - name: SPRING_CLOUD_CONSUL_PORT
+              value: "{{ .Values.env.CONSUL_PORT }}"
+          volumeMounts:
+            - name: shared-images
+              mountPath: /var/tmp/images
+            - name: shared-pdf
+              mountPath: /var/tmp/PDF
+      volumes:
+        - name: shared-images
+          persistentVolumeClaim:
+            claimName: shared-images-pvc
+        - name: shared-pdf
+          persistentVolumeClaim:
+            claimName: shared-pdf-pvc
