@@ -45,6 +45,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Download JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: server-config-jar
+          path: server-config/target/
+
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         with:
@@ -52,6 +58,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
 
   docker:
     name: Build & Push Docker Image
