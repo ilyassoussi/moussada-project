@@ -30,6 +30,13 @@ jobs:
       - name: Build JAR
         run: ./mvnw clean package -DskipTests
 
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          projectBaseDir: ./server-config
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
@@ -90,6 +97,6 @@ jobs:
 
       - name: Deploy to GKE with Helm
         run: |
-          helm upgrade --install $IMAGE_NAME ./helm/server-config \
+          helm upgrade --install $IMAGE_NAME ./server-config/helm/ \
             --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME \
             --set image.tag=${{ github.sha }}
