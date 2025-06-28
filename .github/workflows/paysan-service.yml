@@ -27,7 +27,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
+      - name: Setup Maven settings.xml for GitHub Packages
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>github</id>
+                <username>ilyassoussi</username>
+                <password>${{ secrets.TOKEN }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
       - name: Build JAR
         run: ./mvnw clean package -DskipTests
 
