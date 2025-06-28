@@ -13,8 +13,6 @@ jobs:
   setup:
     name: Setup & Build
     runs-on: ubuntu-latest
-    env:
-      SECRET: ${{ secrets.SECRET }}
     defaults:
       run:
         working-directory: paysan-service
@@ -91,6 +89,20 @@ jobs:
 
       - name: Docker Login
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Create Maven settings.xml
+        run: |
+          mkdir -p paysan-service/.m2
+          cat > paysan-service/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>github</id>
+                <username>ilyassoussi</username>
+                <password>${{ secrets.TOKEN }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
 
       - name: Build & Push Image
         run: |
