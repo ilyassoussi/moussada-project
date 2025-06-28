@@ -92,20 +92,6 @@ jobs:
       - name: Docker Login
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      - name: Setup Maven settings.xml for GitHub Packages
-        run: |
-          mkdir -p ~/.m2
-          cat > ~/.m2/settings.xml <<EOF
-          <settings>
-            <servers>
-              <server>
-                <id>github</id>
-                <username>ilyassoussi</username>
-                <password>${{ secrets.TOKEN }}</password>
-              </server>
-            </servers>
-          </settings>
-          EOF
       - name: Build & Push Image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/$IMAGE_NAME:${{ github.sha }} paysan-service
