@@ -5,8 +5,7 @@ on:
     branches: [master]
     paths:
       - 'paysan-service/**'
-    env:
-      SECRET: ${{ secrets.SECRET }}
+
 env:
   IMAGE_NAME: paysan-service
 
@@ -14,10 +13,11 @@ jobs:
   setup:
     name: Setup & Build
     runs-on: ubuntu-latest
+    env:
+      SECRET: ${{ secrets.SECRET }}
     defaults:
       run:
         working-directory: paysan-service
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
