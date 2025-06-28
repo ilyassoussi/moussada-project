@@ -5,7 +5,8 @@ on:
     branches: [master]
     paths:
       - 'paysan-service/**'
-
+    env:
+      SECRET: ${{ secrets.SECRET }}
 env:
   IMAGE_NAME: paysan-service
 
