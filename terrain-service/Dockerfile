@@ -4,7 +4,7 @@ FROM maven:3.8.5-openjdk-17-slim AS stage1
 WORKDIR /home/app
 
 # Copier le settings.xml AVANT l'installation
-COPY settings.xml /root/.m2/settings.xml
+COPY .m2/settings.xml /root/.m2/settings.xml
 
 # Copier le projet
 COPY . /home/app/
