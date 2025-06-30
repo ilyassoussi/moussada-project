@@ -14,4 +14,5 @@ public class ServerConfigApplication {
 		SpringApplication.run(ServerConfigApplication.class, args);
 	}
 
+	
 }

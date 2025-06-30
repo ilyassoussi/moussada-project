@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 public class ConfigurationFilePaysan {
 
+
     @Value("${spring.kafka.topic.name}")
     private String topicName;
 

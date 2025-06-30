@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping ("/admin/actualite")
 public class ActualiteController {
 
+
     private ActualiteService actualiteService;
 
     public ActualiteController(ActualiteService actualiteService) {

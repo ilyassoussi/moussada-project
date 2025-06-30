@@ -19,6 +19,7 @@ public class InfoPaysanTerres {
         this.terrainSoapService = terrainSoapService;
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getTerre(@PathVariable int id) {
         GetInformationsResponse response = terrainSoapService.getTerreByCIN(id);

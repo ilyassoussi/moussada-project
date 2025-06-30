@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 public class utile {
 
+
     private static final Path rootLocation = Paths.get("/var/tmp/PDF");
 //    private final Path rootLocationimg = Paths.get("/var/tmp/IMAGE");
 
