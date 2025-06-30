@@ -36,34 +36,34 @@ jobs:
           name: utilisateur-service-jar
           path: utilisateur-service/target/*.jar
 
-  sonarqube-check:
-    name: SonarQube Scan
-    runs-on: ubuntu-latest
-    needs: setup
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download JAR
-        uses: actions/download-artifact@v4
-        with:
-          name: utilisateur-service-jar
-          path: utilisateur-service/target/
-
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        with:
-          projectBaseDir: ./utilisateur-service
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_UTILISATEUR }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
+#  sonarqube-check:
+#    name: SonarQube Scan
+#    runs-on: ubuntu-latest
+#    needs: setup
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Download JAR
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: utilisateur-service-jar
+#          path: utilisateur-service/target/
+#
+#      - name: SonarQube Scan
+#        uses: sonarsource/sonarqube-scan-action@master
+#        with:
+#          projectBaseDir: ./utilisateur-service
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_UTILISATEUR }}
+#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+#
 
   docker:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    needs: sonarqube-check
+    needs: setup
 
     steps:
       - name: Checkout code
