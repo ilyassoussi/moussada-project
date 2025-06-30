@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 public class ConfigurationFileShared {
 
-    
     @Bean
     public RequestInterceptor requestInterceptor() {
         return new RequestInterceptor() {
