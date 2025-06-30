@@ -36,6 +36,7 @@ jobs:
           name: server-config-jar
           path: server-config/target/*.jar
 
+
 #  sonarqube-check:
 #    name: SonarQube Scan
 #    runs-on: ubuntu-latest
