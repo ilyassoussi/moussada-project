@@ -19,13 +19,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableScheduling
 
 public class UtilisateurServiceApplication {
-	private final PasswordEncoder passwordEncoder;
-	private final UtilisateurDAO utilisateurdao;
-
-	public UtilisateurServiceApplication(PasswordEncoder passwordEncoder, UtilisateurDAO utilisateurdao) {
-		this.passwordEncoder = passwordEncoder;
-		this.utilisateurdao = utilisateurdao;
-	}
+//	private final PasswordEncoder passwordEncoder;
+//	private final UtilisateurDAO utilisateurdao;
+//
+//	public UtilisateurServiceApplication(PasswordEncoder passwordEncoder, UtilisateurDAO utilisateurdao) {
+//		this.passwordEncoder = passwordEncoder;
+//		this.utilisateurdao = utilisateurdao;
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(UtilisateurServiceApplication.class, args);
@@ -33,97 +33,97 @@ public class UtilisateurServiceApplication {
 	@Bean
 	public ModelMapper modelMapper(){return new ModelMapper();}
 
-	@PostConstruct //had la methode katexecuta automatique lors dyal demarrage dyal application
-	public void createAdmin() {
-			Utilisateur utilisateur = Utilisateur.builder()
-					.mdp(this.passwordEncoder.encode("Mous%@%@Terrain2026@'"))
-					.date_de_naissance(utile.CurentDate())
-					.mail("moussaada.terrain@moussada-terrain.ma")
-					.is_active(true)
-					.phone("0537555500")
-					.is_valide(true)
-					.validation(0)
-					.nometprenom("Admin Moussada")
-					.identite("TR-976303RR")
-					.build();
-
-			Role role = new Role();
-			role.setType_role(Type_Role.Service_terrain);
-			utilisateur.setRole(role);
-
-			Utilisateur saved = this.utilisateurdao.save(utilisateur);
-
-		Utilisateur utilisateur1 = Utilisateur.builder()
-				.mdp(this.passwordEncoder.encode("Mous%@%@Subvention61##@'"))
-				.date_de_naissance(utile.CurentDate())
-				.mail("moussaada.subventions@moussada-subventions.ma")
-				.is_active(true)
-				.phone("0537551214")
-				.is_valide(true)
-				.validation(0)
-				.nometprenom("Admin Moussada")
-				.identite("SB-958&&303SS")
-				.build();
-
-		Role role1 = new Role();
-		role1.setType_role(Type_Role.Subvention);
-		utilisateur1.setRole(role1);
-
-		Utilisateur saved1 = this.utilisateurdao.save(utilisateur1);
-
-		Utilisateur utilisateur0 = Utilisateur.builder()
-				.mdp(this.passwordEncoder.encode("admin%@12@admin%%@'"))
-				.date_de_naissance(utile.CurentDate())
-				.mail("moussaada.admin@moussada-admin.ma")
-				.is_active(true)
-				.phone("0661000000")
-				.is_valide(true)
-				.validation(0)
-				.nometprenom("Admin Moussada")
-				.identite("AD-1369%&@03@S")
-				.build();
-
-		Role role0 = new Role();
-		role0.setType_role(Type_Role.Admin);
-		utilisateur0.setRole(role0);
-
-		Utilisateur saved0 = this.utilisateurdao.save(utilisateur0);
-
-		Utilisateur utilisateur10 = Utilisateur.builder()
-				.mdp(this.passwordEncoder.encode("R3pp6sva%"))
-				.date_de_naissance(utile.CurentDate())
-				.mail("ilyas.soussi@gmail.com")
-				.is_active(true)
-				.phone("+212661512121")
-				.is_valide(true)
-				.validation(0)
-				.nometprenom("Soussi ilyas")
-				.identite("X407680")
-				.build();
-
-		Role role10 = new Role();
-		role10.setType_role(Type_Role.Paysan);
-		utilisateur10.setRole(role10);
-
-		Utilisateur saved10 = this.utilisateurdao.save(utilisateur10);
-
-		Utilisateur utilisateur11 = Utilisateur.builder()
-				.mdp(this.passwordEncoder.encode("R3pp6sva%"))
-				.date_de_naissance(utile.CurentDate())
-				.mail("aya.belhachmi@gmail.com")
-				.is_active(true)
-				.phone("+212661512121")
-				.is_valide(true)
-				.validation(0)
-				.nometprenom("BELHACHMI aya")
-				.identite("X708090")
-				.build();
-
-		Role role11 = new Role();
-		role11.setType_role(Type_Role.Paysan);
-		utilisateur11.setRole(role10);
-
-		Utilisateur saved11 = this.utilisateurdao.save(utilisateur11);
-
-	}
+//	@PostConstruct //had la methode katexecuta automatique lors dyal demarrage dyal application
+//	public void createAdmin() {
+//			Utilisateur utilisateur = Utilisateur.builder()
+//					.mdp(this.passwordEncoder.encode("Mous%@%@Terrain2026@'"))
+//					.date_de_naissance(utile.CurentDate())
+//					.mail("moussaada.terrain@moussada-terrain.ma")
+//					.is_active(true)
+//					.phone("0537555500")
+//					.is_valide(true)
+//					.validation(0)
+//					.nometprenom("Admin Moussada")
+//					.identite("TR-976303RR")
+//					.build();
+//
+//			Role role = new Role();
+//			role.setType_role(Type_Role.Service_terrain);
+//			utilisateur.setRole(role);
+//
+//			Utilisateur saved = this.utilisateurdao.save(utilisateur);
+//
+//		Utilisateur utilisateur1 = Utilisateur.builder()
+//				.mdp(this.passwordEncoder.encode("Mous%@%@Subvention61##@'"))
+//				.date_de_naissance(utile.CurentDate())
+//				.mail("moussaada.subventions@moussada-subventions.ma")
+//				.is_active(true)
+//				.phone("0537551214")
+//				.is_valide(true)
+//				.validation(0)
+//				.nometprenom("Admin Moussada")
+//				.identite("SB-958&&303SS")
+//				.build();
+//
+//		Role role1 = new Role();
+//		role1.setType_role(Type_Role.Subvention);
+//		utilisateur1.setRole(role1);
+//
+//		Utilisateur saved1 = this.utilisateurdao.save(utilisateur1);
+//
+//		Utilisateur utilisateur0 = Utilisateur.builder()
+//				.mdp(this.passwordEncoder.encode("admin%@12@admin%%@'"))
+//				.date_de_naissance(utile.CurentDate())
+//				.mail("moussaada.admin@moussada-admin.ma")
+//				.is_active(true)
+//				.phone("0661000000")
+//				.is_valide(true)
+//				.validation(0)
+//				.nometprenom("Admin Moussada")
+//				.identite("AD-1369%&@03@S")
+//				.build();
+//
+//		Role role0 = new Role();
+//		role0.setType_role(Type_Role.Admin);
+//		utilisateur0.setRole(role0);
+//
+//		Utilisateur saved0 = this.utilisateurdao.save(utilisateur0);
+//
+//		Utilisateur utilisateur10 = Utilisateur.builder()
+//				.mdp(this.passwordEncoder.encode("R3pp6sva%"))
+//				.date_de_naissance(utile.CurentDate())
+//				.mail("ilyas.soussi@gmail.com")
+//				.is_active(true)
+//				.phone("+212661512121")
+//				.is_valide(true)
+//				.validation(0)
+//				.nometprenom("Soussi ilyas")
+//				.identite("X407680")
+//				.build();
+//
+//		Role role10 = new Role();
+//		role10.setType_role(Type_Role.Paysan);
+//		utilisateur10.setRole(role10);
+//
+//		Utilisateur saved10 = this.utilisateurdao.save(utilisateur10);
+//
+//		Utilisateur utilisateur11 = Utilisateur.builder()
+//				.mdp(this.passwordEncoder.encode("R3pp6sva%"))
+//				.date_de_naissance(utile.CurentDate())
+//				.mail("aya.belhachmi@gmail.com")
+//				.is_active(true)
+//				.phone("+212661512121")
+//				.is_valide(true)
+//				.validation(0)
+//				.nometprenom("BELHACHMI aya")
+//				.identite("X708090")
+//				.build();
+//
+//		Role role11 = new Role();
+//		role11.setType_role(Type_Role.Paysan);
+//		utilisateur11.setRole(role10);
+//
+//		Utilisateur saved11 = this.utilisateurdao.save(utilisateur11);
+//
+//	}
 }
